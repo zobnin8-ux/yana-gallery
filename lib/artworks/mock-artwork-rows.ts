@@ -19,6 +19,7 @@ export const mockArtworkRows: ArtworkRow[] = [
       {
         id: "artwork-1-image-1",
         url: "/images/artworks/basic-quin.png",
+        thumbnailUrl: "/images/artworks/thumbnails/basic-quin-thumb.jpg",
         alt: "Light Composition I"
       }
     ],
@@ -42,6 +43,7 @@ export const mockArtworkRows: ArtworkRow[] = [
       {
         id: "artwork-2-image-1",
         url: "/images/artworks/beauty-truth-6.png",
+        thumbnailUrl: "/images/artworks/thumbnails/beauty-truth-6-thumb.jpg",
         alt: "Light Composition II"
       }
     ],
@@ -65,6 +67,7 @@ export const mockArtworkRows: ArtworkRow[] = [
       {
         id: "artwork-3-image-1",
         url: "/images/artworks/beauty-truth-7.png",
+        thumbnailUrl: "/images/artworks/thumbnails/beauty-truth-7-thumb.jpg",
         alt: "Light Composition III"
       }
     ],
@@ -88,6 +91,7 @@ export const mockArtworkRows: ArtworkRow[] = [
       {
         id: "artwork-4-image-1",
         url: "/images/artworks/color-signs-7.png",
+        thumbnailUrl: "/images/artworks/thumbnails/color-signs-7-thumb.jpg",
         alt: "Light Composition IV"
       }
     ],
@@ -111,6 +115,7 @@ export const mockArtworkRows: ArtworkRow[] = [
       {
         id: "artwork-5-image-1",
         url: "/images/artworks/crosslings-3.jpg",
+        thumbnailUrl: "/images/artworks/thumbnails/crosslings-3-thumb.jpg",
         alt: "Light Composition V"
       }
     ],
@@ -134,6 +139,7 @@ export const mockArtworkRows: ArtworkRow[] = [
       {
         id: "artwork-6-image-1",
         url: "/images/artworks/grandiose-landscape-window.jpg",
+        thumbnailUrl: "/images/artworks/thumbnails/grandiose-landscape-window-thumb.jpg",
         alt: "Light Composition VI"
       }
     ],

@@ -7,6 +7,7 @@ export type ArtworkCurrency = (typeof artworkCurrencies)[number];
 export type ArtworkImage = {
   id: string;
   url: string;
+  thumbnailUrl?: string;
   alt: string;
   width?: number;
   height?: number;

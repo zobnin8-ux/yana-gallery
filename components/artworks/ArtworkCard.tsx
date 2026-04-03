@@ -10,6 +10,7 @@ type ArtworkCardProps = {
 
 export function ArtworkCard({ artwork, variant = "default" }: ArtworkCardProps) {
   const primaryImage = artwork.images[0];
+  const previewImageUrl = primaryImage?.thumbnailUrl ?? primaryImage?.url;
   const width = artwork.width ?? primaryImage?.width ?? null;
   const height = artwork.height ?? primaryImage?.height ?? null;
   const orientation =
@@ -21,10 +22,11 @@ export function ArtworkCard({ artwork, variant = "default" }: ArtworkCardProps) 
         <div className={`artwork-card-image artwork-card-image-${orientation}`}>
           {primaryImage ? (
             <Image
-              src={primaryImage.url}
+              src={previewImageUrl}
               alt={primaryImage.alt}
               fill
-              sizes="(max-width: 760px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              loading="lazy"
+              sizes="(max-width: 760px) 78vw, (max-width: 1200px) 260px, 260px"
               className="artwork-card-img"
             />
           ) : null}

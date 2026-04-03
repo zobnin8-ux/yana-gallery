@@ -9,6 +9,8 @@ type HeroProps = {
 
 export function Hero({ artworks }: HeroProps) {
   const [primaryArtwork, secondaryArtwork] = artworks;
+  const primaryImage = primaryArtwork?.images[0];
+  const secondaryImage = secondaryArtwork?.images[0];
 
   return (
     <section className="hero">
@@ -30,25 +32,24 @@ export function Hero({ artworks }: HeroProps) {
         </div>
         <div className="hero-visual reveal reveal-delay-2" aria-hidden="true">
           <div className="hero-art-frame hero-art-frame-large">
-            {primaryArtwork?.images[0] ? (
+            {primaryImage ? (
               <Image
-                src={primaryArtwork.images[0].url}
-                alt={primaryArtwork.images[0].alt}
+                src={primaryImage.thumbnailUrl ?? primaryImage.url}
+                alt={primaryImage.alt}
                 fill
                 priority
-                sizes="(max-width: 980px) 100vw, 40vw"
+                sizes="(max-width: 980px) 92vw, 540px"
                 className="hero-art-image"
               />
             ) : null}
           </div>
           <div className="hero-art-frame hero-art-frame-small">
-            {secondaryArtwork?.images[0] ? (
+            {secondaryImage ? (
               <Image
-                src={secondaryArtwork.images[0].url}
-                alt={secondaryArtwork.images[0].alt}
+                src={secondaryImage.thumbnailUrl ?? secondaryImage.url}
+                alt={secondaryImage.alt}
                 fill
-                priority
-                sizes="(max-width: 980px) 40vw, 20vw"
+                sizes="(max-width: 980px) 40vw, 280px"
                 className="hero-art-image"
               />
             ) : null}
