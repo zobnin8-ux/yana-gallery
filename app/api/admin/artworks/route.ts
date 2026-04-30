@@ -1,6 +1,4 @@
 import { randomUUID } from "node:crypto";
-import { existsSync, mkdirSync, writeFileSync } from "node:fs";
-import path from "node:path";
 
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
@@ -38,30 +36,16 @@ async function saveUploadedImages(formData: FormData, existingImages: ArtworkIma
     return existingImages;
   }
 
-  const uploadDirectory = path.join(process.cwd(), "public", "uploads", "artworks");
-
-  if (!existsSync(uploadDirectory)) {
-    mkdirSync(uploadDirectory, { recursive: true });
-  }
-
   const uploadedImages: ArtworkImage[] = [];
 
   for (const [index, file] of files.entries()) {
-    const extension = path.extname(file.name) || ".jpg";
-    const filename = `${Date.now()}-${randomUUID()}${extension}`;
-    const destination = path.join(uploadDirectory, filename);
-    const buffer = Buffer.from(await file.arrayBuffer());
-
-    writeFileSync(destination, buffer);
-
-    uploadedImages.push({
-      id: randomUUID(),
-      url: `/uploads/artworks/${filename}`,
-      thumbnailUrl: `/uploads/artworks/${filename}`,
-      alt: String(formData.get("artworkTitle") ?? "Artwork"),
-      sortOrder: existingImages.length + index + 1,
-      isPrimary: existingImages.length === 0 && index === 0
-    });
+    uploadedImages.push(
+      await galleryStore.uploadArtworkImage(
+        file,
+        String(formData.get("artworkTitle") ?? "Artwork"),
+        existingImages.length + index + 1
+      )
+    );
   }
 
   return [...existingImages, ...uploadedImages].map((image, index) => ({
@@ -73,7 +57,7 @@ async function saveUploadedImages(formData: FormData, existingImages: ArtworkIma
 
 function existingImagesFromForm(formData: FormData): ArtworkImage[] {
   return formData.getAll("existingImages").map((url, index) => ({
-    id: `${String(url)}-${index}`,
+    id: randomUUID(),
     url: String(url),
     thumbnailUrl: String(url),
     alt: String(formData.get("artworkTitle") ?? "Artwork"),
@@ -82,10 +66,10 @@ function existingImagesFromForm(formData: FormData): ArtworkImage[] {
   }));
 }
 
-function resolveCollection(formData: FormData) {
+async function resolveCollection(formData: FormData) {
   const collectionId = String(formData.get("artworkCollectionId") ?? "").trim();
   const newCollectionName = String(formData.get("newCollectionName") ?? "").trim();
-  const collections = galleryStore.listCollections().filter((collection) => collection.id !== "collection-uncategorized");
+  const collections = (await galleryStore.listCollections()).filter((collection) => collection.id !== "collection-uncategorized");
 
   if (newCollectionName) {
     const existingCollection = collections.find(
@@ -122,13 +106,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: false, message: "Название работы обязательно." }, { status: 422 });
   }
 
-  const collection = resolveCollection(formData);
+  const collection = await resolveCollection(formData);
   const existingImages = existingImagesFromForm(formData);
   const images = await saveUploadedImages(formData, existingImages);
   const id = String(formData.get("artworkId") ?? "").trim() || undefined;
   const slug = String(formData.get("artworkSlug") ?? "").trim() || slugify(title);
 
-  const artwork = galleryStore.upsertArtwork({
+  const artwork = await galleryStore.upsertArtwork({
     id,
     slug,
     title,
@@ -165,6 +149,6 @@ export async function DELETE(request: Request) {
     return NextResponse.json({ success: false, message: "Не передан id работы." }, { status: 422 });
   }
 
-  galleryStore.deleteArtwork(id);
+  await galleryStore.deleteArtwork(id);
   return NextResponse.json({ success: true });
 }

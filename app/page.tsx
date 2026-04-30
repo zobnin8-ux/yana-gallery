@@ -6,16 +6,17 @@ import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { artworksRepository } from "@/lib/repositories/artworks-repository";
 
-export default function HomePage() {
-  const featuredArtworks = artworksRepository.listFeatured();
-  const heroArtworks = artworksRepository.listHero().length ? artworksRepository.listHero() : featuredArtworks.slice(0, 2);
-  const collections = artworksRepository.listCollections().filter((collection) => collection.featured);
+export default async function HomePage() {
+  const featuredArtworks = await artworksRepository.listFeatured();
+  const heroArtworks = await artworksRepository.listHero();
+  const collections = (await artworksRepository.listCollections()).filter((collection) => collection.featured);
+  const displayHeroArtworks = heroArtworks.length ? heroArtworks : featuredArtworks.slice(0, 2);
 
   return (
     <>
       <SiteHeader />
       <main className="home-page">
-        <Hero artworks={heroArtworks} />
+        <Hero artworks={displayHeroArtworks} />
         <PageContainer>
           <Section className="home-rhythm">
             <div className="home-rhythm-line" />

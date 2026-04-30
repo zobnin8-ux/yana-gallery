@@ -7,13 +7,13 @@ export const metadata: Metadata = {
   title: "Заявки | Админка"
 };
 
-export default function AdminInquiriesPage() {
-  const inquiries = galleryStore.listInquiries();
+export default async function AdminInquiriesPage() {
+  const inquiries = await galleryStore.listInquiries();
 
   return (
     <section className="admin-section">
       <SectionTitle>Заявки</SectionTitle>
-      <p className="admin-copy">Все запросы из публичной формы сохраняются здесь и в файле данных галереи.</p>
+      <p className="admin-copy">Все запросы из публичной формы сохраняются здесь и в Supabase.</p>
       <div className="admin-inquiries-list">
         {inquiries.length ? (
           inquiries.map((inquiry) => (

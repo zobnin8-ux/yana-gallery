@@ -8,8 +8,8 @@ export const metadata: Metadata = {
   title: "Коллекции | Админка"
 };
 
-export default function AdminCollectionsPage() {
-  const collections = artworksRepository.listCollections();
+export default async function AdminCollectionsPage() {
+  const collections = await artworksRepository.listCollections();
 
   return (
     <section className="admin-section">

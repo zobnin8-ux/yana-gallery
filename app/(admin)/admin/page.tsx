@@ -3,9 +3,9 @@
 import { SectionTitle } from "@/components/layout/SectionTitle";
 import { artworksRepository } from "@/lib/repositories/artworks-repository";
 
-export default function AdminPage() {
-  const collections = artworksRepository.listCollections();
-  const artworks = artworksRepository.list();
+export default async function AdminPage() {
+  const collections = await artworksRepository.listCollections();
+  const artworks = await artworksRepository.list();
 
   return (
     <section className="admin-section">

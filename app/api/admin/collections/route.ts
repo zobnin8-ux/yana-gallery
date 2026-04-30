@@ -37,7 +37,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: false, message: "Название коллекции обязательно." }, { status: 422 });
   }
 
-  const collection = galleryStore.upsertCollection({
+  const collection = await galleryStore.upsertCollection({
     id: body.id ?? randomUUID(),
     slug: slugify(name),
     name,
@@ -61,6 +61,6 @@ export async function DELETE(request: Request) {
     return NextResponse.json({ success: false, message: "Эту коллекцию нельзя удалить." }, { status: 422 });
   }
 
-  galleryStore.deleteCollection(id);
+  await galleryStore.deleteCollection(id);
   return NextResponse.json({ success: true });
 }
