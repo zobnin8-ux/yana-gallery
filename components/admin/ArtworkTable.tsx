@@ -19,6 +19,18 @@ function formatPrice(artwork: Artwork) {
   return artwork.currency ? `${artwork.price} ${artwork.currency}` : `${artwork.price}`;
 }
 
+function formatStatus(artwork: Artwork) {
+  if (artwork.status === "available") {
+    return "В продаже";
+  }
+
+  if (artwork.status === "sold") {
+    return "Продана";
+  }
+
+  return "В резерве";
+}
+
 export function ArtworkTable({ artworks }: ArtworkTableProps) {
   const router = useRouter();
   const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -43,70 +55,75 @@ export function ArtworkTable({ artworks }: ArtworkTableProps) {
   return (
     <div className="admin-table-wrap">
       <div className="admin-table-toolbar">
+        <div>
+          <h2 className="admin-workspace-title">Картины</h2>
+          <p className="admin-workspace-copy">Редактируйте карточки, статусы и публикацию работ.</p>
+        </div>
         <Link className="admin-action-link" href="/admin/artworks/new">
-          Добавить работу
+          Добавить картину
         </Link>
       </div>
-      <table className="admin-table">
-        <thead>
-          <tr>
-            <th>Изображение</th>
-            <th>Название</th>
-            <th>Коллекция</th>
-            <th>Год</th>
-            <th>Техника</th>
-            <th>Статус</th>
-            <th>Цена</th>
-            <th>Действие</th>
-          </tr>
-        </thead>
-        <tbody>
-          {artworks.map((artwork) => {
-            const primaryImage = artwork.images[0];
+      <div className="admin-artwork-card-grid">
+        {artworks.map((artwork) => {
+          const primaryImage = artwork.images[0];
 
-            return (
-              <tr key={artwork.id}>
-                <td>
-                  <div className="admin-artwork-thumb">
-                    {primaryImage ? (
-                      <Image
-                        src={primaryImage.thumbnailUrl ?? primaryImage.url}
-                        alt={primaryImage.alt}
-                        fill
-                        sizes="72px"
-                        className="admin-artwork-thumb-image"
-                      />
-                    ) : (
-                      <span>Без изображения</span>
-                    )}
+          return (
+            <article className="admin-artwork-card" key={artwork.id}>
+              <div className="admin-artwork-card-image">
+                {primaryImage ? (
+                  <Image
+                    src={primaryImage.thumbnailUrl ?? primaryImage.url}
+                    alt={primaryImage.alt}
+                    fill
+                    sizes="(max-width: 760px) 92vw, 320px"
+                    className="admin-artwork-card-img"
+                  />
+                ) : (
+                  <span>Добавьте изображение</span>
+                )}
+              </div>
+              <div className="admin-artwork-card-body">
+                <div className="admin-artwork-card-head">
+                  <span className={`admin-status-pill admin-status-pill-${artwork.status}`}>{formatStatus(artwork)}</span>
+                  {artwork.featured ? <span className="admin-status-pill">На главной</span> : null}
+                </div>
+                <h3>{artwork.title}</h3>
+                <dl className="admin-artwork-card-meta">
+                  <div>
+                    <dt>Коллекция</dt>
+                    <dd>{artwork.collection ?? "Без коллекции"}</dd>
                   </div>
-                </td>
-                <td>{artwork.title}</td>
-                <td>{artwork.collection ?? "Без коллекции"}</td>
-                <td>{artwork.year ?? "-"}</td>
-                <td>{artwork.medium ?? "-"}</td>
-                <td>{artwork.status === "available" ? "Доступна" : artwork.status === "sold" ? "Продана" : "В резерве"}</td>
-                <td>{formatPrice(artwork)}</td>
-                <td>
-                  <div className="admin-table-actions">
-                    <Link className="admin-table-link" href={`/admin/artworks/${artwork.id}/edit`}>
-                      Редактировать
-                    </Link>
-                    <button
-                      className="admin-collection-delete"
-                      disabled={deletingId === artwork.id}
-                      onClick={() => handleDelete(artwork)}
-                      type="button"
-                    >
-                      {deletingId === artwork.id ? "Удаляем..." : "Удалить"}
-                    </button>
+                  <div>
+                    <dt>Год / размер</dt>
+                    <dd>
+                      {[artwork.year, artwork.width && artwork.height ? `${artwork.width} × ${artwork.height} см` : null]
+                        .filter(Boolean)
+                        .join(", ") || "Не указано"}
+                    </dd>
                   </div>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+                  <div>
+                    <dt>Цена</dt>
+                    <dd>{formatPrice(artwork)}</dd>
+                  </div>
+                </dl>
+                <div className="admin-artwork-card-actions">
+                  <Link className="admin-table-link" href={`/admin/artworks/${artwork.id}/edit`}>
+                    Редактировать
+                  </Link>
+                  <button
+                    className="admin-collection-delete"
+                    disabled={deletingId === artwork.id}
+                    onClick={() => handleDelete(artwork)}
+                    type="button"
+                  >
+                    {deletingId === artwork.id ? "Удаляем..." : "Удалить"}
+                  </button>
+                </div>
+              </div>
+            </article>
+          );
+        })}
+      </div>
     </div>
   );
 }
