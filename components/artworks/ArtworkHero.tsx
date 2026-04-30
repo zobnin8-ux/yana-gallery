@@ -8,6 +8,7 @@ type ArtworkHeroProps = {
 
 export function ArtworkHero({ artwork }: ArtworkHeroProps) {
   const primaryImage = artwork.images[0];
+  const detailImages = artwork.images.slice(1, 4);
 
   return (
     <div className="artwork-hero">
@@ -23,6 +24,21 @@ export function ArtworkHero({ artwork }: ArtworkHeroProps) {
           />
         ) : null}
       </div>
+      {detailImages.length ? (
+        <div className="artwork-detail-strip">
+          {detailImages.map((image) => (
+            <div className="artwork-detail-frame" key={image.id}>
+              <Image
+                src={image.thumbnailUrl ?? image.url}
+                alt={image.alt}
+                fill
+                sizes="160px"
+                className="artwork-detail-image"
+              />
+            </div>
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 }

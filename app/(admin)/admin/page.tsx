@@ -21,6 +21,10 @@ export default function AdminPage() {
           <strong>{collections.length} коллекции</strong>
         </div>
         <div className="admin-overview-card">
+          <span>Заявки</span>
+          <strong>Сохраняются в CMS-слое</strong>
+        </div>
+        <div className="admin-overview-card">
           <span>Статусы</span>
           <strong>Доступна / Продана / В резерве</strong>
         </div>
@@ -34,6 +38,9 @@ export default function AdminPage() {
         </Link>
         <Link className="admin-action-link" href="/admin/collections">
           Смотреть коллекции
+        </Link>
+        <Link className="admin-action-link" href="/admin/inquiries">
+          Смотреть заявки
         </Link>
       </div>
     </section>

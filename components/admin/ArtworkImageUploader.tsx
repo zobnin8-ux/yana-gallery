@@ -6,24 +6,13 @@ export function ArtworkImageUploader({ images }: ArtworkImageUploaderProps) {
   return (
     <div className="admin-image-fields">
       <label className="admin-field">
-        <span>Главное изображение</span>
+        <span>Загрузить изображения</span>
         <div className="admin-file-input">
-          <input accept="image/*" id="artworkCoverImage" name="artworkCoverImage" type="file" />
-          <label className="admin-file-trigger" htmlFor="artworkCoverImage">
-            Выбрать файл
-          </label>
-          <span className="admin-file-placeholder">Файл не выбран</span>
-        </div>
-      </label>
-
-      <label className="admin-field">
-        <span>Дополнительные изображения</span>
-        <div className="admin-file-input">
-          <input accept="image/*" id="artworkGalleryImages" multiple name="artworkGalleryImages" type="file" />
-          <label className="admin-file-trigger" htmlFor="artworkGalleryImages">
+          <input accept="image/*" id="artworkImages" multiple name="artworkImages" type="file" />
+          <label className="admin-file-trigger" htmlFor="artworkImages">
             Выбрать файлы
           </label>
-          <span className="admin-file-placeholder">Файлы не выбраны</span>
+          <span className="admin-file-placeholder">Новые файлы добавятся к текущим изображениям</span>
         </div>
       </label>
 
@@ -36,6 +25,7 @@ export function ArtworkImageUploader({ images }: ArtworkImageUploaderProps) {
 
               return (
                 <div className="admin-uploaded-image-item" key={image}>
+                  <input name="existingImages" type="hidden" value={image} />
                   {filename}
                 </div>
               );

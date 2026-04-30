@@ -1,4 +1,5 @@
 ﻿import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 
 import { ArtworkDescription } from "@/components/artworks/ArtworkDescription";
 import { ArtworkHero } from "@/components/artworks/ArtworkHero";
@@ -14,6 +15,28 @@ type ArtworkPageProps = {
     slug: string;
   }>;
 };
+
+export async function generateMetadata({ params }: ArtworkPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const artwork = getArtworkBySlug(slug);
+  const image = artwork?.images[0];
+
+  if (!artwork) {
+    return {
+      title: "Работа не найдена | Yana Zubareva Gallery"
+    };
+  }
+
+  return {
+    title: artwork.seoTitle ?? `${artwork.title} | Yana Zubareva Gallery`,
+    description: artwork.seoDescription ?? artwork.description ?? "Работа художницы Yana Zubareva.",
+    openGraph: {
+      title: artwork.seoTitle ?? artwork.title,
+      description: artwork.seoDescription ?? artwork.description ?? undefined,
+      images: image ? [{ url: image.url, alt: image.alt }] : undefined
+    }
+  };
+}
 
 export default async function ArtworkPage({ params }: ArtworkPageProps) {
   const { slug } = await params;

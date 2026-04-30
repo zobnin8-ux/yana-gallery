@@ -15,6 +15,8 @@ export function ArtworkCard({ artwork, variant = "default" }: ArtworkCardProps) 
   const height = artwork.height ?? primaryImage?.height ?? null;
   const orientation =
     width && height ? (width > height ? "landscape" : width < height ? "portrait" : "square") : "portrait";
+  const statusLabel =
+    artwork.status === "available" ? "Доступна" : artwork.status === "reserved" ? "В резерве" : "Продана";
 
   return (
     <article className={`artwork-card artwork-card-${variant}`}>
@@ -33,8 +35,14 @@ export function ArtworkCard({ artwork, variant = "default" }: ArtworkCardProps) 
           <div className="artwork-card-overlay" />
         </div>
         <div className="artwork-card-body">
+          <p className="artwork-card-kicker">{artwork.collection ?? "Original work"}</p>
           <h3 className="artwork-card-title">{artwork.title}</h3>
-          {artwork.year ? <p className="artwork-card-meta">{artwork.year}</p> : null}
+          <p className="artwork-card-meta">
+            {[artwork.year, artwork.width && artwork.height ? `${artwork.width} × ${artwork.height} cm` : null]
+              .filter(Boolean)
+              .join(" · ")}
+          </p>
+          <span className={`artwork-card-status artwork-card-status-${artwork.status}`}>{statusLabel}</span>
         </div>
       </Link>
     </article>

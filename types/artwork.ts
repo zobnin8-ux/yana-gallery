@@ -11,6 +11,8 @@ export type ArtworkImage = {
   alt: string;
   width?: number;
   height?: number;
+  sortOrder?: number;
+  isPrimary?: boolean;
 };
 
 export type Artwork = {
@@ -18,6 +20,7 @@ export type Artwork = {
   slug: string;
   title: string;
   collection?: string | null;
+  collectionId?: string | null;
   year?: number | null;
   medium?: string | null;
   width?: number | null;
@@ -28,6 +31,11 @@ export type Artwork = {
   description?: string | null;
   images: ArtworkImage[];
   featured: boolean;
+  hero: boolean;
+  sortOrder: number;
+  showPrice: boolean;
+  seoTitle?: string | null;
+  seoDescription?: string | null;
 };
 
 export type ArtworkInsert = Omit<Artwork, "id"> & {
@@ -40,6 +48,7 @@ export type ArtworkRow = {
   id: string;
   slug: string;
   title: string;
+  collectionId: string | null;
   collection: string | null;
   year: number | null;
   medium: string | null;
@@ -51,4 +60,23 @@ export type ArtworkRow = {
   description: string | null;
   images: ArtworkImage[];
   featured: boolean;
+  hero: boolean;
+  sortOrder: number;
+  showPrice: boolean;
+  seoTitle: string | null;
+  seoDescription: string | null;
+};
+
+export type ArtworkCollection = {
+  id: string;
+  slug: string;
+  name: string;
+  description: string | null;
+  coverArtworkId: string | null;
+  sortOrder: number;
+  featured: boolean;
+};
+
+export type ArtworkCollectionWithArtworks = ArtworkCollection & {
+  artworks: Artwork[];
 };

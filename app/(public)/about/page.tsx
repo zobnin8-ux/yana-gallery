@@ -16,8 +16,8 @@ export default function AboutPage() {
               <div className="about-image-wrap reveal">
                 <div className="about-image-frame">
                   <Image
-                    src="/images/artist/yana-zubareva-portrait.jpg"
-                    alt="Яна Зубарева"
+                    src="/images/artworks/light-composition-1.svg"
+                    alt="Фрагмент работы Яны Зубаревой"
                     fill
                     sizes="(max-width: 980px) 100vw, 46vw"
                     className="about-image"

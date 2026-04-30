@@ -9,16 +9,16 @@ export const metadata: Metadata = {
 };
 
 export default function AdminCollectionsPage() {
-  const artworks = artworksRepository.list();
+  const collections = artworksRepository.listCollections();
 
   return (
     <section className="admin-section">
       <SectionTitle>Коллекции</SectionTitle>
       <p className="admin-copy">
-        Здесь можно переименовывать коллекции, удалять их без удаления картин и перемещать работы между
-        коллекциями. Все изменения сразу отражаются в галерее.
+        Здесь можно создавать, редактировать и удалять коллекции. Перемещение отдельных работ выполняется в
+        форме редактирования работы.
       </p>
-      <AdminCollectionsManager artworks={artworks} />
+      <AdminCollectionsManager collections={collections} />
     </section>
   );
 }

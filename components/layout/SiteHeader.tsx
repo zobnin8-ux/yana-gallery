@@ -12,7 +12,6 @@ export function SiteHeader() {
           <Link href="/gallery">Галерея</Link>
           <Link href="/about">Обо мне</Link>
           <Link href="/contact">Контакты</Link>
-          <Link href="/admin">Админка</Link>
         </div>
       </nav>
     </header>
