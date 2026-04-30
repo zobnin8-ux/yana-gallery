@@ -111,7 +111,7 @@ export async function POST(request: Request) {
     const existingImages = existingImagesFromForm(formData);
     const images = await saveUploadedImages(formData, existingImages);
     const id = String(formData.get("artworkId") ?? "").trim() || undefined;
-    const slug = String(formData.get("artworkSlug") ?? "").trim() || slugify(title);
+    const slug = slugify(String(formData.get("artworkSlug") ?? "").trim() || title);
 
     const artwork = await galleryStore.upsertArtwork({
       id,
