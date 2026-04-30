@@ -44,25 +44,25 @@ export function ArtworkMeta({ artwork }: ArtworkMetaProps) {
 
       <dl className="artwork-specs">
         <div className="artwork-spec">
-          <dt>{"\u0422\u0435\u0445\u043d\u0438\u043a\u0430"}</dt>
+          <dt>Medium</dt>
           <dd>{artwork.medium ?? "\u041f\u043e \u0437\u0430\u043f\u0440\u043e\u0441\u0443"}</dd>
         </div>
         <div className="artwork-spec">
-          <dt>{"\u0420\u0430\u0437\u043c\u0435\u0440"}</dt>
+          <dt>Dimensions</dt>
           <dd>{formatDimensions(artwork)}</dd>
         </div>
         <div className="artwork-spec">
-          <dt>{"\u0426\u0435\u043d\u0430"}</dt>
+          <dt>Acquisition</dt>
           <dd>{formatPrice(artwork)}</dd>
         </div>
         <div className="artwork-spec">
-          <dt>{"\u0414\u043e\u0441\u0442\u0430\u0432\u043a\u0430"}</dt>
-          <dd>Обсуждается индивидуально</dd>
+          <dt>Shipping</dt>
+          <dd>Private arrangement</dd>
         </div>
       </dl>
 
       <Link className="artwork-request-link" href={`/contact?artwork=${encodeURIComponent(artwork.title)}`}>
-        {"\u0417\u0430\u043f\u0440\u043e\u0441\u0438\u0442\u044c"}
+        Запросить dossier
       </Link>
     </div>
   );

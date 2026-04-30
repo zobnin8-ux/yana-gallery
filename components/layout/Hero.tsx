@@ -8,31 +8,30 @@ type HeroProps = {
 };
 
 export function Hero({ artworks }: HeroProps) {
-  const [primaryArtwork, secondaryArtwork] = artworks;
+  const [primaryArtwork] = artworks;
   const primaryImage = primaryArtwork?.images[0];
-  const secondaryImage = secondaryArtwork?.images[0];
 
   return (
     <section className="hero">
       <div className="hero-inner">
         <div className="hero-copy reveal reveal-delay-1">
-          <p className="eyebrow">Yana Zubareva Studio</p>
+          <p className="eyebrow">Private viewing room / 2026</p>
           <h1 className="hero-title">Yana Zubareva</h1>
           <p className="hero-text">
-            Современная живопись как пространство тишины: свет, воздух и мягкое присутствие работы в интерьере.
+            Живопись как тихое поле присутствия: свет, воздух, пауза и почти архитектурное чувство пространства.
           </p>
           <div className="hero-actions">
             <Link className="hero-link hero-link-primary" href="/gallery">
-              Открыть viewing room
+              Войти в экспозицию
             </Link>
             <Link className="hero-link" href="/about">
-              Artist statement
+              Текст художника
             </Link>
           </div>
           <div className="hero-proof">
             <span>Original works</span>
-            <span>Private inquiries</span>
-            <span>Worldwide shipping on request</span>
+            <span>Studio inquiries</span>
+            <span>Catalog on request</span>
           </div>
         </div>
         <div className="hero-visual reveal reveal-delay-2" aria-hidden="true">
@@ -43,23 +42,13 @@ export function Hero({ artworks }: HeroProps) {
                 alt={primaryImage.alt}
                 fill
                 priority
-                sizes="(max-width: 980px) 92vw, 540px"
-                className="hero-art-image"
-              />
-            ) : null}
-          </div>
-          <div className="hero-art-frame hero-art-frame-small">
-            {secondaryImage ? (
-              <Image
-                src={secondaryImage.thumbnailUrl ?? secondaryImage.url}
-                alt={secondaryImage.alt}
-                fill
-                sizes="(max-width: 980px) 40vw, 280px"
+                sizes="(max-width: 980px) 92vw, 620px"
                 className="hero-art-image"
               />
             ) : null}
           </div>
           <div className="hero-caption">
+            <span>01</span>
             <p>{primaryArtwork?.title ?? "Избранная работа"}</p>
             <span>{primaryArtwork?.year ?? ""}</span>
           </div>

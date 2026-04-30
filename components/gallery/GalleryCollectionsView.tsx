@@ -66,12 +66,17 @@ export function GalleryCollectionsView({ collections }: GalleryCollectionsViewPr
       </div>
 
       <div className="gallery-collections">
-        {visibleCollections.map((collection) => (
+        {visibleCollections.map((collection, index) => (
           <section className="gallery-collection" id={collection.slug} key={collection.id}>
             <div className="gallery-collection-heading">
-              <p className="gallery-collection-label">Коллекция</p>
-              <h2 className="gallery-collection-title">{collection.name}</h2>
-              {collection.description ? <p className="gallery-collection-description">{collection.description}</p> : null}
+              <div>
+                <p className="gallery-collection-label">Room {String(index + 1).padStart(2, "0")}</p>
+                <h2 className="gallery-collection-title">{collection.name}</h2>
+              </div>
+              <div className="gallery-collection-note">
+                <span>{collection.artworks.length} works</span>
+                {collection.description ? <p>{collection.description}</p> : null}
+              </div>
             </div>
             <ArtworkGrid artworks={collection.artworks} variant="gallery" />
           </section>
