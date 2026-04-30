@@ -31,21 +31,25 @@ export function ArtworkForm({ mode, artwork, collections }: ArtworkFormProps) {
       formData.set("artworkId", artwork.id);
     }
 
-    const response = await fetch("/api/admin/artworks", {
-      method: "POST",
-      body: formData
-    });
-    const result = (await response.json()) as { success: boolean; message?: string; redirectTo?: string };
+    try {
+      const response = await fetch("/api/admin/artworks", {
+        method: "POST",
+        body: formData
+      });
+      const result = (await response.json()) as { success: boolean; message?: string; redirectTo?: string };
 
-    setIsSubmitting(false);
+      if (!response.ok || !result.success) {
+        setStatusMessage(result.message ?? "Не удалось сохранить работу.");
+        return;
+      }
 
-    if (!response.ok || !result.success) {
-      setStatusMessage(result.message ?? "Не удалось сохранить работу.");
-      return;
+      router.push(result.redirectTo ?? "/admin/artworks");
+      router.refresh();
+    } catch (error) {
+      setStatusMessage(error instanceof Error ? error.message : "Не удалось сохранить работу.");
+    } finally {
+      setIsSubmitting(false);
     }
-
-    router.push(result.redirectTo ?? "/admin/artworks");
-    router.refresh();
   }
 
   return (

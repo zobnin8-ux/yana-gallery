@@ -99,43 +99,53 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: false, message: "Требуется вход в админку." }, { status: 401 });
   }
 
-  const formData = await request.formData();
-  const title = String(formData.get("artworkTitle") ?? "").trim();
+  try {
+    const formData = await request.formData();
+    const title = String(formData.get("artworkTitle") ?? "").trim();
 
-  if (!title) {
-    return NextResponse.json({ success: false, message: "Название работы обязательно." }, { status: 422 });
+    if (!title) {
+      return NextResponse.json({ success: false, message: "Название работы обязательно." }, { status: 422 });
+    }
+
+    const collection = await resolveCollection(formData);
+    const existingImages = existingImagesFromForm(formData);
+    const images = await saveUploadedImages(formData, existingImages);
+    const id = String(formData.get("artworkId") ?? "").trim() || undefined;
+    const slug = String(formData.get("artworkSlug") ?? "").trim() || slugify(title);
+
+    const artwork = await galleryStore.upsertArtwork({
+      id,
+      slug,
+      title,
+      collectionId: collection?.id ?? null,
+      collection: collection?.name ?? null,
+      year: parseNumber(formData.get("artworkYear")),
+      medium: String(formData.get("artworkMedium") ?? "").trim() || null,
+      width: parseNumber(formData.get("artworkWidthCm")),
+      height: parseNumber(formData.get("artworkHeightCm")),
+      price: parseNumber(formData.get("artworkPrice")),
+      currency: (String(formData.get("artworkCurrency") ?? "EUR") || "EUR") as ArtworkCurrency,
+      status: (String(formData.get("artworkStatus") ?? "available") || "available") as ArtworkStatus,
+      description: String(formData.get("artworkDescription") ?? "").trim() || null,
+      images,
+      featured: formData.get("artworkFeatured") === "on",
+      hero: formData.get("artworkHero") === "on",
+      sortOrder: parseNumber(formData.get("artworkSortOrder")) ?? 100,
+      showPrice: formData.get("artworkShowPrice") === "on",
+      seoTitle: String(formData.get("artworkSeoTitle") ?? "").trim() || null,
+      seoDescription: String(formData.get("artworkSeoDescription") ?? "").trim() || null
+    });
+
+    return NextResponse.json({ success: true, artwork, redirectTo: "/admin/artworks" });
+  } catch (error) {
+    return NextResponse.json(
+      {
+        success: false,
+        message: error instanceof Error ? error.message : "Не удалось сохранить работу."
+      },
+      { status: 500 }
+    );
   }
-
-  const collection = await resolveCollection(formData);
-  const existingImages = existingImagesFromForm(formData);
-  const images = await saveUploadedImages(formData, existingImages);
-  const id = String(formData.get("artworkId") ?? "").trim() || undefined;
-  const slug = String(formData.get("artworkSlug") ?? "").trim() || slugify(title);
-
-  const artwork = await galleryStore.upsertArtwork({
-    id,
-    slug,
-    title,
-    collectionId: collection?.id ?? null,
-    collection: collection?.name ?? null,
-    year: parseNumber(formData.get("artworkYear")),
-    medium: String(formData.get("artworkMedium") ?? "").trim() || null,
-    width: parseNumber(formData.get("artworkWidthCm")),
-    height: parseNumber(formData.get("artworkHeightCm")),
-    price: parseNumber(formData.get("artworkPrice")),
-    currency: (String(formData.get("artworkCurrency") ?? "EUR") || "EUR") as ArtworkCurrency,
-    status: (String(formData.get("artworkStatus") ?? "available") || "available") as ArtworkStatus,
-    description: String(formData.get("artworkDescription") ?? "").trim() || null,
-    images,
-    featured: formData.get("artworkFeatured") === "on",
-    hero: formData.get("artworkHero") === "on",
-    sortOrder: parseNumber(formData.get("artworkSortOrder")) ?? 100,
-    showPrice: formData.get("artworkShowPrice") === "on",
-    seoTitle: String(formData.get("artworkSeoTitle") ?? "").trim() || null,
-    seoDescription: String(formData.get("artworkSeoDescription") ?? "").trim() || null
-  });
-
-  return NextResponse.json({ success: true, artwork, redirectTo: "/admin/artworks" });
 }
 
 export async function DELETE(request: Request) {
