@@ -26,7 +26,7 @@ export default function AboutPage() {
               </div>
 
               <div className="about-copy reveal reveal-delay-1">
-                <p className="about-eyebrow">About</p>
+                <p className="about-eyebrow">Обо мне</p>
                 <h1 className="about-title">Обо мне</h1>
                 <p className="about-intro">
                   Я работаю с живописью как с пространством тишины, света и внутреннего равновесия.
@@ -46,11 +46,11 @@ export default function AboutPage() {
 
                 <div className="about-contacts">
                   <div className="about-contact-item">
-                    <span>Email</span>
+                    <span>Почта</span>
                     <a href="mailto:studio@yanazubareva.com">studio@yanazubareva.com</a>
                   </div>
                   <div className="about-contact-item">
-                    <span>Telegram</span>
+                    <span>Телеграм</span>
                     <a href="https://t.me/yana_art72" rel="noreferrer" target="_blank">
                       @yana_art72
                     </a>
@@ -61,7 +61,7 @@ export default function AboutPage() {
                   <a
                     className="about-social-link"
                     href="mailto:studio@yanazubareva.com"
-                    aria-label="Email"
+                    aria-label="Почта"
                   >
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                       <path
@@ -79,7 +79,7 @@ export default function AboutPage() {
                     href="https://t.me/yana_art72"
                     rel="noreferrer"
                     target="_blank"
-                    aria-label="Telegram"
+                    aria-label="Телеграм"
                   >
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                       <path

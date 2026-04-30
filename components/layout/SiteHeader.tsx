@@ -5,7 +5,7 @@ export function SiteHeader() {
     <header className="site-header">
       <nav className="site-nav">
         <Link className="site-brand" href="/">
-          Yana Zubareva
+          Яна Зубарева
         </Link>
         <div className="site-nav-links">
           <Link href="/">Главная</Link>
@@ -13,7 +13,7 @@ export function SiteHeader() {
           <Link href="/about">Обо мне</Link>
           <Link href="/contact">Контакты</Link>
           <Link className="site-nav-admin-link" href="/admin/login">
-            Studio login
+            Вход в кабинет
           </Link>
         </div>
       </nav>

@@ -11,7 +11,7 @@ function formatDimensions(artwork: Artwork) {
     (value): value is number => typeof value === "number"
   );
 
-  return parts.length > 0 ? `${parts.join(" × ")} cm` : "On request";
+  return parts.length > 0 ? `${parts.join(" × ")} см` : "По запросу";
 }
 
 function formatPrice(artwork: Artwork) {
@@ -23,7 +23,7 @@ function formatPrice(artwork: Artwork) {
     return `${artwork.price}`;
   }
 
-  return new Intl.NumberFormat("en-US", {
+  return new Intl.NumberFormat("ru-RU", {
     style: "currency",
     currency: artwork.currency,
     maximumFractionDigits: 0
@@ -44,25 +44,25 @@ export function ArtworkMeta({ artwork }: ArtworkMetaProps) {
 
       <dl className="artwork-specs">
         <div className="artwork-spec">
-          <dt>Medium</dt>
+          <dt>Материал</dt>
           <dd>{artwork.medium ?? "\u041f\u043e \u0437\u0430\u043f\u0440\u043e\u0441\u0443"}</dd>
         </div>
         <div className="artwork-spec">
-          <dt>Dimensions</dt>
+          <dt>Размер</dt>
           <dd>{formatDimensions(artwork)}</dd>
         </div>
         <div className="artwork-spec">
-          <dt>Acquisition</dt>
+          <dt>Стоимость</dt>
           <dd>{formatPrice(artwork)}</dd>
         </div>
         <div className="artwork-spec">
-          <dt>Shipping</dt>
-          <dd>Private arrangement</dd>
+          <dt>Доставка</dt>
+          <dd>Индивидуально</dd>
         </div>
       </dl>
 
       <Link className="artwork-request-link" href={`/contact?artwork=${encodeURIComponent(artwork.title)}`}>
-        Запросить dossier
+        Запросить информацию
       </Link>
     </div>
   );

@@ -5,7 +5,7 @@ import { AdminHeader } from "@/components/admin/AdminHeader";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
 
 export const metadata: Metadata = {
-  title: "Админка | Yana Zubareva Gallery"
+  title: "Админка | Галерея Яны Зубаревой"
 };
 
 type AdminLayoutProps = {

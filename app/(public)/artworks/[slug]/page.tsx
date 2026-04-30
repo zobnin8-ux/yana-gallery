@@ -23,13 +23,13 @@ export async function generateMetadata({ params }: ArtworkPageProps): Promise<Me
 
   if (!artwork) {
     return {
-      title: "Работа не найдена | Yana Zubareva Gallery"
+      title: "Работа не найдена | Галерея Яны Зубаревой"
     };
   }
 
   return {
-    title: artwork.seoTitle ?? `${artwork.title} | Yana Zubareva Gallery`,
-    description: artwork.seoDescription ?? artwork.description ?? "Работа художницы Yana Zubareva.",
+    title: artwork.seoTitle ?? `${artwork.title} | Галерея Яны Зубаревой`,
+    description: artwork.seoDescription ?? artwork.description ?? "Работа художницы Яны Зубаревой.",
     openGraph: {
       title: artwork.seoTitle ?? artwork.title,
       description: artwork.seoDescription ?? artwork.description ?? undefined,
@@ -53,7 +53,7 @@ export default async function ArtworkPage({ params }: ArtworkPageProps) {
         <PageContainer>
           <Section className="artwork-section">
             <div className="artwork-page-intro reveal reveal-delay-1">
-              <p className="eyebrow">Artwork passport</p>
+              <p className="eyebrow">Паспорт работы</p>
             </div>
             <div className="artwork-layout">
               <ArtworkHero artwork={artwork} />

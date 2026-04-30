@@ -206,8 +206,8 @@ export function ArtworkForm({ mode, artwork, collections }: ArtworkFormProps) {
           <summary>Дополнительно: SEO и порядок показа</summary>
           <div className="admin-form-grid">
             <label className="admin-field">
-              <span>Slug</span>
-              <input defaultValue={artwork?.slug} name="artworkSlug" placeholder="light-composition-1" />
+              <span>Адрес страницы (латиница)</span>
+              <input defaultValue={artwork?.slug} name="artworkSlug" placeholder="strekozy-i-nebo" />
             </label>
 
             <label className="admin-field">
@@ -222,7 +222,7 @@ export function ArtworkForm({ mode, artwork, collections }: ArtworkFormProps) {
             </label>
 
             <label className="admin-field admin-field-full">
-              <span>SEO title</span>
+              <span>SEO-заголовок</span>
               <input
                 defaultValue={artwork?.seoTitle ?? undefined}
                 name="artworkSeoTitle"
@@ -231,7 +231,7 @@ export function ArtworkForm({ mode, artwork, collections }: ArtworkFormProps) {
             </label>
 
             <label className="admin-field admin-field-full">
-              <span>SEO description</span>
+              <span>SEO-описание</span>
               <textarea
                 defaultValue={artwork?.seoDescription ?? undefined}
                 name="artworkSeoDescription"

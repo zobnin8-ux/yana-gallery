@@ -10,7 +10,7 @@ export function FeaturedArtworks({ artworks }: FeaturedArtworksProps) {
   return (
     <div className="featured-artworks reveal reveal-delay-2">
       <div className="featured-artworks-heading">
-        <p className="eyebrow">Selected works</p>
+        <p className="eyebrow">Избранное</p>
         <h2 className="section-heading">Работы для внимательного просмотра</h2>
       </div>
       <ArtworkGrid artworks={artworks} variant="home" />

@@ -2,6 +2,7 @@
 
 import { SectionTitle } from "@/components/layout/SectionTitle";
 import { artworksRepository } from "@/lib/repositories/artworks-repository";
+import { collectionsCountLabel, worksCountLabel } from "@/lib/ru-plurals";
 
 export default async function AdminPage() {
   const collections = await artworksRepository.listCollections();
@@ -14,15 +15,15 @@ export default async function AdminPage() {
       <div className="admin-overview-grid">
         <div className="admin-overview-card">
           <span>Работы</span>
-          <strong>{artworks.length} работ</strong>
+          <strong>{worksCountLabel(artworks.length)}</strong>
         </div>
         <div className="admin-overview-card">
           <span>Коллекции</span>
-          <strong>{collections.length} коллекции</strong>
+          <strong>{collectionsCountLabel(collections.length)}</strong>
         </div>
         <div className="admin-overview-card">
           <span>Заявки</span>
-          <strong>Сохраняются в CMS-слое</strong>
+          <strong>Сохраняются в галерее</strong>
         </div>
         <div className="admin-overview-card">
           <span>Статусы</span>

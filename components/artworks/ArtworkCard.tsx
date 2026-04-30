@@ -35,7 +35,7 @@ export function ArtworkCard({ artwork, variant = "default" }: ArtworkCardProps) 
           <div className="artwork-card-overlay" />
         </div>
         <div className="artwork-card-body">
-          <p className="artwork-card-kicker">{artwork.collection ?? "Original work"}</p>
+          <p className="artwork-card-kicker">{artwork.collection ?? "Без коллекции"}</p>
           <h3 className="artwork-card-title">{artwork.title}</h3>
           <p className="artwork-card-meta">
             {[artwork.year, artwork.width && artwork.height ? `${artwork.width} × ${artwork.height} cm` : null]

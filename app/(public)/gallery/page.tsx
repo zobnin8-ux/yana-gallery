@@ -16,12 +16,12 @@ export default async function GalleryPage() {
           <Section className="gallery-section reveal reveal-delay-1">
             <div className="gallery-heading">
               <div className="gallery-heading-copy">
-                <p className="eyebrow">Viewing rooms</p>
+                <p className="eyebrow">Залы экспозиции</p>
                 <h1 className="gallery-title">Экспозиция</h1>
               </div>
               <p className="gallery-intro">
                 Работы разложены не как магазинная сетка, а как серия тихих залов. Сначала смотрите свет и
-                масштаб, затем переходите к паспорту выбранной работы.
+                масштаб, затем откройте страницу выбранной работы.
               </p>
             </div>
             <GalleryCollectionsView collections={collections} />

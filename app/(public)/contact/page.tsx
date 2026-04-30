@@ -23,7 +23,7 @@ export default function ContactPage() {
                 </p>
                 <div className="contact-details">
                   <div className="contact-detail">
-                    <span>Email</span>
+                    <span>Почта</span>
                     <a href="mailto:studio@yanazubareva.com">studio@yanazubareva.com</a>
                   </div>
                   <div className="contact-detail">
