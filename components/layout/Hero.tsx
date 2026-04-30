@@ -10,6 +10,14 @@ type HeroProps = {
 export function Hero({ artworks }: HeroProps) {
   const [primaryArtwork] = artworks;
   const primaryImage = primaryArtwork?.images[0];
+  const statusLabel =
+    primaryArtwork?.status === "available"
+      ? "Available"
+      : primaryArtwork?.status === "reserved"
+        ? "Reserved"
+        : primaryArtwork?.status === "sold"
+          ? "Sold"
+          : "Private selection";
 
   return (
     <section className="hero">
@@ -38,7 +46,7 @@ export function Hero({ artworks }: HeroProps) {
           <div className="hero-art-frame hero-art-frame-large">
             {primaryImage ? (
               <Image
-                src={primaryImage.thumbnailUrl ?? primaryImage.url}
+                src={primaryImage.url}
                 alt={primaryImage.alt}
                 fill
                 priority
@@ -49,8 +57,12 @@ export function Hero({ artworks }: HeroProps) {
           </div>
           <div className="hero-caption">
             <span>01</span>
-            <p>{primaryArtwork?.title ?? "Избранная работа"}</p>
-            <span>{primaryArtwork?.year ?? ""}</span>
+            <div>
+              <p>{primaryArtwork?.title ?? "Избранная работа"}</p>
+              <span>
+                {[primaryArtwork?.year, primaryArtwork?.medium, statusLabel].filter(Boolean).join(" / ")}
+              </span>
+            </div>
           </div>
         </div>
       </div>

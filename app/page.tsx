@@ -11,6 +11,8 @@ export default async function HomePage() {
   const heroArtworks = await artworksRepository.listHero();
   const collections = (await artworksRepository.listCollections()).filter((collection) => collection.featured);
   const displayHeroArtworks = heroArtworks.length ? heroArtworks : featuredArtworks.slice(0, 2);
+  const heroArtworkId = displayHeroArtworks[0]?.id;
+  const supportingArtworks = featuredArtworks.filter((artwork) => artwork.id !== heroArtworkId);
 
   return (
     <>
@@ -28,24 +30,36 @@ export default async function HomePage() {
               </p>
             </div>
           </Section>
-          <Section className="collection-teaser-section">
-            <div className="collection-teaser-heading">
-              <p className="eyebrow">Rooms</p>
-              <h2 className="section-heading">Экспозиция собрана как последовательность залов</h2>
-            </div>
-            <div className="collection-teaser-grid">
-              {collections.map((collection) => (
-                <a className="collection-teaser-card" href={`/gallery#${collection.slug}`} key={collection.id}>
-                  <span>{collection.artworks.length} работ</span>
-                  <h3>{collection.name}</h3>
-                  {collection.description ? <p>{collection.description}</p> : null}
-                </a>
-              ))}
-            </div>
-          </Section>
-          <Section>
-            <FeaturedArtworks artworks={featuredArtworks.slice(0, 6)} />
-          </Section>
+          {collections.length ? (
+            <Section className="collection-teaser-section">
+              <div className="collection-teaser-heading">
+                <p className="eyebrow">Rooms</p>
+                <h2 className="section-heading">Экспозиция собрана как последовательность залов</h2>
+              </div>
+              <div className="collection-teaser-grid">
+                {collections.map((collection) => (
+                  <a className="collection-teaser-card" href={`/gallery#${collection.slug}`} key={collection.id}>
+                    <span>{collection.artworks.length} работ</span>
+                    <h3>{collection.name}</h3>
+                    {collection.description ? <p>{collection.description}</p> : null}
+                  </a>
+                ))}
+              </div>
+            </Section>
+          ) : null}
+          {supportingArtworks.length ? (
+            <Section>
+              <FeaturedArtworks artworks={supportingArtworks.slice(0, 6)} />
+            </Section>
+          ) : (
+            <Section className="home-single-work">
+              <p className="eyebrow">Private catalogue</p>
+              <h2 className="section-heading">Экспозиция будет расширяться постепенно.</h2>
+              <p>
+                Пока в открытом просмотре одна работа, главная страница держит паузу вокруг неё и не имитирует полный каталог.
+              </p>
+            </Section>
+          )}
         </PageContainer>
       </main>
       <SiteFooter />
