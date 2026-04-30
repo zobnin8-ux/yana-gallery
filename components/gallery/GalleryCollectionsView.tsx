@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 
 import { ArtworkGrid } from "@/components/artworks/ArtworkGrid";
+import { worksCountLabel } from "@/lib/ru-plurals";
 import type { ArtworkCollectionWithArtworks, ArtworkStatus } from "@/types/artwork";
 
 type GalleryCollectionsViewProps = {
@@ -70,11 +71,11 @@ export function GalleryCollectionsView({ collections }: GalleryCollectionsViewPr
           <section className="gallery-collection" id={collection.slug} key={collection.id}>
             <div className="gallery-collection-heading">
               <div>
-                <p className="gallery-collection-label">Room {String(index + 1).padStart(2, "0")}</p>
+                <p className="gallery-collection-label">Зал {String(index + 1).padStart(2, "0")}</p>
                 <h2 className="gallery-collection-title">{collection.name}</h2>
               </div>
               <div className="gallery-collection-note">
-                <span>{collection.artworks.length} works</span>
+                <span>{worksCountLabel(collection.artworks.length)}</span>
                 {collection.description ? <p>{collection.description}</p> : null}
               </div>
             </div>

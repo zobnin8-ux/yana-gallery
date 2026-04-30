@@ -39,7 +39,7 @@ export function InquiryForm() {
       </label>
 
       <label className="inquiry-field">
-        <span>Email</span>
+        <span>Почта</span>
         <input name="email" placeholder="name@email.com" required type="email" />
       </label>
 

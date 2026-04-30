@@ -12,19 +12,19 @@ export function Hero({ artworks }: HeroProps) {
   const primaryImage = primaryArtwork?.images[0];
   const statusLabel =
     primaryArtwork?.status === "available"
-      ? "Available"
+      ? "Доступна"
       : primaryArtwork?.status === "reserved"
-        ? "Reserved"
+        ? "В резерве"
         : primaryArtwork?.status === "sold"
-          ? "Sold"
-          : "Private selection";
+          ? "Продана"
+          : "";
 
   return (
     <section className="hero">
       <div className="hero-inner">
         <div className="hero-copy reveal reveal-delay-1">
-          <p className="eyebrow">Private viewing room / 2026</p>
-          <h1 className="hero-title">Yana Zubareva</h1>
+          <p className="eyebrow">Частный просмотр / 2026</p>
+          <h1 className="hero-title">Яна Зубарева</h1>
           <p className="hero-text">
             Живопись как тихое поле присутствия: свет, воздух, пауза и почти архитектурное чувство пространства.
           </p>
@@ -37,9 +37,9 @@ export function Hero({ artworks }: HeroProps) {
             </Link>
           </div>
           <div className="hero-proof">
-            <span>Original works</span>
-            <span>Studio inquiries</span>
-            <span>Catalog on request</span>
+            <span>Авторские работы</span>
+            <span>Запросы в студию</span>
+            <span>Каталог по запросу</span>
           </div>
         </div>
         <div className="hero-visual reveal reveal-delay-2" aria-hidden="true">

@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import type { ArtworkCollectionWithArtworks } from "@/types/artwork";
+import { worksCountLabel } from "@/lib/ru-plurals";
 
 type AdminCollectionsManagerProps = {
   collections: ArtworkCollectionWithArtworks[];
@@ -95,7 +96,7 @@ export function AdminCollectionsManager({ collections }: AdminCollectionsManager
               <div>
                 <span className="admin-collection-panel-label">Коллекция</span>
                 <h3 className="admin-collection-panel-title">{collection.name}</h3>
-                <p className="admin-collection-panel-meta">{collection.artworks.length} работ</p>
+                <p className="admin-collection-panel-meta">{worksCountLabel(collection.artworks.length)}</p>
               </div>
               <div className="admin-collection-panel-actions">
                 <button className="admin-table-link" disabled={savingId === collection.id} type="submit">

@@ -5,6 +5,7 @@ import { Section } from "@/components/layout/Section";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { artworksRepository } from "@/lib/repositories/artworks-repository";
+import { worksCountLabel } from "@/lib/ru-plurals";
 
 export default async function HomePage() {
   const featuredArtworks = await artworksRepository.listFeatured();
@@ -23,7 +24,7 @@ export default async function HomePage() {
           <Section className="home-rhythm">
             <div className="home-rhythm-line" />
             <div className="home-rhythm-copy">
-              <p className="eyebrow">Curatorial note</p>
+              <p className="eyebrow">Кураторская заметка</p>
               <p className="home-intro-text">
                 Это не каталог товаров, а медленное пространство просмотра: каждая работа оставлена с
                 воздухом вокруг себя, чтобы зритель сначала почувствовал тишину, а уже потом прочитал детали.
@@ -33,13 +34,13 @@ export default async function HomePage() {
           {collections.length ? (
             <Section className="collection-teaser-section">
               <div className="collection-teaser-heading">
-                <p className="eyebrow">Rooms</p>
+                <p className="eyebrow">Залы</p>
                 <h2 className="section-heading">Экспозиция собрана как последовательность залов</h2>
               </div>
               <div className="collection-teaser-grid">
                 {collections.map((collection) => (
                   <a className="collection-teaser-card" href={`/gallery#${collection.slug}`} key={collection.id}>
-                    <span>{collection.artworks.length} работ</span>
+                    <span>{worksCountLabel(collection.artworks.length)}</span>
                     <h3>{collection.name}</h3>
                     {collection.description ? <p>{collection.description}</p> : null}
                   </a>
@@ -53,7 +54,7 @@ export default async function HomePage() {
             </Section>
           ) : (
             <Section className="home-single-work">
-              <p className="eyebrow">Private catalogue</p>
+              <p className="eyebrow">Личный каталог</p>
               <h2 className="section-heading">Экспозиция будет расширяться постепенно.</h2>
               <p>
                 Пока в открытом просмотре одна работа, главная страница держит паузу вокруг неё и не имитирует полный каталог.
