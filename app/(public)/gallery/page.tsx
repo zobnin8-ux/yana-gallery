@@ -5,8 +5,8 @@ import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { artworksRepository } from "@/lib/repositories/artworks-repository";
 
-export default function GalleryPage() {
-  const collections = artworksRepository.listCollections();
+export default async function GalleryPage() {
+  const collections = await artworksRepository.listCollections();
 
   return (
     <>

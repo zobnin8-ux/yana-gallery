@@ -18,7 +18,7 @@ type ArtworkPageProps = {
 
 export async function generateMetadata({ params }: ArtworkPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const artwork = getArtworkBySlug(slug);
+  const artwork = await getArtworkBySlug(slug);
   const image = artwork?.images[0];
 
   if (!artwork) {
@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: ArtworkPageProps): Promise<Me
 
 export default async function ArtworkPage({ params }: ArtworkPageProps) {
   const { slug } = await params;
-  const artwork = getArtworkBySlug(slug);
+  const artwork = await getArtworkBySlug(slug);
 
   if (!artwork) {
     notFound();

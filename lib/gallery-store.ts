@@ -1,8 +1,8 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import path from "node:path";
 import { randomUUID } from "node:crypto";
 import { unstable_noStore as noStore } from "next/cache";
 
+import galleryData from "@/data/gallery.json";
+import { getSupabaseAdminClient, getSupabaseStorageBucket, isSupabaseConfigured } from "@/lib/supabase";
 import type { Artwork, ArtworkCollection, ArtworkCollectionWithArtworks, ArtworkImage } from "@/types/artwork";
 import type { Inquiry } from "@/types/inquiry";
 
@@ -12,72 +12,66 @@ type GalleryData = {
   inquiries: Inquiry[];
 };
 
+type CollectionRow = {
+  id: string;
+  slug: string;
+  name: string;
+  description: string | null;
+  cover_artwork_id: string | null;
+  sort_order: number;
+  featured: boolean;
+};
+
+type ArtworkRow = {
+  id: string;
+  slug: string;
+  title: string;
+  collection_id: string | null;
+  year: number | null;
+  medium: string | null;
+  width: number | null;
+  height: number | null;
+  price: number | null;
+  currency: Artwork["currency"];
+  status: Artwork["status"];
+  description: string | null;
+  featured: boolean;
+  hero: boolean;
+  sort_order: number;
+  show_price: boolean;
+  seo_title: string | null;
+  seo_description: string | null;
+};
+
+type ArtworkImageRow = {
+  id: string;
+  artwork_id: string;
+  url: string;
+  thumbnail_url: string | null;
+  alt: string;
+  width: number | null;
+  height: number | null;
+  sort_order: number;
+  is_primary: boolean;
+};
+
+type InquiryRow = {
+  id: string;
+  artwork_id: string | null;
+  artwork_title: string | null;
+  name: string;
+  email: string;
+  message: string;
+  status: Inquiry["status"];
+  created_at: string;
+};
+
 export type ArtworkPayload = Omit<Artwork, "id" | "images"> & {
   id?: string;
   images?: ArtworkImage[];
 };
 
-const dataDirectory = path.join(process.cwd(), "data");
-const galleryDataPath = path.join(dataDirectory, "gallery.json");
-
-function ensureDataFile() {
-  if (!existsSync(dataDirectory)) {
-    mkdirSync(dataDirectory, { recursive: true });
-  }
-
-  if (!existsSync(galleryDataPath)) {
-    writeFileSync(
-      galleryDataPath,
-      JSON.stringify({ collections: [], artworks: [], inquiries: [] }, null, 2),
-      "utf8"
-    );
-  }
-}
-
-function normalizeArtwork(artwork: Artwork): Artwork {
-  const images = [...artwork.images].sort((left, right) => (left.sortOrder ?? 0) - (right.sortOrder ?? 0));
-  const collection = artwork.collection?.trim() || null;
-
-  return {
-    ...artwork,
-    collection,
-    collectionId: artwork.collectionId ?? null,
-    year: artwork.year ?? null,
-    medium: artwork.medium?.trim() || null,
-    width: artwork.width ?? null,
-    height: artwork.height ?? null,
-    price: artwork.price ?? null,
-    currency: artwork.currency ?? null,
-    description: artwork.description?.trim() || null,
-    images,
-    sortOrder: artwork.sortOrder ?? 100,
-    showPrice: artwork.showPrice ?? false,
-    hero: artwork.hero ?? false,
-    seoTitle: artwork.seoTitle?.trim() || null,
-    seoDescription: artwork.seoDescription?.trim() || null
-  };
-}
-
-function normalizeData(data: GalleryData): GalleryData {
-  const collections = [...data.collections].sort((left, right) => left.sortOrder - right.sortOrder);
-  const artworks = [...data.artworks].map(normalizeArtwork).sort((left, right) => left.sortOrder - right.sortOrder);
-  const inquiries = [...data.inquiries].sort((left, right) => right.createdAt.localeCompare(left.createdAt));
-
-  return { collections, artworks, inquiries };
-}
-
-function readGalleryData(): GalleryData {
-  noStore();
-  ensureDataFile();
-
-  const rawData = readFileSync(galleryDataPath, "utf8");
-  return normalizeData(JSON.parse(rawData) as GalleryData);
-}
-
-function writeGalleryData(data: GalleryData) {
-  ensureDataFile();
-  writeFileSync(galleryDataPath, `${JSON.stringify(normalizeData(data), null, 2)}\n`, "utf8");
-}
+const fallbackData = galleryData as GalleryData;
 
 export function slugify(value: string) {
   const slug = value
@@ -91,71 +85,200 @@ export function slugify(value: string) {
   return slug || `artwork-${Date.now()}`;
 }
 
-function ensureUniqueSlug(baseSlug: string, artworks: Artwork[], currentId?: string) {
-  let nextSlug = baseSlug;
-  let index = 2;
-
-  while (artworks.some((artwork) => artwork.slug === nextSlug && artwork.id !== currentId)) {
-    nextSlug = `${baseSlug}-${index}`;
-    index += 1;
-  }
-
-  return nextSlug;
+function collectionFromRow(row: CollectionRow): ArtworkCollection {
+  return {
+    id: row.id,
+    slug: row.slug,
+    name: row.name,
+    description: row.description,
+    coverArtworkId: row.cover_artwork_id,
+    sortOrder: row.sort_order,
+    featured: row.featured
+  };
 }
 
-function buildCollectionMap(collections: ArtworkCollection[]) {
-  return new Map(collections.map((collection) => [collection.id, collection]));
+function imageFromRow(row: ArtworkImageRow): ArtworkImage {
+  return {
+    id: row.id,
+    url: row.url,
+    thumbnailUrl: row.thumbnail_url ?? undefined,
+    alt: row.alt,
+    width: row.width ?? undefined,
+    height: row.height ?? undefined,
+    sortOrder: row.sort_order,
+    isPrimary: row.is_primary
+  };
 }
 
-function withCollectionNames(data: GalleryData): GalleryData {
-  const collectionMap = buildCollectionMap(data.collections);
+function artworkFromRow(row: ArtworkRow, collections: ArtworkCollection[], images: ArtworkImage[]): Artwork {
+  const collection = row.collection_id ? collections.find((item) => item.id === row.collection_id) : undefined;
 
   return {
-    ...data,
-    artworks: data.artworks.map((artwork) => ({
-      ...artwork,
-      collection: artwork.collectionId ? collectionMap.get(artwork.collectionId)?.name ?? artwork.collection : artwork.collection
-    }))
+    id: row.id,
+    slug: row.slug,
+    title: row.title,
+    collectionId: row.collection_id,
+    collection: collection?.name ?? null,
+    year: row.year,
+    medium: row.medium,
+    width: row.width,
+    height: row.height,
+    price: row.price,
+    currency: row.currency,
+    status: row.status,
+    description: row.description,
+    images: images.sort((left, right) => (left.sortOrder ?? 0) - (right.sortOrder ?? 0)),
+    featured: row.featured,
+    hero: row.hero,
+    sortOrder: row.sort_order,
+    showPrice: row.show_price,
+    seoTitle: row.seo_title,
+    seoDescription: row.seo_description
+  };
+}
+
+function inquiryFromRow(row: InquiryRow): Inquiry {
+  return {
+    id: row.id,
+    artworkId: row.artwork_id,
+    artworkTitle: row.artwork_title,
+    name: row.name,
+    email: row.email,
+    message: row.message,
+    status: row.status,
+    createdAt: row.created_at
+  };
+}
+
+function fallbackCollections(): ArtworkCollectionWithArtworks[] {
+  const collections = [...fallbackData.collections].sort((left, right) => left.sortOrder - right.sortOrder);
+  const artworks = [...fallbackData.artworks].sort((left, right) => left.sortOrder - right.sortOrder);
+  const assignedArtworkIds = new Set<string>();
+  const withArtworks = collections.map((collection) => {
+    const collectionArtworks = artworks.filter((artwork) => artwork.collectionId === collection.id);
+    collectionArtworks.forEach((artwork) => assignedArtworkIds.add(artwork.id));
+    return { ...collection, artworks: collectionArtworks };
+  });
+  const uncategorized = artworks.filter((artwork) => !assignedArtworkIds.has(artwork.id));
+
+  return uncategorized.length
+    ? [
+        ...withArtworks,
+        {
+          id: "collection-uncategorized",
+          slug: "uncategorized",
+          name: "Без коллекции",
+          description: null,
+          coverArtworkId: uncategorized[0]?.id ?? null,
+          sortOrder: 10000,
+          featured: false,
+          artworks: uncategorized
+        }
+      ]
+    : withArtworks;
+}
+
+async function getSupabaseData() {
+  const supabase = getSupabaseAdminClient();
+  const [collectionsResult, artworksResult, imagesResult] = await Promise.all([
+    supabase.from("collections").select("*").order("sort_order", { ascending: true }),
+    supabase.from("artworks").select("*").order("sort_order", { ascending: true }),
+    supabase.from("artwork_images").select("*").order("sort_order", { ascending: true })
+  ]);
+
+  if (collectionsResult.error) {
+    throw collectionsResult.error;
+  }
+
+  if (artworksResult.error) {
+    throw artworksResult.error;
+  }
+
+  if (imagesResult.error) {
+    throw imagesResult.error;
+  }
+
+  const collections = (collectionsResult.data as CollectionRow[]).map(collectionFromRow);
+  const imageRows = imagesResult.data as ArtworkImageRow[];
+  const artworks = (artworksResult.data as ArtworkRow[]).map((row) =>
+    artworkFromRow(
+      row,
+      collections,
+      imageRows.filter((image) => image.artwork_id === row.id).map(imageFromRow)
+    )
+  );
+
+  return { collections, artworks };
+}
+
+function artworkToRow(artwork: ArtworkPayload) {
+  return {
+    slug: artwork.slug,
+    title: artwork.title,
+    collection_id: artwork.collectionId ?? null,
+    year: artwork.year ?? null,
+    medium: artwork.medium ?? null,
+    width: artwork.width ?? null,
+    height: artwork.height ?? null,
+    price: artwork.price ?? null,
+    currency: artwork.currency ?? "EUR",
+    status: artwork.status,
+    description: artwork.description ?? null,
+    featured: artwork.featured,
+    hero: artwork.hero,
+    sort_order: artwork.sortOrder,
+    show_price: artwork.showPrice,
+    seo_title: artwork.seoTitle ?? null,
+    seo_description: artwork.seoDescription ?? null
   };
 }
 
 export const galleryStore = {
-  listArtworks() {
-    return withCollectionNames(readGalleryData()).artworks;
+  async listArtworks() {
+    noStore();
+
+    if (!isSupabaseConfigured()) {
+      return [...fallbackData.artworks].sort((left, right) => left.sortOrder - right.sortOrder);
+    }
+
+    return (await getSupabaseData()).artworks;
   },
 
-  listFeaturedArtworks() {
-    return galleryStore.listArtworks().filter((artwork) => artwork.featured);
+  async listFeaturedArtworks() {
+    return (await galleryStore.listArtworks()).filter((artwork) => artwork.featured);
   },
 
-  listHeroArtworks() {
-    return galleryStore.listArtworks().filter((artwork) => artwork.hero);
+  async listHeroArtworks() {
+    return (await galleryStore.listArtworks()).filter((artwork) => artwork.hero);
   },
 
-  findArtworkById(id: string) {
-    return galleryStore.listArtworks().find((artwork) => artwork.id === id);
+  async findArtworkById(id: string) {
+    return (await galleryStore.listArtworks()).find((artwork) => artwork.id === id);
   },
 
-  findArtworkBySlug(slug: string) {
-    return galleryStore.listArtworks().find((artwork) => artwork.slug === slug);
+  async findArtworkBySlug(slug: string) {
+    return (await galleryStore.listArtworks()).find((artwork) => artwork.slug === slug);
   },
 
-  listCollections(): ArtworkCollectionWithArtworks[] {
-    const data = withCollectionNames(readGalleryData());
+  async listCollections(): Promise<ArtworkCollectionWithArtworks[]> {
+    noStore();
+
+    if (!isSupabaseConfigured()) {
+      return fallbackCollections();
+    }
+
+    const { collections, artworks } = await getSupabaseData();
     const assignedArtworkIds = new Set<string>();
-
-    const collections = data.collections.map((collection) => {
-      const artworks = data.artworks.filter((artwork) => artwork.collectionId === collection.id);
-      artworks.forEach((artwork) => assignedArtworkIds.add(artwork.id));
-
-      return { ...collection, artworks };
+    const withArtworks = collections.map((collection) => {
+      const collectionArtworks = artworks.filter((artwork) => artwork.collectionId === collection.id);
+      collectionArtworks.forEach((artwork) => assignedArtworkIds.add(artwork.id));
+      return { ...collection, artworks: collectionArtworks };
     });
-
-    const uncategorized = data.artworks.filter((artwork) => !assignedArtworkIds.has(artwork.id));
+    const uncategorized = artworks.filter((artwork) => !assignedArtworkIds.has(artwork.id));
 
     return uncategorized.length
       ? [
-          ...collections,
+          ...withArtworks,
           {
             id: "collection-uncategorized",
             slug: "uncategorized",
@@ -167,77 +290,177 @@ export const galleryStore = {
             artworks: uncategorized
           }
         ]
-      : collections;
+      : withArtworks;
   },
 
-  upsertArtwork(payload: ArtworkPayload) {
-    const data = readGalleryData();
-    const existingArtwork = payload.id ? data.artworks.find((artwork) => artwork.id === payload.id) : undefined;
-    const id = existingArtwork?.id ?? randomUUID();
-    const slug = ensureUniqueSlug(payload.slug || slugify(payload.title), data.artworks, id);
-    const images = payload.images?.length ? payload.images : existingArtwork?.images ?? [];
+  async upsertArtwork(payload: ArtworkPayload) {
+    if (!isSupabaseConfigured()) {
+      throw new Error("Supabase is required to save artworks.");
+    }
 
-    const artwork = normalizeArtwork({
-      ...payload,
-      id,
-      slug,
-      images
-    });
+    const supabase = getSupabaseAdminClient();
+    const id = payload.id || randomUUID();
+    const artworkRow = { id, ...artworkToRow({ ...payload, slug: payload.slug || slugify(payload.title) }) };
+    const { error } = await supabase.from("artworks").upsert(artworkRow, { onConflict: "id" });
 
-    const nextArtworks = existingArtwork
-      ? data.artworks.map((item) => (item.id === id ? artwork : item))
-      : [...data.artworks, artwork];
+    if (error) {
+      throw error;
+    }
 
-    writeGalleryData({ ...data, artworks: nextArtworks });
-    return artwork;
+    if (payload.images) {
+      await supabase.from("artwork_images").delete().eq("artwork_id", id);
+
+      if (payload.images.length) {
+        const { error: imagesError } = await supabase.from("artwork_images").insert(
+          payload.images.map((image, index) => ({
+            id: image.id || randomUUID(),
+            artwork_id: id,
+            url: image.url,
+            thumbnail_url: image.thumbnailUrl ?? image.url,
+            alt: image.alt,
+            width: image.width ?? null,
+            height: image.height ?? null,
+            sort_order: image.sortOrder ?? index + 1,
+            is_primary: image.isPrimary ?? index === 0
+          }))
+        );
+
+        if (imagesError) {
+          throw imagesError;
+        }
+      }
+    }
+
+    return galleryStore.findArtworkById(id);
   },
 
-  deleteArtwork(id: string) {
-    const data = readGalleryData();
-    writeGalleryData({ ...data, artworks: data.artworks.filter((artwork) => artwork.id !== id) });
+  async deleteArtwork(id: string) {
+    if (!isSupabaseConfigured()) {
+      throw new Error("Supabase is required to delete artworks.");
+    }
+
+    const { error } = await getSupabaseAdminClient().from("artworks").delete().eq("id", id);
+
+    if (error) {
+      throw error;
+    }
   },
 
-  upsertCollection(collection: ArtworkCollection) {
-    const data = readGalleryData();
-    const existingCollection = data.collections.find((item) => item.id === collection.id);
-    const nextCollection = {
-      ...collection,
+  async upsertCollection(collection: ArtworkCollection) {
+    if (!isSupabaseConfigured()) {
+      throw new Error("Supabase is required to save collections.");
+    }
+
+    const row = {
+      id: collection.id || randomUUID(),
       slug: collection.slug || slugify(collection.name),
-      description: collection.description?.trim() || null
+      name: collection.name,
+      description: collection.description ?? null,
+      cover_artwork_id: collection.coverArtworkId ?? null,
+      sort_order: collection.sortOrder,
+      featured: collection.featured
     };
-    const collections = existingCollection
-      ? data.collections.map((item) => (item.id === collection.id ? nextCollection : item))
-      : [...data.collections, nextCollection];
+    const { data, error } = await getSupabaseAdminClient()
+      .from("collections")
+      .upsert(row, { onConflict: "id" })
+      .select("*")
+      .single();
 
-    writeGalleryData({ ...data, collections });
-    return nextCollection;
+    if (error) {
+      throw error;
+    }
+
+    return collectionFromRow(data as CollectionRow);
   },
 
-  deleteCollection(id: string) {
-    const data = readGalleryData();
-    writeGalleryData({
-      ...data,
-      collections: data.collections.filter((collection) => collection.id !== id),
-      artworks: data.artworks.map((artwork) =>
-        artwork.collectionId === id ? { ...artwork, collectionId: null, collection: null } : artwork
-      )
+  async deleteCollection(id: string) {
+    if (!isSupabaseConfigured()) {
+      throw new Error("Supabase is required to delete collections.");
+    }
+
+    const { error } = await getSupabaseAdminClient().from("collections").delete().eq("id", id);
+
+    if (error) {
+      throw error;
+    }
+  },
+
+  async createInquiry(inquiry: Omit<Inquiry, "id" | "createdAt" | "status">) {
+    if (!isSupabaseConfigured()) {
+      return {
+        ...inquiry,
+        id: randomUUID(),
+        createdAt: new Date().toISOString(),
+        status: "new" as const
+      };
+    }
+
+    const { data, error } = await getSupabaseAdminClient()
+      .from("inquiries")
+      .insert({
+        artwork_id: inquiry.artworkId ?? null,
+        artwork_title: inquiry.artworkTitle ?? null,
+        name: inquiry.name,
+        email: inquiry.email,
+        message: inquiry.message,
+        status: "new"
+      })
+      .select("*")
+      .single();
+
+    if (error) {
+      throw error;
+    }
+
+    return inquiryFromRow(data as InquiryRow);
+  },
+
+  async listInquiries() {
+    noStore();
+
+    if (!isSupabaseConfigured()) {
+      return [];
+    }
+
+    const { data, error } = await getSupabaseAdminClient()
+      .from("inquiries")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      throw error;
+    }
+
+    return (data as InquiryRow[]).map(inquiryFromRow);
+  },
+
+  async uploadArtworkImage(file: File, alt: string, sortOrder: number): Promise<ArtworkImage> {
+    if (!isSupabaseConfigured()) {
+      throw new Error("Supabase is required to upload images.");
+    }
+
+    const extension = file.name.split(".").pop() || "jpg";
+    const filename = `${Date.now()}-${randomUUID()}.${extension}`;
+    const path = `artworks/${filename}`;
+    const supabase = getSupabaseAdminClient();
+    const { error } = await supabase.storage.from(getSupabaseStorageBucket()).upload(path, file, {
+      cacheControl: "31536000",
+      upsert: false
     });
-  },
 
-  createInquiry(inquiry: Omit<Inquiry, "id" | "createdAt" | "status">) {
-    const data = readGalleryData();
-    const nextInquiry: Inquiry = {
-      ...inquiry,
+    if (error) {
+      throw error;
+    }
+
+    const { data } = supabase.storage.from(getSupabaseStorageBucket()).getPublicUrl(path);
+
+    return {
       id: randomUUID(),
-      createdAt: new Date().toISOString(),
-      status: "new"
+      url: data.publicUrl,
+      thumbnailUrl: data.publicUrl,
+      alt,
+      sortOrder,
+      isPrimary: sortOrder === 1
     };
-
-    writeGalleryData({ ...data, inquiries: [nextInquiry, ...data.inquiries] });
-    return nextInquiry;
-  },
-
-  listInquiries() {
-    return readGalleryData().inquiries;
   }
 };

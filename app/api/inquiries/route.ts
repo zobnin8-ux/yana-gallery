@@ -23,7 +23,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const inquiry = galleryStore.createInquiry({
+  const inquiry = await galleryStore.createInquiry({
     name,
     email,
     message,

@@ -18,8 +18,8 @@ type EditArtworkPageProps = {
 
 export default async function EditArtworkPage({ params }: EditArtworkPageProps) {
   const { id } = await params;
-  const artwork = getArtworkById(id);
-  const collections = artworksRepository.listCollections();
+  const artwork = await getArtworkById(id);
+  const collections = await artworksRepository.listCollections();
 
   if (!artwork) {
     notFound();
