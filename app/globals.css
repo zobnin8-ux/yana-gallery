@@ -261,15 +261,16 @@ main {
 
 .home-rhythm {
   padding: 0 0 68px;
-  display: grid;
-  grid-template-columns: 120px minmax(0, 1fr);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   gap: 28px;
-  align-items: start;
 }
 
 .home-rhythm-line {
+  width: 72px;
   height: 1px;
-  margin-top: 16px;
+  flex-shrink: 0;
   background: linear-gradient(90deg, rgba(83, 64, 44, 0.35), rgba(83, 64, 44, 0));
 }
 
@@ -2189,11 +2190,11 @@ body {
 
 .home-rhythm {
   padding: 86px 0 118px;
-  grid-template-columns: minmax(160px, 0.32fr) minmax(0, 0.68fr);
   border-top: 1px solid rgba(23, 23, 21, 0.12);
 }
 
 .home-rhythm-line {
+  width: min(120px, 22vw);
   background: #171715;
 }
 
@@ -2265,8 +2266,23 @@ body {
 }
 
 .featured-artworks-heading {
+  display: flex;
+  flex-direction: column;
   align-items: flex-start;
+  justify-content: flex-start;
+  gap: 12px;
   margin-bottom: 72px;
+}
+
+.featured-artworks-heading .eyebrow {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  line-height: 1.35;
+  text-transform: uppercase;
+  color: rgba(23, 23, 21, 0.9);
 }
 
 .artwork-grid-home,
@@ -2638,7 +2654,6 @@ body {
   }
 
   .home-rhythm {
-    grid-template-columns: 1fr;
     gap: 18px;
   }
 
