@@ -53,7 +53,7 @@ export default async function ArtworkPage({ params }: ArtworkPageProps) {
         <PageContainer>
           <Section className="artwork-section">
             <div className="artwork-page-intro reveal reveal-delay-1">
-              <p className="eyebrow">Artwork</p>
+              <p className="eyebrow">Artwork passport</p>
             </div>
             <div className="artwork-layout">
               <ArtworkHero artwork={artwork} />

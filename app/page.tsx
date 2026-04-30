@@ -20,17 +20,17 @@ export default function HomePage() {
           <Section className="home-rhythm">
             <div className="home-rhythm-line" />
             <div className="home-rhythm-copy">
-              <p className="eyebrow">Private viewing room</p>
+              <p className="eyebrow">Curatorial note</p>
               <p className="home-intro-text">
-                Галерея построена как тихое пространство для медленного взгляда: свет, пропорции,
-                фактура и пауза важнее визуального шума.
+                Это не каталог товаров, а медленное пространство просмотра: каждая работа оставлена с
+                воздухом вокруг себя, чтобы зритель сначала почувствовал тишину, а уже потом прочитал детали.
               </p>
             </div>
           </Section>
           <Section className="collection-teaser-section">
             <div className="collection-teaser-heading">
-              <p className="eyebrow">Current collections</p>
-              <h2 className="section-heading">Коллекции как отдельные комнаты</h2>
+              <p className="eyebrow">Rooms</p>
+              <h2 className="section-heading">Экспозиция собрана как последовательность залов</h2>
             </div>
             <div className="collection-teaser-grid">
               {collections.map((collection) => (

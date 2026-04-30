@@ -16,12 +16,12 @@ export default function GalleryPage() {
           <Section className="gallery-section reveal reveal-delay-1">
             <div className="gallery-heading">
               <div className="gallery-heading-copy">
-                <p className="eyebrow">Viewing room</p>
-                <h1 className="gallery-title">Галерея работ</h1>
+                <p className="eyebrow">Viewing rooms</p>
+                <h1 className="gallery-title">Экспозиция</h1>
               </div>
               <p className="gallery-intro">
-                Каждая серия собрана как отдельная комната: можно смотреть всё сразу или оставить только
-                доступные работы, чтобы выбрать объект для запроса.
+                Работы разложены не как магазинная сетка, а как серия тихих залов. Сначала смотрите свет и
+                масштаб, затем переходите к паспорту выбранной работы.
               </p>
             </div>
             <GalleryCollectionsView collections={collections} />

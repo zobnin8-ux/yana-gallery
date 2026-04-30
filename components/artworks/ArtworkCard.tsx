@@ -40,7 +40,7 @@ export function ArtworkCard({ artwork, variant = "default" }: ArtworkCardProps) 
           <p className="artwork-card-meta">
             {[artwork.year, artwork.width && artwork.height ? `${artwork.width} × ${artwork.height} cm` : null]
               .filter(Boolean)
-              .join(" · ")}
+              .join(", ")}
           </p>
           <span className={`artwork-card-status artwork-card-status-${artwork.status}`}>{statusLabel}</span>
         </div>
