@@ -15,7 +15,7 @@ function formatDimensions(artwork: Artwork) {
 }
 
 function formatPrice(artwork: Artwork) {
-  if (typeof artwork.price !== "number") {
+  if (!artwork.showPrice || typeof artwork.price !== "number") {
     return "\u041f\u043e \u0437\u0430\u043f\u0440\u043e\u0441\u0443";
   }
 
@@ -31,9 +31,13 @@ function formatPrice(artwork: Artwork) {
 }
 
 export function ArtworkMeta({ artwork }: ArtworkMetaProps) {
+  const statusLabel =
+    artwork.status === "available" ? "Доступна" : artwork.status === "reserved" ? "В резерве" : "Продана";
+
   return (
     <div className="artwork-meta">
       <div className="artwork-meta-heading">
+        <p className={`artwork-status artwork-status-${artwork.status}`}>{statusLabel}</p>
         <h1 className="artwork-meta-title">{artwork.title}</h1>
         {artwork.year ? <p className="artwork-meta-year">{artwork.year}</p> : null}
       </div>
@@ -51,9 +55,13 @@ export function ArtworkMeta({ artwork }: ArtworkMetaProps) {
           <dt>{"\u0426\u0435\u043d\u0430"}</dt>
           <dd>{formatPrice(artwork)}</dd>
         </div>
+        <div className="artwork-spec">
+          <dt>{"\u0414\u043e\u0441\u0442\u0430\u0432\u043a\u0430"}</dt>
+          <dd>Обсуждается индивидуально</dd>
+        </div>
       </dl>
 
-      <Link className="artwork-request-link" href="/contact">
+      <Link className="artwork-request-link" href={`/contact?artwork=${encodeURIComponent(artwork.title)}`}>
         {"\u0417\u0430\u043f\u0440\u043e\u0441\u0438\u0442\u044c"}
       </Link>
     </div>

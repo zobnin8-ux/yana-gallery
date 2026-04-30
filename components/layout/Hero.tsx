@@ -16,18 +16,23 @@ export function Hero({ artworks }: HeroProps) {
     <section className="hero">
       <div className="hero-inner">
         <div className="hero-copy reveal reveal-delay-1">
-          <p className="eyebrow">LGHT art gallery</p>
+          <p className="eyebrow">Yana Zubareva Studio</p>
           <h1 className="hero-title">Yana Zubareva</h1>
           <p className="hero-text">
-            Современная живопись, представленная через тишину, атмосферу и спокойное ощущение пространства.
+            Современная живопись как пространство тишины: свет, воздух и мягкое присутствие работы в интерьере.
           </p>
           <div className="hero-actions">
             <Link className="hero-link hero-link-primary" href="/gallery">
-              Смотреть галерею
+              Открыть viewing room
             </Link>
             <Link className="hero-link" href="/about">
-              Обо мне
+              Artist statement
             </Link>
+          </div>
+          <div className="hero-proof">
+            <span>Original works</span>
+            <span>Private inquiries</span>
+            <span>Worldwide shipping on request</span>
           </div>
         </div>
         <div className="hero-visual reveal reveal-delay-2" aria-hidden="true">

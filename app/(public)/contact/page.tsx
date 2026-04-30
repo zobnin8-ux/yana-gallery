@@ -1,4 +1,6 @@
-﻿import { InquiryForm } from "@/components/forms/InquiryForm";
+﻿import { Suspense } from "react";
+
+import { InquiryForm } from "@/components/forms/InquiryForm";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { Section } from "@/components/layout/Section";
 import { SiteFooter } from "@/components/layout/SiteFooter";
@@ -32,7 +34,9 @@ export default function ContactPage() {
               </div>
 
               <div className="contact-form-card reveal reveal-delay-1">
-                <InquiryForm />
+                <Suspense fallback={<p>Загружаем форму...</p>}>
+                  <InquiryForm />
+                </Suspense>
               </div>
             </div>
           </Section>

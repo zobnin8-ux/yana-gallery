@@ -6,7 +6,7 @@ import { SiteHeader } from "@/components/layout/SiteHeader";
 import { artworksRepository } from "@/lib/repositories/artworks-repository";
 
 export default function GalleryPage() {
-  const artworks = artworksRepository.list();
+  const collections = artworksRepository.listCollections();
 
   return (
     <>
@@ -16,15 +16,15 @@ export default function GalleryPage() {
           <Section className="gallery-section reveal reveal-delay-1">
             <div className="gallery-heading">
               <div className="gallery-heading-copy">
-                <p className="eyebrow">Collection</p>
-                <h1 className="gallery-title">Gallery</h1>
+                <p className="eyebrow">Viewing room</p>
+                <h1 className="gallery-title">Галерея работ</h1>
               </div>
               <p className="gallery-intro">
-                Работы собраны по коллекциям, чтобы каждая серия сохраняла собственный ритм, настроение и
-                внутреннюю логику просмотра.
+                Каждая серия собрана как отдельная комната: можно смотреть всё сразу или оставить только
+                доступные работы, чтобы выбрать объект для запроса.
               </p>
             </div>
-            <GalleryCollectionsView artworks={artworks} />
+            <GalleryCollectionsView collections={collections} />
           </Section>
         </PageContainer>
       </main>

@@ -1,0 +1,223 @@
+{
+  "collections": [
+    {
+      "id": "collection-light-compositions",
+      "slug": "light-compositions",
+      "name": "Light compositions",
+      "description": "Серия о мягком свете, паузе и состоянии внутреннего равновесия.",
+      "coverArtworkId": "artwork-1",
+      "sortOrder": 10,
+      "featured": true
+    },
+    {
+      "id": "collection-atmospheric-fields",
+      "slug": "atmospheric-fields",
+      "name": "Atmospheric fields",
+      "description": "Более просторные работы с ощущением воздуха, дистанции и медленного движения.",
+      "coverArtworkId": "artwork-4",
+      "sortOrder": 20,
+      "featured": true
+    }
+  ],
+  "artworks": [
+    {
+      "id": "artwork-1",
+      "slug": "light-composition-1",
+      "title": "Light Composition I",
+      "collectionId": "collection-light-compositions",
+      "collection": "Light compositions",
+      "year": 2024,
+      "medium": "Canvas, mixed media",
+      "width": 80,
+      "height": 100,
+      "price": 3200,
+      "currency": "EUR",
+      "status": "available",
+      "description": "A quiet composition built around soft transitions of light and a restrained sense of movement.",
+      "images": [
+        {
+          "id": "artwork-1-image-1",
+          "url": "/images/artworks/light-composition-1.svg",
+          "thumbnailUrl": "/images/artworks/light-composition-1.svg",
+          "alt": "Light Composition I",
+          "width": 80,
+          "height": 100,
+          "sortOrder": 10,
+          "isPrimary": true
+        }
+      ],
+      "featured": true,
+      "hero": true,
+      "sortOrder": 10,
+      "showPrice": true,
+      "seoTitle": "Light Composition I | Yana Zubareva",
+      "seoDescription": "Light Composition I, 2024. Contemporary artwork by Yana Zubareva."
+    },
+    {
+      "id": "artwork-2",
+      "slug": "light-composition-2",
+      "title": "Light Composition II",
+      "collectionId": "collection-light-compositions",
+      "collection": "Light compositions",
+      "year": 2025,
+      "medium": "Canvas, mixed media",
+      "width": 90,
+      "height": 120,
+      "price": null,
+      "currency": "EUR",
+      "status": "reserved",
+      "description": "A larger work with a calmer vertical rhythm, focused on atmosphere, balance, and spaciousness.",
+      "images": [
+        {
+          "id": "artwork-2-image-1",
+          "url": "/images/artworks/light-composition-2.svg",
+          "thumbnailUrl": "/images/artworks/light-composition-2.svg",
+          "alt": "Light Composition II",
+          "width": 90,
+          "height": 120,
+          "sortOrder": 10,
+          "isPrimary": true
+        }
+      ],
+      "featured": true,
+      "hero": true,
+      "sortOrder": 20,
+      "showPrice": false,
+      "seoTitle": "Light Composition II | Yana Zubareva",
+      "seoDescription": "Light Composition II, 2025. Contemporary artwork by Yana Zubareva."
+    },
+    {
+      "id": "artwork-3",
+      "slug": "light-composition-3",
+      "title": "Light Composition III",
+      "collectionId": "collection-light-compositions",
+      "collection": "Light compositions",
+      "year": 2025,
+      "medium": "Canvas, mixed media",
+      "width": 70,
+      "height": 90,
+      "price": null,
+      "currency": "EUR",
+      "status": "available",
+      "description": "A compact study of tone and presence, intended as a continuation of the same light-based series.",
+      "images": [
+        {
+          "id": "artwork-3-image-1",
+          "url": "/images/artworks/light-composition-3.svg",
+          "thumbnailUrl": "/images/artworks/light-composition-3.svg",
+          "alt": "Light Composition III",
+          "width": 70,
+          "height": 90,
+          "sortOrder": 10,
+          "isPrimary": true
+        }
+      ],
+      "featured": true,
+      "hero": false,
+      "sortOrder": 30,
+      "showPrice": false,
+      "seoTitle": "Light Composition III | Yana Zubareva",
+      "seoDescription": "Light Composition III, 2025. Contemporary artwork by Yana Zubareva."
+    },
+    {
+      "id": "artwork-4",
+      "slug": "light-composition-4",
+      "title": "Light Composition IV",
+      "collectionId": "collection-atmospheric-fields",
+      "collection": "Atmospheric fields",
+      "year": 2026,
+      "medium": "Canvas, mixed media",
+      "width": 110,
+      "height": 140,
+      "price": 4200,
+      "currency": "EUR",
+      "status": "available",
+      "description": "A more open composition with a wider field of light and a slower, horizontal rhythm.",
+      "images": [
+        {
+          "id": "artwork-4-image-1",
+          "url": "/images/artworks/light-composition-4.svg",
+          "thumbnailUrl": "/images/artworks/light-composition-4.svg",
+          "alt": "Light Composition IV",
+          "width": 110,
+          "height": 140,
+          "sortOrder": 10,
+          "isPrimary": true
+        }
+      ],
+      "featured": true,
+      "hero": false,
+      "sortOrder": 40,
+      "showPrice": true,
+      "seoTitle": "Light Composition IV | Yana Zubareva",
+      "seoDescription": "Light Composition IV, 2026. Contemporary artwork by Yana Zubareva."
+    },
+    {
+      "id": "artwork-5",
+      "slug": "light-composition-5",
+      "title": "Light Composition V",
+      "collectionId": "collection-atmospheric-fields",
+      "collection": "Atmospheric fields",
+      "year": 2026,
+      "medium": "Canvas, mixed media",
+      "width": 85,
+      "height": 115,
+      "price": null,
+      "currency": "EUR",
+      "status": "reserved",
+      "description": "A vertical study with a soft central glow and a more delicate edge treatment.",
+      "images": [
+        {
+          "id": "artwork-5-image-1",
+          "url": "/images/artworks/light-composition-5.svg",
+          "thumbnailUrl": "/images/artworks/light-composition-5.svg",
+          "alt": "Light Composition V",
+          "width": 85,
+          "height": 115,
+          "sortOrder": 10,
+          "isPrimary": true
+        }
+      ],
+      "featured": true,
+      "hero": false,
+      "sortOrder": 50,
+      "showPrice": false,
+      "seoTitle": "Light Composition V | Yana Zubareva",
+      "seoDescription": "Light Composition V, 2026. Contemporary artwork by Yana Zubareva."
+    },
+    {
+      "id": "artwork-6",
+      "slug": "light-composition-6",
+      "title": "Light Composition VI",
+      "collectionId": "collection-atmospheric-fields",
+      "collection": "Atmospheric fields",
+      "year": 2026,
+      "medium": "Canvas, mixed media",
+      "width": 100,
+      "height": 100,
+      "price": 3900,
+      "currency": "EUR",
+      "status": "available",
+      "description": "A quieter square composition focused on balance, softness, and an even spread of light.",
+      "images": [
+        {
+          "id": "artwork-6-image-1",
+          "url": "/images/artworks/light-composition-6.svg",
+          "thumbnailUrl": "/images/artworks/light-composition-6.svg",
+          "alt": "Light Composition VI",
+          "width": 100,
+          "height": 100,
+          "sortOrder": 10,
+          "isPrimary": true
+        }
+      ],
+      "featured": true,
+      "hero": false,
+      "sortOrder": 60,
+      "showPrice": true,
+      "seoTitle": "Light Composition VI | Yana Zubareva",
+      "seoDescription": "Light Composition VI, 2026. Contemporary artwork by Yana Zubareva."
+    }
+  ],
+  "inquiries": []
+}

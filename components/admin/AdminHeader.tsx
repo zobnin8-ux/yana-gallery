@@ -1,5 +1,7 @@
 ﻿import Link from "next/link";
 
+import { AdminLogoutButton } from "./AdminLogoutButton";
+
 export function AdminHeader() {
   return (
     <header className="admin-header">
@@ -9,9 +11,12 @@ export function AdminHeader() {
           <h1 className="admin-title">Управление работами</h1>
           <p className="admin-subtitle">Спокойное рабочее пространство для обновления галереи.</p>
         </div>
-        <Link className="admin-back-link" href="/">
-          Вернуться на сайт
-        </Link>
+        <div className="admin-header-actions">
+          <Link className="admin-back-link" href="/">
+            Вернуться на сайт
+          </Link>
+          <AdminLogoutButton />
+        </div>
       </div>
     </header>
   );

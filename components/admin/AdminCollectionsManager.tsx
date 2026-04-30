@@ -1,234 +1,148 @@
 ﻿"use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
-import {
-  applyCollectionOverrides,
-  collectionOverridesStorageKey,
-  groupArtworksByCollection,
-  type CollectionOverrides
-} from "@/lib/collections/collection-overrides";
-import type { Artwork } from "@/types/artwork";
+import type { ArtworkCollectionWithArtworks } from "@/types/artwork";
 
 type AdminCollectionsManagerProps = {
-  artworks: Artwork[];
+  collections: ArtworkCollectionWithArtworks[];
 };
 
-const uncategorizedCollectionName = "Без коллекции";
-
-function readCollectionOverrides() {
-  if (typeof window === "undefined") {
-    return {};
-  }
-
-  try {
-    const rawValue = window.localStorage.getItem(collectionOverridesStorageKey);
-    return rawValue ? (JSON.parse(rawValue) as CollectionOverrides) : {};
-  } catch {
-    return {};
-  }
-}
-
-function writeCollectionOverrides(overrides: CollectionOverrides) {
-  window.localStorage.setItem(collectionOverridesStorageKey, JSON.stringify(overrides));
-  window.dispatchEvent(new Event("yana-collections-updated"));
-}
-
-export function AdminCollectionsManager({ artworks }: AdminCollectionsManagerProps) {
-  const [overrides, setOverrides] = useState<CollectionOverrides>(() => readCollectionOverrides());
-  const [selectedCollection, setSelectedCollection] = useState<string | null>(null);
-  const [renameValue, setRenameValue] = useState("");
-  const [moveValues, setMoveValues] = useState<Record<string, string>>({});
+export function AdminCollectionsManager({ collections }: AdminCollectionsManagerProps) {
+  const router = useRouter();
   const [statusMessage, setStatusMessage] = useState("");
+  const [savingId, setSavingId] = useState<string | null>(null);
 
-  const currentArtworks = useMemo(() => applyCollectionOverrides(artworks, overrides), [artworks, overrides]);
-  const collections = useMemo(() => groupArtworksByCollection(currentArtworks), [currentArtworks]);
+  async function saveCollection(formData: FormData) {
+    const id = String(formData.get("id") ?? "") || undefined;
+    const name = String(formData.get("name") ?? "").trim();
 
-  useEffect(() => {
-    if (!collections.length) {
-      setSelectedCollection(null);
-      setRenameValue("");
+    if (!name) {
+      setStatusMessage("Введите название коллекции.");
       return;
     }
 
-    const nextSelected =
-      selectedCollection && collections.some((item) => item.name === selectedCollection)
-        ? selectedCollection
-        : collections[0].name;
-
-    setSelectedCollection(nextSelected);
-    setRenameValue(nextSelected === uncategorizedCollectionName ? "" : nextSelected);
-  }, [collections, selectedCollection]);
-
-  const activeCollection =
-    collections.find((collection) => collection.name === selectedCollection) ?? collections[0] ?? null;
-
-  const saveOverrides = (nextOverrides: CollectionOverrides, nextMessage: string) => {
-    setOverrides(nextOverrides);
-    writeCollectionOverrides(nextOverrides);
-    setStatusMessage(nextMessage);
-  };
-
-  const handleSelectCollection = (collectionName: string) => {
-    setSelectedCollection(collectionName);
-    setRenameValue(collectionName === uncategorizedCollectionName ? "" : collectionName);
-    setStatusMessage("");
-  };
-
-  const handleRenameCollection = () => {
-    if (!activeCollection) {
-      return;
-    }
-
-    const nextName = renameValue.trim();
-
-    if (!nextName || nextName === activeCollection.name) {
-      setStatusMessage("Введи новое название коллекции.");
-      return;
-    }
-
-    const nextOverrides = { ...overrides };
-
-    currentArtworks.forEach((artwork) => {
-      const artworkCollection = artwork.collection?.trim() || uncategorizedCollectionName;
-
-      if (artworkCollection === activeCollection.name) {
-        nextOverrides[artwork.id] = nextName;
-      }
+    setSavingId(id ?? "new");
+    const response = await fetch("/api/admin/collections", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id,
+        name,
+        description: String(formData.get("description") ?? ""),
+        coverArtworkId: String(formData.get("coverArtworkId") ?? "") || null,
+        sortOrder: Number(formData.get("sortOrder") ?? 100),
+        featured: formData.get("featured") === "on"
+      })
     });
+    const result = (await response.json()) as { success: boolean; message?: string };
 
-    setSelectedCollection(nextName);
-    saveOverrides(nextOverrides, `Коллекция переименована: ${nextName}`);
-  };
+    setSavingId(null);
+    setStatusMessage(result.success ? "Коллекция сохранена." : result.message ?? "Не удалось сохранить коллекцию.");
+    router.refresh();
+  }
 
-  const handleDeleteCollection = () => {
-    if (!activeCollection) {
+  async function deleteCollection(collection: ArtworkCollectionWithArtworks) {
+    const confirmed = window.confirm(`Удалить коллекцию «${collection.name}»? Работы останутся без коллекции.`);
+
+    if (!confirmed) {
       return;
     }
 
-    const nextOverrides = { ...overrides };
-
-    currentArtworks.forEach((artwork) => {
-      const artworkCollection = artwork.collection?.trim() || uncategorizedCollectionName;
-
-      if (artworkCollection === activeCollection.name) {
-        nextOverrides[artwork.id] = null;
-      }
+    setSavingId(collection.id);
+    await fetch("/api/admin/collections", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: collection.id })
     });
-
-    setSelectedCollection(uncategorizedCollectionName);
-    setRenameValue("");
-    saveOverrides(nextOverrides, "Коллекция удалена. Картины перенесены в раздел «Без коллекции». ");
-  };
-
-  const handleMoveArtwork = (artworkId: string, fallbackCollection: string | null) => {
-    const nextName = moveValues[artworkId]?.trim();
-    const normalizedName = nextName || fallbackCollection || null;
-
-    saveOverrides(
-      {
-        ...overrides,
-        [artworkId]: normalizedName
-      },
-      "Картина перемещена в другую коллекцию."
-    );
-  };
-
-  if (!collections.length) {
-    return null;
+    setSavingId(null);
+    setStatusMessage("Коллекция удалена.");
+    router.refresh();
   }
 
   return (
     <div className="admin-collections-manager">
-      <div className="admin-collection-selector">
-        {collections.map((collection) => {
-          const isActive = collection.name === activeCollection?.name;
+      {statusMessage ? <p className="admin-collection-status">{statusMessage}</p> : null}
 
-          return (
-            <button
-              className={`admin-collection-choice${isActive ? " is-active" : ""}`}
-              key={collection.name}
-              onClick={() => handleSelectCollection(collection.name)}
-              type="button"
-            >
-              <span className="admin-collection-choice-mark">{isActive ? "✓" : ""}</span>
-              <span className="admin-collection-choice-copy">
-                <strong>{collection.name}</strong>
-                <span>{collection.artworks.length} работ</span>
-              </span>
-            </button>
-          );
-        })}
-      </div>
+      <form action={saveCollection} className="admin-collection-panel">
+        <div className="admin-form-grid">
+          <label className="admin-field">
+            <span>Новая коллекция</span>
+            <input name="name" placeholder="Название коллекции" />
+          </label>
+          <label className="admin-field">
+            <span>Порядок</span>
+            <input defaultValue="100" name="sortOrder" />
+          </label>
+          <label className="admin-field admin-field-full">
+            <span>Описание</span>
+            <textarea name="description" placeholder="Короткое описание коллекции" rows={3} />
+          </label>
+        </div>
+        <div className="admin-form-actions">
+          <button className="admin-submit-button" disabled={savingId === "new"} type="submit">
+            {savingId === "new" ? "Создаём..." : "Создать коллекцию"}
+          </button>
+        </div>
+      </form>
 
-      {activeCollection ? (
-        <article className="admin-collection-panel">
-          <div className="admin-collection-panel-head">
-            <div>
-              <span className="admin-collection-panel-label">Выбранная коллекция</span>
-              <h3 className="admin-collection-panel-title">{activeCollection.name}</h3>
-              <p className="admin-collection-panel-meta">{activeCollection.artworks.length} работ</p>
-            </div>
-
-            <div className="admin-collection-panel-actions">
-              <input
-                className="admin-collection-rename-input"
-                onChange={(event) => setRenameValue(event.target.value)}
-                placeholder="Новое название коллекции"
-                type="text"
-                value={renameValue}
-              />
-              <button className="admin-table-link" onClick={handleRenameCollection} type="button">
-                Переименовать
-              </button>
-              <button className="admin-collection-delete" onClick={handleDeleteCollection} type="button">
-                Удалить коллекцию
-              </button>
-            </div>
-          </div>
-
-          {statusMessage ? <p className="admin-collection-status">{statusMessage}</p> : null}
-
-          <div className="admin-collection-artworks">
-            {activeCollection.artworks.map((artwork) => (
-              <div className="admin-collection-artwork-row" key={artwork.id}>
-                <div className="admin-collection-artwork-copy">
-                  <strong>{artwork.title}</strong>
-                  <span>{artwork.year ?? "Без года"}</span>
-                </div>
-
-                <div className="admin-collection-artwork-move">
-                  <input
-                    className="admin-collection-move-input"
-                    list={`collections-${artwork.id}`}
-                    onChange={(event) =>
-                      setMoveValues((current) => ({
-                        ...current,
-                        [artwork.id]: event.target.value
-                      }))
-                    }
-                    placeholder="Название коллекции"
-                    type="text"
-                    value={moveValues[artwork.id] ?? artwork.collection ?? ""}
-                  />
-                  <datalist id={`collections-${artwork.id}`}>
-                    {collections.map((item) => (
-                      <option key={item.name} value={item.name === uncategorizedCollectionName ? "" : item.name} />
-                    ))}
-                  </datalist>
-                  <button
-                    className="admin-table-link"
-                    onClick={() => handleMoveArtwork(artwork.id, artwork.collection ?? null)}
-                    type="button"
-                  >
-                    Переместить
-                  </button>
-                </div>
+      <div className="admin-collections-stack">
+        {collections.map((collection) => (
+          <form action={saveCollection} className="admin-collection-panel" key={collection.id}>
+            <input name="id" type="hidden" value={collection.id} />
+            <div className="admin-collection-panel-head">
+              <div>
+                <span className="admin-collection-panel-label">Коллекция</span>
+                <h3 className="admin-collection-panel-title">{collection.name}</h3>
+                <p className="admin-collection-panel-meta">{collection.artworks.length} работ</p>
               </div>
-            ))}
-          </div>
-        </article>
-      ) : null}
+              <div className="admin-collection-panel-actions">
+                <button className="admin-table-link" disabled={savingId === collection.id} type="submit">
+                  {savingId === collection.id ? "Сохраняем..." : "Сохранить"}
+                </button>
+                <button
+                  className="admin-collection-delete"
+                  disabled={collection.id === "collection-uncategorized" || savingId === collection.id}
+                  onClick={() => deleteCollection(collection)}
+                  type="button"
+                >
+                  Удалить
+                </button>
+              </div>
+            </div>
+            <div className="admin-form-grid admin-collection-edit-grid">
+              <label className="admin-field">
+                <span>Название</span>
+                <input defaultValue={collection.name} name="name" />
+              </label>
+              <label className="admin-field">
+                <span>Порядок</span>
+                <input defaultValue={collection.sortOrder} name="sortOrder" />
+              </label>
+              <label className="admin-field admin-field-full">
+                <span>Описание</span>
+                <textarea defaultValue={collection.description ?? ""} name="description" rows={3} />
+              </label>
+              <label className="admin-field admin-field-full">
+                <span>Обложка</span>
+                <select defaultValue={collection.coverArtworkId ?? ""} name="coverArtworkId">
+                  <option value="">Автоматически</option>
+                  {collection.artworks.map((artwork) => (
+                    <option key={artwork.id} value={artwork.id}>
+                      {artwork.title}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label className="admin-field admin-field-full admin-inline-check">
+                <input defaultChecked={collection.featured} name="featured" type="checkbox" />
+                <span>Показывать как избранную коллекцию</span>
+              </label>
+            </div>
+          </form>
+        ))}
+      </div>
     </div>
   );
 }
