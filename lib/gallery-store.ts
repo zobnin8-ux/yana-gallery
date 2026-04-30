@@ -29,12 +29,15 @@ type ArtworkRow = {
   collection_id: string | null;
   year: number | null;
   medium: string | null;
+  size_label?: string | null;
   width: number | null;
   height: number | null;
   price: number | null;
+  price_range?: string | null;
   currency: Artwork["currency"];
   status: Artwork["status"];
   description: string | null;
+  shipping_note?: string | null;
   featured: boolean;
   hero: boolean;
   sort_order: number;
@@ -158,12 +161,15 @@ function artworkFromRow(row: ArtworkRow, collections: ArtworkCollection[], image
     collection: collection?.name ?? null,
     year: row.year,
     medium: row.medium,
+    sizeLabel: row.size_label ?? null,
     width: row.width,
     height: row.height,
     price: row.price,
+    priceRange: row.price_range ?? null,
     currency: row.currency,
     status: row.status,
     description: row.description,
+    shippingNote: row.shipping_note ?? null,
     images: images.sort((left, right) => (left.sortOrder ?? 0) - (right.sortOrder ?? 0)),
     featured: row.featured,
     hero: row.hero,
@@ -255,12 +261,15 @@ function artworkToRow(artwork: ArtworkPayload) {
     collection_id: artwork.collectionId ?? null,
     year: artwork.year ?? null,
     medium: artwork.medium ?? null,
+    size_label: artwork.sizeLabel ?? null,
     width: artwork.width ?? null,
     height: artwork.height ?? null,
     price: artwork.price ?? null,
+    price_range: artwork.priceRange ?? null,
     currency: artwork.currency ?? "EUR",
     status: artwork.status,
     description: artwork.description ?? null,
+    shipping_note: artwork.shippingNote ?? null,
     featured: artwork.featured,
     hero: artwork.hero,
     sort_order: artwork.sortOrder,

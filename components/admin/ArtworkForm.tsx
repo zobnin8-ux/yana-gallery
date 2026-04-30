@@ -185,6 +185,33 @@ export function ArtworkForm({ mode, artwork, collections }: ArtworkFormProps) {
               </div>
             </label>
 
+            <label className="admin-field admin-field-full">
+              <span>Размер на сайте (текст)</span>
+              <input
+                defaultValue={artwork?.sizeLabel ?? undefined}
+                name="artworkSizeLabel"
+                placeholder="Если указано — показывается вместо «Ширина × Высота» в см"
+              />
+            </label>
+
+            <label className="admin-field admin-field-full">
+              <span>Стоимость (текст)</span>
+              <input
+                defaultValue={artwork?.priceRange ?? undefined}
+                name="artworkPriceRange"
+                placeholder="Если указано — показывается вместо числа и валюты"
+              />
+            </label>
+
+            <label className="admin-field admin-field-full">
+              <span>Доставка (текст)</span>
+              <input
+                defaultValue={artwork?.shippingNote ?? undefined}
+                name="artworkShippingNote"
+                placeholder="Строка «Доставка» на странице работы — только если заполнить"
+              />
+            </label>
+
             <div className="admin-field admin-field-full admin-switch-grid">
               <label>
                 <input defaultChecked={artwork?.featured ?? true} name="artworkFeatured" type="checkbox" />

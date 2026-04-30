@@ -23,12 +23,18 @@ export type Artwork = {
   collectionId?: string | null;
   year?: number | null;
   medium?: string | null;
+  /** Свободный текст размера для сайта; если пусто — собирается из width × height. */
+  sizeLabel?: string | null;
   width?: number | null;
   height?: number | null;
   price?: number | null;
+  /** Текстовый диапазон цены (приоритет над числовой ценой на странице работы). */
+  priceRange?: string | null;
   currency?: ArtworkCurrency | null;
   status: ArtworkStatus;
   description?: string | null;
+  /** Текст про доставку; строка «Доставка» на сайте только если заполнено. */
+  shippingNote?: string | null;
   images: ArtworkImage[];
   featured: boolean;
   hero: boolean;
@@ -52,12 +58,16 @@ export type ArtworkRow = {
   collection: string | null;
   year: number | null;
   medium: string | null;
+  /** Опционально: в JSON/миграциях может отсутствовать. */
+  sizeLabel?: string | null;
   width: number | null;
   height: number | null;
   price: number | null;
+  priceRange?: string | null;
   currency: ArtworkCurrency | null;
   status: ArtworkStatus;
   description: string | null;
+  shippingNote?: string | null;
   images: ArtworkImage[];
   featured: boolean;
   hero: boolean;

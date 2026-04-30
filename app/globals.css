@@ -606,6 +606,17 @@ main {
   color: var(--muted);
 }
 
+.artwork-specs-fallback {
+  margin: 0;
+  padding: 20px 0 0;
+  max-width: 28rem;
+  border-top: 1px solid var(--border);
+  font-family: var(--serif);
+  font-size: 1.06rem;
+  line-height: 1.65;
+  color: #47433d;
+}
+
 .artwork-request-link {
   display: inline-flex;
   align-items: center;
@@ -2512,6 +2523,12 @@ body {
   font-size: 0.68rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
+}
+
+.artwork-specs-fallback {
+  padding-top: 26px;
+  max-width: 31rem;
+  font-size: 1.08rem;
 }
 
 .artwork-request-link {
