@@ -1,5 +1,6 @@
 ﻿"use client";
 
+import Image from "next/image";
 import { useState } from "react";
 
 type ArtworkImageUploaderProps = {
@@ -54,7 +55,10 @@ export function ArtworkImageUploader({ images }: ArtworkImageUploaderProps) {
               return (
                 <div className="admin-uploaded-image-item" key={image}>
                   <input name="existingImages" type="hidden" value={image} />
-                  {filename}
+                  <span className="admin-uploaded-image-preview">
+                    <Image src={image} alt={filename} fill sizes="72px" className="admin-uploaded-image-preview-img" />
+                  </span>
+                  <span>{filename}</span>
                 </div>
               );
             })}

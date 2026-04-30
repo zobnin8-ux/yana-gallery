@@ -1,5 +1,6 @@
 ﻿"use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -49,6 +50,7 @@ export function ArtworkTable({ artworks }: ArtworkTableProps) {
       <table className="admin-table">
         <thead>
           <tr>
+            <th>Изображение</th>
             <th>Название</th>
             <th>Коллекция</th>
             <th>Год</th>
@@ -59,31 +61,50 @@ export function ArtworkTable({ artworks }: ArtworkTableProps) {
           </tr>
         </thead>
         <tbody>
-          {artworks.map((artwork) => (
-            <tr key={artwork.id}>
-              <td>{artwork.title}</td>
-              <td>{artwork.collection ?? "Без коллекции"}</td>
-              <td>{artwork.year ?? "-"}</td>
-              <td>{artwork.medium ?? "-"}</td>
-              <td>{artwork.status === "available" ? "Доступна" : artwork.status === "sold" ? "Продана" : "В резерве"}</td>
-              <td>{formatPrice(artwork)}</td>
-              <td>
-                <div className="admin-table-actions">
-                  <Link className="admin-table-link" href={`/admin/artworks/${artwork.id}/edit`}>
-                    Редактировать
-                  </Link>
-                  <button
-                    className="admin-collection-delete"
-                    disabled={deletingId === artwork.id}
-                    onClick={() => handleDelete(artwork)}
-                    type="button"
-                  >
-                    {deletingId === artwork.id ? "Удаляем..." : "Удалить"}
-                  </button>
-                </div>
-              </td>
-            </tr>
-          ))}
+          {artworks.map((artwork) => {
+            const primaryImage = artwork.images[0];
+
+            return (
+              <tr key={artwork.id}>
+                <td>
+                  <div className="admin-artwork-thumb">
+                    {primaryImage ? (
+                      <Image
+                        src={primaryImage.thumbnailUrl ?? primaryImage.url}
+                        alt={primaryImage.alt}
+                        fill
+                        sizes="72px"
+                        className="admin-artwork-thumb-image"
+                      />
+                    ) : (
+                      <span>Без изображения</span>
+                    )}
+                  </div>
+                </td>
+                <td>{artwork.title}</td>
+                <td>{artwork.collection ?? "Без коллекции"}</td>
+                <td>{artwork.year ?? "-"}</td>
+                <td>{artwork.medium ?? "-"}</td>
+                <td>{artwork.status === "available" ? "Доступна" : artwork.status === "sold" ? "Продана" : "В резерве"}</td>
+                <td>{formatPrice(artwork)}</td>
+                <td>
+                  <div className="admin-table-actions">
+                    <Link className="admin-table-link" href={`/admin/artworks/${artwork.id}/edit`}>
+                      Редактировать
+                    </Link>
+                    <button
+                      className="admin-collection-delete"
+                      disabled={deletingId === artwork.id}
+                      onClick={() => handleDelete(artwork)}
+                      type="button"
+                    >
+                      {deletingId === artwork.id ? "Удаляем..." : "Удалить"}
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
