@@ -14,6 +14,9 @@ export function SiteHeader() {
           <Link href="/gallery">Экспозиция</Link>
           <Link href="/about">Художник</Link>
           <Link href="/contact">Студия</Link>
+          <Link className="site-nav-admin-link" href="/admin">
+            Вход
+          </Link>
         </div>
       </nav>
     </header>
