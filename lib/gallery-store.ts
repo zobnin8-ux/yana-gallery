@@ -39,6 +39,7 @@ type ArtworkRow = {
   status: Artwork["status"];
   description: string | null;
   shipping_note?: string | null;
+  interior_image_url?: string | null;
   featured: boolean;
   hero: boolean;
   sort_order: number;
@@ -122,6 +123,7 @@ function artworkFromRow(row: ArtworkRow, collections: ArtworkCollection[], image
     status: row.status,
     description: row.description,
     shippingNote: row.shipping_note ?? null,
+    interiorImageUrl: row.interior_image_url ?? null,
     images: images.sort((left, right) => (left.sortOrder ?? 0) - (right.sortOrder ?? 0)),
     featured: row.featured,
     hero: row.hero,
@@ -222,6 +224,7 @@ function artworkToRow(artwork: ArtworkPayload) {
     status: artwork.status,
     description: artwork.description ?? null,
     shipping_note: artwork.shippingNote ?? null,
+    interior_image_url: artwork.interiorImageUrl ?? null,
     featured: artwork.featured,
     hero: artwork.hero,
     sort_order: artwork.sortOrder,

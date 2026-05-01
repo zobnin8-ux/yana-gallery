@@ -64,6 +64,15 @@ export function ArtworkForm({ mode, artwork, collections }: ArtworkFormProps) {
             </div>
           </div>
           <ArtworkImageUploader images={artwork?.images.map((image) => image.url)} />
+          <label className="admin-field admin-field-full">
+            <span>Фото в интерьере (URL, опционально)</span>
+            <input
+              defaultValue={artwork?.interiorImageUrl ?? undefined}
+              name="artworkInteriorImageUrl"
+              placeholder="https://… отдельный кадр для страницы работы"
+              type="url"
+            />
+          </label>
         </section>
 
         <section className="admin-form-card">
