@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 
-import { ArtworkGrid } from "@/components/artworks/ArtworkGrid";
+import { ArtworkCard } from "@/components/artworks/ArtworkCard";
 import { worksCountLabel } from "@/lib/ru-plurals";
 import type { ArtworkCollectionWithArtworks, ArtworkStatus } from "@/types/artwork";
 
@@ -11,10 +11,10 @@ type GalleryCollectionsViewProps = {
 };
 
 const statusLabels: Record<ArtworkStatus | "all", string> = {
-  all: "Все",
-  available: "Доступные",
-  reserved: "В резерве",
-  sold: "Проданные"
+  all: "все",
+  available: "доступные",
+  reserved: "в резерве",
+  sold: "проданные"
 };
 
 export function GalleryCollectionsView({ collections }: GalleryCollectionsViewProps) {
@@ -33,17 +33,18 @@ export function GalleryCollectionsView({ collections }: GalleryCollectionsViewPr
 
   return (
     <div className="gallery-collections-view">
-      <div className="gallery-filter-bar" aria-label="Фильтры галереи">
+      <div className="gallery-filters-line" role="navigation" aria-label="Фильтры галереи">
+        <span className="gallery-filters-label">Серия:</span>
         <button
-          className={activeCollectionId === "all" ? "is-active" : ""}
+          className={`gallery-filter-anchor${activeCollectionId === "all" ? " is-active" : ""}`}
           onClick={() => setActiveCollectionId("all")}
           type="button"
         >
-          Все коллекции
+          все
         </button>
         {collections.map((collection) => (
           <button
-            className={activeCollectionId === collection.id ? "is-active" : ""}
+            className={`gallery-filter-anchor${activeCollectionId === collection.id ? " is-active" : ""}`}
             key={collection.id}
             onClick={() => setActiveCollectionId(collection.id)}
             type="button"
@@ -51,12 +52,13 @@ export function GalleryCollectionsView({ collections }: GalleryCollectionsViewPr
             {collection.name}
           </button>
         ))}
-      </div>
-
-      <div className="gallery-filter-bar gallery-filter-bar-secondary" aria-label="Фильтр по статусу">
+        <span className="gallery-filters-sep" aria-hidden="true">
+          ·
+        </span>
+        <span className="gallery-filters-label">Статус:</span>
         {(Object.keys(statusLabels) as Array<ArtworkStatus | "all">).map((status) => (
           <button
-            className={activeStatus === status ? "is-active" : ""}
+            className={`gallery-filter-anchor${activeStatus === status ? " is-active" : ""}`}
             key={status}
             onClick={() => setActiveStatus(status)}
             type="button"
@@ -66,20 +68,19 @@ export function GalleryCollectionsView({ collections }: GalleryCollectionsViewPr
         ))}
       </div>
 
-      <div className="gallery-collections">
-        {visibleCollections.map((collection, index) => (
-          <section className="gallery-collection" id={collection.slug} key={collection.id}>
-            <div className="gallery-collection-heading">
-              <div>
-                <p className="gallery-collection-label">Зал {String(index + 1).padStart(2, "0")}</p>
-                <h2 className="gallery-collection-title">{collection.name}</h2>
-              </div>
-              <div className="gallery-collection-note">
-                <span>{worksCountLabel(collection.artworks.length)}</span>
-                {collection.description ? <p>{collection.description}</p> : null}
-              </div>
+      <div className="gallery-collections gallery-collections-feed">
+        {visibleCollections.map((collection) => (
+          <section className="gallery-collection gallery-collection-feed" id={collection.slug} key={collection.id}>
+            <header className="gallery-series-header">
+              <h2 className="gallery-series-title">{collection.name}</h2>
+              <p className="gallery-series-meta">{worksCountLabel(collection.artworks.length)}</p>
+              {collection.description ? <p className="gallery-series-lede">{collection.description}</p> : null}
+            </header>
+            <div className="vertical-artwork-feed">
+              {collection.artworks.map((artwork) => (
+                <ArtworkCard artwork={artwork} key={artwork.id} variant="feed" />
+              ))}
             </div>
-            <ArtworkGrid artworks={collection.artworks} variant="gallery" />
           </section>
         ))}
       </div>

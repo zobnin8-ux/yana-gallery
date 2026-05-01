@@ -19,8 +19,10 @@ export function ArtworkCard({ artwork, variant = "default" }: ArtworkCardProps) 
   const statusLabel =
     artwork.status === "available" ? "Доступна" : artwork.status === "reserved" ? "В резерве" : "Продана";
 
+  const isSold = artwork.status === "sold";
+
   return (
-    <article className={`artwork-card artwork-card-${variant}`}>
+    <article className={`artwork-card artwork-card-${variant}${isSold ? " artwork-card-is-sold" : ""}`}>
       <Link className="artwork-card-link" href={`/artworks/${artwork.slug}`}>
         <div className={`artwork-card-image artwork-card-image-${orientation}`}>
           {primaryImage ? (
@@ -38,6 +40,12 @@ export function ArtworkCard({ artwork, variant = "default" }: ArtworkCardProps) 
             />
           ) : null}
           <div className="artwork-card-overlay" />
+          {isSold ? (
+            <>
+              <div aria-hidden="true" className="artwork-card-sold-dim" />
+              <span className="artwork-card-sold-ribbon">Продана</span>
+            </>
+          ) : null}
         </div>
         <div className="artwork-card-body">
           {artwork.collection ? (

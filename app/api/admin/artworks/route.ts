@@ -131,6 +131,7 @@ export async function POST(request: Request) {
       status: (String(formData.get("artworkStatus") ?? "available") || "available") as ArtworkStatus,
       description: String(formData.get("artworkDescription") ?? "").trim() || null,
       shippingNote: String(formData.get("artworkShippingNote") ?? "").trim() || null,
+      interiorImageUrl: String(formData.get("artworkInteriorImageUrl") ?? "").trim() || null,
       images,
       featured: formData.get("artworkFeatured") === "on",
       hero: formData.get("artworkHero") === "on",

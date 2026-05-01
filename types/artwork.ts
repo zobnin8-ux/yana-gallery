@@ -33,6 +33,8 @@ export type Artwork = {
   currency?: ArtworkCurrency | null;
   status: ArtworkStatus;
   description?: string | null;
+  /** URL дополнительного кадра «в интерьере» (не из списка слайдов, опционально). */
+  interiorImageUrl?: string | null;
   /** Текст про доставку; строка «Доставка» на сайте только если заполнено. */
   shippingNote?: string | null;
   images: ArtworkImage[];
@@ -67,6 +69,7 @@ export type ArtworkRow = {
   currency: ArtworkCurrency | null;
   status: ArtworkStatus;
   description: string | null;
+  interiorImageUrl?: string | null;
   shippingNote?: string | null;
   images: ArtworkImage[];
   featured: boolean;
