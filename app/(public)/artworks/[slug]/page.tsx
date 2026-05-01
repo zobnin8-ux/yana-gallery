@@ -9,6 +9,7 @@ import { Section } from "@/components/layout/Section";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { getArtworkBySlug } from "@/lib/artworks/get-artwork-by-slug";
+import { artworksRepository } from "@/lib/repositories/artworks-repository";
 
 type ArtworkPageProps = {
   params: Promise<{
@@ -46,19 +47,26 @@ export default async function ArtworkPage({ params }: ArtworkPageProps) {
     notFound();
   }
 
+  const collections = await artworksRepository.listCollections();
+  const matchedCollection = artwork.collectionId
+    ? collections.find((collection) => collection.id === artwork.collectionId)
+    : null;
+  const collectionGalleryHref = matchedCollection
+    ? `/gallery#${matchedCollection.slug}`
+    : artwork.collectionId
+      ? "/gallery"
+      : "/gallery#uncategorized";
+
   return (
     <>
       <SiteHeader />
       <main className="artwork-page">
         <PageContainer>
           <Section className="artwork-section">
-            <div className="artwork-page-intro reveal reveal-delay-1">
-              <p className="eyebrow">Паспорт работы</p>
-            </div>
             <div className="artwork-layout">
               <ArtworkHero artwork={artwork} />
               <div className="artwork-panel">
-                <ArtworkMeta artwork={artwork} />
+                <ArtworkMeta artwork={artwork} collectionGalleryHref={collectionGalleryHref} />
                 <ArtworkDescription artwork={artwork} />
               </div>
             </div>

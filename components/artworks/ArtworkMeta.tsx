@@ -4,6 +4,7 @@ import type { Artwork } from "@/types/artwork";
 
 type ArtworkMetaProps = {
   artwork: Artwork;
+  collectionGalleryHref?: string;
 };
 
 const SPECS_FALLBACK =
@@ -65,14 +66,20 @@ function buildSpecs(artwork: Artwork): Array<{ term: string; value: string }> {
   return rows;
 }
 
-export function ArtworkMeta({ artwork }: ArtworkMetaProps) {
+export function ArtworkMeta({ artwork, collectionGalleryHref }: ArtworkMetaProps) {
   const statusLabel =
     artwork.status === "available" ? "Доступна" : artwork.status === "reserved" ? "В резерве" : "Продана";
   const specs = buildSpecs(artwork);
+  const collectionLabel = artwork.collection ?? "Без коллекции";
 
   return (
     <div className="artwork-meta">
       <div className="artwork-meta-heading">
+        {collectionGalleryHref ? (
+          <p className="artwork-meta-collection">
+            <Link href={collectionGalleryHref}>{collectionLabel}</Link>
+          </p>
+        ) : null}
         <p className={`artwork-status artwork-status-${artwork.status}`}>{statusLabel}</p>
         <h1 className="artwork-meta-title">{artwork.title}</h1>
         {artwork.year ? <p className="artwork-meta-year">{artwork.year}</p> : null}

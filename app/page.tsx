@@ -21,16 +21,6 @@ export default async function HomePage() {
       <main className="home-page">
         <Hero artworks={displayHeroArtworks} />
         <PageContainer>
-          <Section className="home-rhythm">
-            <div className="home-rhythm-line" />
-            <div className="home-rhythm-copy">
-              <p className="eyebrow">Кураторская заметка</p>
-              <p className="home-intro-text">
-                Это не каталог товаров, а медленное пространство просмотра: каждая работа оставлена с
-                воздухом вокруг себя, чтобы зритель сначала почувствовал тишину, а уже потом прочитал детали.
-              </p>
-            </div>
-          </Section>
           {collections.length ? (
             <Section className="collection-teaser-section">
               <div className="collection-teaser-heading">
