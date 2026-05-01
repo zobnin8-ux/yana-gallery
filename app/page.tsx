@@ -2,15 +2,15 @@
 import Link from "next/link";
 
 import { HomeWorkFeed } from "@/components/home/HomeWorkFeed";
-import { Hero } from "@/components/layout/Hero";
+import { HomeFrontispiece } from "@/components/layout/HomeFrontispiece";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { Section } from "@/components/layout/Section";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { artworksRepository } from "@/lib/repositories/artworks-repository";
 
-const HOME_ARTIST_PLACEHOLDER =
-  "Здесь только то, что сейчас хочется показать без шума — откройте работу, если нужны детали.";
+const HOME_LEDE =
+  "Тихий просмотр отобранных работ: без ленты соцсетей — только картина, серия и контакт со студией, когда захотите.";
 
 export const metadata: Metadata = {
   title: "Яна Зубарева — частная галерея",
@@ -31,17 +31,18 @@ export default async function HomePage() {
     <>
       <SiteHeader />
       <main className="home-page">
-        <Hero artwork={heroArtwork} />
+        <HomeFrontispiece artwork={heroArtwork} lede={HOME_LEDE} />
         <PageContainer>
-          {heroArtwork ? (
-            <p className="home-artist-note reveal reveal-delay-1">{HOME_ARTIST_PLACEHOLDER}</p>
-          ) : null}
           {feedArtworks.length ? (
-            <Section className="home-feed-section">
+            <Section className="home-featured-section reveal reveal-delay-1">
+              <header className="home-featured-header">
+                <h2 className="home-featured-heading">Избранное</h2>
+                <p className="home-featured-sub">Несколько работ рядом с домашней — остальное в экспозиции.</p>
+              </header>
               <HomeWorkFeed artworks={feedArtworks} />
             </Section>
           ) : heroArtwork ? (
-            <Section className="home-feed-section home-feed-section-sparse">
+            <Section className="home-feed-section home-feed-section-sparse reveal reveal-delay-1">
               <p className="home-feed-sparse-note">Ещё работы — в полной экспозиции.</p>
             </Section>
           ) : (
@@ -52,7 +53,7 @@ export default async function HomePage() {
           )}
           <p className="home-view-all reveal">
             <Link className="hero-link hero-link-primary" href="/gallery">
-              Смотреть все работы →
+              Полная экспозиция →
             </Link>
           </p>
         </PageContainer>

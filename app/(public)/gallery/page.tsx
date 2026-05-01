@@ -23,13 +23,13 @@ export default async function GalleryPage() {
       <main className="gallery-page">
         <PageContainer>
           <Section className="gallery-section reveal reveal-delay-1">
-            <div className="gallery-heading">
+            <div className="gallery-heading gallery-heading-salon">
               <div className="gallery-heading-copy">
-                <p className="eyebrow">Залы экспозиции</p>
-                <h1 className="gallery-title">Экспозиция</h1>
+                <p className="eyebrow">Экспозиция</p>
+                <h1 className="gallery-title">Работы по сериям</h1>
               </div>
               <p className="gallery-intro">
-                Откройте зал, затем карточку работы — там крупное фото и подробности.
+                Выберите серию и статус — карточка ведёт на страницу работы с крупным фото и подробностями.
               </p>
             </div>
             <GalleryCollectionsView collections={collections} />

@@ -11,9 +11,9 @@ export function HomeWorkFeed({ artworks }: HomeWorkFeedProps) {
   }
 
   return (
-    <div className="home-work-feed">
+    <div className="artwork-grid artwork-grid-home">
       {artworks.map((artwork) => (
-        <ArtworkCard key={artwork.id} artwork={artwork} variant="feed" />
+        <ArtworkCard key={artwork.id} artwork={artwork} variant="home" />
       ))}
     </div>
   );
