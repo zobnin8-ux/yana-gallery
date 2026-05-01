@@ -26,7 +26,9 @@ type RootLayoutProps = {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="ru">
-      <body>{children}</body>
+      <body>
+        <div className="site-shell">{children}</div>
+      </body>
     </html>
   );
 }

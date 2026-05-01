@@ -3,12 +3,15 @@
 export function SiteHeader() {
   return (
     <header className="site-header">
-      <nav className="site-nav">
+      <nav className="site-nav" aria-label="Основная навигация">
         <Link className="site-brand" href="/">
-          Яна Зубарева
+          <span className="site-brand-name">Яна Зубарева</span>
+          <span className="site-brand-line" aria-hidden="true" />
+          <span className="site-brand-tag">частная галерея</span>
         </Link>
         <div className="site-nav-links">
-          <Link href="/gallery">Работы</Link>
+          <Link href="/">Главная</Link>
+          <Link href="/gallery">Экспозиция</Link>
           <Link href="/about">Художник</Link>
           <Link href="/contact">Студия</Link>
         </div>

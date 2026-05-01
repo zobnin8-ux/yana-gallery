@@ -68,17 +68,17 @@ export function GalleryCollectionsView({ collections }: GalleryCollectionsViewPr
         ))}
       </div>
 
-      <div className="gallery-collections gallery-collections-feed">
+      <div className="gallery-collections gallery-collections-salon">
         {visibleCollections.map((collection) => (
-          <section className="gallery-collection gallery-collection-feed" id={collection.slug} key={collection.id}>
+          <section className="gallery-collection gallery-collection-salon" id={collection.slug} key={collection.id}>
             <header className="gallery-series-header">
               <h2 className="gallery-series-title">{collection.name}</h2>
               <p className="gallery-series-meta">{worksCountLabel(collection.artworks.length)}</p>
               {collection.description ? <p className="gallery-series-lede">{collection.description}</p> : null}
             </header>
-            <div className="vertical-artwork-feed">
+            <div className="artwork-grid artwork-grid-gallery gallery-salon-grid">
               {collection.artworks.map((artwork) => (
-                <ArtworkCard artwork={artwork} key={artwork.id} variant="feed" />
+                <ArtworkCard artwork={artwork} key={artwork.id} variant="gallery" />
               ))}
             </div>
           </section>
