@@ -20,8 +20,7 @@ export default async function GalleryPage() {
                 <h1 className="gallery-title">Экспозиция</h1>
               </div>
               <p className="gallery-intro">
-                Работы разложены не как магазинная сетка, а как серия тихих залов. Сначала смотрите свет и
-                масштаб, затем откройте страницу выбранной работы.
+                Откройте зал, затем карточку работы — там крупное фото и подробности.
               </p>
             </div>
             <GalleryCollectionsView collections={collections} />
