@@ -1,5 +1,6 @@
 ﻿import Image from "next/image";
 
+import { primaryArtworkImageAlt } from "@/lib/artwork-image-alt";
 import type { Artwork } from "@/types/artwork";
 
 type ArtworkHeroProps = {
@@ -16,7 +17,7 @@ export function ArtworkHero({ artwork }: ArtworkHeroProps) {
         {primaryImage ? (
           <Image
             src={primaryImage.url}
-            alt={primaryImage.alt}
+            alt={primaryArtworkImageAlt(artwork)}
             fill
             priority
             sizes="(max-width: 980px) 100vw, 58vw"
@@ -30,7 +31,7 @@ export function ArtworkHero({ artwork }: ArtworkHeroProps) {
             <div className="artwork-detail-frame" key={image.id}>
               <Image
                 src={image.thumbnailUrl ?? image.url}
-                alt={image.alt}
+                alt={image.alt?.trim() ? image.alt : `Фрагмент «${artwork.title}»`}
                 fill
                 sizes="160px"
                 className="artwork-detail-image"

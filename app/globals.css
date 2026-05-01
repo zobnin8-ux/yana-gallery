@@ -3013,3 +3013,206 @@ body {
     overflow-x: auto;
   }
 }
+
+.not-found-page {
+  padding: clamp(72px, 12vw, 120px) 0 clamp(96px, 14vw, 160px);
+}
+
+.not-found-inner {
+  max-width: 34rem;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.not-found-title {
+  margin: 12px 0 20px;
+  font-family: var(--serif);
+  font-size: clamp(1.85rem, 3.6vw, 2.75rem);
+  font-weight: 400;
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+}
+
+.not-found-text {
+  margin: 0 0 32px;
+  color: var(--muted);
+  font-size: 1.02rem;
+  line-height: 1.75;
+}
+
+/* П2.1 — главная: одна работа в герое + вертикальная лента */
+.home-hero {
+  padding: 0 0 clamp(48px, 8vw, 88px);
+  background: transparent;
+}
+
+.home-hero-inner {
+  width: min(1440px, calc(100% - 48px));
+  margin: 0 auto;
+}
+
+@media (max-width: 760px) {
+  .home-hero-inner {
+    width: 100%;
+    padding: 0;
+  }
+}
+
+.home-hero-block {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.home-hero-frame {
+  position: relative;
+  width: 100%;
+  min-height: min(70vh, 820px);
+  max-height: 85vh;
+  overflow: hidden;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.12) 0%, transparent 55%),
+    #e0d9cd;
+  border: 1px solid rgba(23, 23, 21, 0.1);
+  box-shadow:
+    0 40px 88px rgba(18, 17, 15, 0.12),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.12),
+    inset 0 0 0 clamp(14px, 3vw, 28px) rgba(253, 251, 246, 0.45);
+}
+
+.home-hero-image {
+  object-fit: contain;
+  padding: clamp(20px, 4vw, 48px);
+}
+
+.home-hero-caption {
+  margin-top: clamp(22px, 3vw, 34px);
+  padding: 0 clamp(24px, 5vw, 0);
+  text-align: center;
+}
+
+.home-hero-piece-title {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: clamp(1.35rem, 2.8vw, 2rem);
+  font-style: italic;
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: 0.01em;
+}
+
+.home-hero-piece-meta {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+  letter-spacing: 0.14em;
+  text-transform: lowercase;
+}
+
+.home-hero-empty {
+  padding: clamp(80px, 18vh, 160px) 24px;
+  text-align: center;
+}
+
+.home-hero-empty-text {
+  margin: 0 0 24px;
+  color: var(--muted);
+  max-width: 28rem;
+  margin-inline: auto;
+  line-height: 1.65;
+}
+
+.home-artist-note {
+  margin: 0 auto clamp(56px, 10vw, 100px);
+  max-width: 36rem;
+  padding: 0 clamp(20px, 4vw, 0);
+  font-family: var(--serif);
+  font-size: clamp(1.15rem, 2vw, 1.45rem);
+  line-height: 1.55;
+  text-align: center;
+  color: #383630;
+}
+
+.home-feed-section {
+  padding: 0 0 clamp(32px, 6vw, 56px);
+}
+
+.home-feed-sparse-note {
+  margin: 0;
+  text-align: center;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.home-work-feed {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(80px, 14vh, 140px);
+}
+
+.home-work-feed .artwork-card-feed {
+  width: 100%;
+  max-width: min(1100px, 100%);
+  margin: 0 auto;
+}
+
+.home-work-feed .artwork-card-feed .artwork-card-link:hover {
+  transform: none;
+}
+
+.artwork-card-feed .artwork-card-image {
+  aspect-ratio: auto;
+  min-height: min(65vh, 720px);
+  max-height: 78vh;
+  border-radius: 0;
+}
+
+.artwork-card-feed .artwork-card-img {
+  object-fit: contain;
+  padding: clamp(18px, 3vw, 40px);
+}
+
+.artwork-card-feed .artwork-card-body {
+  display: block;
+  margin-top: clamp(20px, 3vw, 28px);
+  padding-top: 0;
+  border-top: 0;
+  text-align: center;
+}
+
+.artwork-card-feed .artwork-card-meta {
+  text-align: center;
+  margin-top: 8px;
+}
+
+.artwork-card-feed .artwork-card-status {
+  margin-top: 18px;
+  display: inline-block;
+}
+
+.home-view-all {
+  margin: clamp(48px, 10vw, 100px) 0 clamp(72px, 12vw, 120px);
+  text-align: center;
+}
+
+@media (max-width: 760px) {
+  .home-hero-frame {
+    min-height: min(62vh, 640px);
+    border-left: 0;
+    border-right: 0;
+    border-radius: 0;
+  }
+
+  .home-hero-caption {
+    padding: 0 20px;
+  }
+
+  .home-work-feed {
+    gap: clamp(56px, 12vw, 96px);
+  }
+
+  .artwork-card-feed .artwork-card-image {
+    min-height: min(58vh, 560px);
+  }
+}

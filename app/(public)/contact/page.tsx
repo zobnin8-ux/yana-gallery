@@ -1,10 +1,18 @@
-﻿import { Suspense } from "react";
+﻿import type { Metadata } from "next";
+import { Suspense } from "react";
 
 import { InquiryForm } from "@/components/forms/InquiryForm";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { Section } from "@/components/layout/Section";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
+
+export const metadata: Metadata = {
+  title: "Студия — связь по работам",
+  description: "Запросить информацию о работе, резерве и доставке.",
+  openGraph: { title: "Студия — связь по работам" },
+  twitter: { card: "summary_large_image", title: "Студия — связь по работам" }
+};
 
 export default function ContactPage() {
   return (

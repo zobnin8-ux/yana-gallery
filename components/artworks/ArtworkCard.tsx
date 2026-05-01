@@ -1,11 +1,12 @@
 ﻿import Image from "next/image";
 import Link from "next/link";
 
+import { primaryArtworkImageAlt } from "@/lib/artwork-image-alt";
 import type { Artwork } from "@/types/artwork";
 
 type ArtworkCardProps = {
   artwork: Artwork;
-  variant?: "default" | "gallery" | "home";
+  variant?: "default" | "gallery" | "home" | "feed";
 };
 
 export function ArtworkCard({ artwork, variant = "default" }: ArtworkCardProps) {
@@ -25,21 +26,23 @@ export function ArtworkCard({ artwork, variant = "default" }: ArtworkCardProps) 
           {primaryImage ? (
             <Image
               src={previewImageUrl}
-              alt={primaryImage.alt}
+              alt={primaryImage ? primaryArtworkImageAlt(artwork) : ""}
               fill
               loading="lazy"
-              sizes="(max-width: 760px) 78vw, (max-width: 1200px) 260px, 260px"
+              sizes={
+                variant === "feed"
+                  ? "(max-width: 760px) 100vw, min(1100px, 92vw)"
+                  : "(max-width: 760px) 78vw, (max-width: 1200px) 260px, 260px"
+              }
               className="artwork-card-img"
             />
           ) : null}
           <div className="artwork-card-overlay" />
         </div>
         <div className="artwork-card-body">
-          <p
-            className={`artwork-card-kicker${artwork.collection ? "" : " artwork-card-kicker-muted"}`}
-          >
-            {artwork.collection ?? "Без коллекции"}
-          </p>
+          {artwork.collection ? (
+            <p className="artwork-card-kicker">{artwork.collection}</p>
+          ) : null}
           <h3 className="artwork-card-title">{artwork.title}</h3>
           <p className="artwork-card-meta">
             {[artwork.year, artwork.width && artwork.height ? `${artwork.width} × ${artwork.height} cm` : null]

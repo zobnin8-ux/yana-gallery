@@ -11,6 +11,11 @@ export const metadata: Metadata = {
     title: "Галерея Яны Зубаревой",
     description: "Частный просмотр отобранных работ художницы Яны Зубаревой.",
     type: "website"
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Галерея Яны Зубаревой",
+    description: "Частный просмотр отобранных работ художницы Яны Зубаревой."
   }
 };
 

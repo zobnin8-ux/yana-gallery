@@ -1,9 +1,18 @@
-﻿import { GalleryCollectionsView } from "@/components/gallery/GalleryCollectionsView";
+﻿import type { Metadata } from "next";
+
+import { GalleryCollectionsView } from "@/components/gallery/GalleryCollectionsView";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { Section } from "@/components/layout/Section";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { artworksRepository } from "@/lib/repositories/artworks-repository";
+
+export const metadata: Metadata = {
+  title: "Экспозиция — работы Яны Зубаревой",
+  description: "Серии работ, доступные для просмотра и запроса в студии.",
+  openGraph: { title: "Экспозиция — работы Яны Зубаревой" },
+  twitter: { card: "summary_large_image", title: "Экспозиция — работы Яны Зубаревой" }
+};
 
 export default async function GalleryPage() {
   const collections = await artworksRepository.listCollections();
