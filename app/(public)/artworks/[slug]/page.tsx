@@ -8,6 +8,7 @@ import { PageContainer } from "@/components/layout/PageContainer";
 import { Section } from "@/components/layout/Section";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
+import { primaryArtworkImageAlt } from "@/lib/artwork-image-alt";
 import { getArtworkBySlug } from "@/lib/artworks/get-artwork-by-slug";
 import { artworksRepository } from "@/lib/repositories/artworks-repository";
 
@@ -28,13 +29,28 @@ export async function generateMetadata({ params }: ArtworkPageProps): Promise<Me
     };
   }
 
+  const description =
+    artwork.seoDescription?.trim() ||
+    [artwork.medium?.trim(), artwork.year != null ? String(artwork.year) : null].filter(Boolean).join(". ") ||
+    `Работа «${artwork.title}».`;
+
   return {
-    title: artwork.seoTitle ?? `${artwork.title} | Галерея Яны Зубаревой`,
-    description: artwork.seoDescription ?? artwork.description ?? "Работа художницы Яны Зубаревой.",
+    title: artwork.seoTitle ?? `${artwork.title} — живопись Яны Зубаревой`,
+    description,
+    alternates: {
+      canonical: `/artworks/${artwork.slug}`
+    },
     openGraph: {
+      type: "article",
       title: artwork.seoTitle ?? artwork.title,
-      description: artwork.seoDescription ?? artwork.description ?? undefined,
-      images: image ? [{ url: image.url, alt: image.alt }] : undefined
+      description: artwork.seoDescription?.trim() || description,
+      images: image ? [{ url: image.url, alt: primaryArtworkImageAlt(artwork) }] : undefined
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: artwork.seoTitle ?? artwork.title,
+      description: artwork.seoDescription?.trim() || description,
+      images: image ? [image.url] : undefined
     }
   };
 }
@@ -51,11 +67,7 @@ export default async function ArtworkPage({ params }: ArtworkPageProps) {
   const matchedCollection = artwork.collectionId
     ? collections.find((collection) => collection.id === artwork.collectionId)
     : null;
-  const collectionGalleryHref = matchedCollection
-    ? `/gallery#${matchedCollection.slug}`
-    : artwork.collectionId
-      ? "/gallery"
-      : "/gallery#uncategorized";
+  const collectionGalleryHref = matchedCollection ? `/gallery#${matchedCollection.slug}` : undefined;
 
   return (
     <>

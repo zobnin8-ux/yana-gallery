@@ -1,70 +1,58 @@
 ﻿import Image from "next/image";
 import Link from "next/link";
 
+import { primaryArtworkImageAlt } from "@/lib/artwork-image-alt";
 import type { Artwork } from "@/types/artwork";
 
 type HeroProps = {
-  artworks: Artwork[];
+  artwork: Artwork | undefined;
 };
 
-export function Hero({ artworks }: HeroProps) {
-  const [primaryArtwork] = artworks;
-  const primaryImage = primaryArtwork?.images[0];
+export function Hero({ artwork }: HeroProps) {
+  const primaryImage = artwork?.images[0];
   const statusLabel =
-    primaryArtwork?.status === "available"
-      ? "Доступна"
-      : primaryArtwork?.status === "reserved"
-        ? "В резерве"
-        : primaryArtwork?.status === "sold"
-          ? "Продана"
+    artwork?.status === "available"
+      ? "доступна"
+      : artwork?.status === "reserved"
+        ? "в резерве"
+        : artwork?.status === "sold"
+          ? "продана"
           : "";
 
+  if (!artwork || !primaryImage) {
+    return (
+      <section className="home-hero home-hero-empty">
+        <div className="home-hero-inner">
+          <p className="home-hero-empty-text">Скоро здесь появится первая работа для просмотра.</p>
+          <Link className="hero-link hero-link-primary" href="/gallery">
+            Перейти в экспозицию
+          </Link>
+        </div>
+      </section>
+    );
+  }
+
   return (
-    <section className="hero">
-      <div className="hero-inner">
-        <div className="hero-copy reveal reveal-delay-1">
-          <p className="eyebrow">Частный просмотр / 2026</p>
-          <h1 className="hero-title">Яна Зубарева</h1>
-          <p className="hero-text">
-            Живопись как тихое поле присутствия: свет, воздух, пауза и почти архитектурное чувство пространства.
-          </p>
-          <div className="hero-actions">
-            <Link className="hero-link hero-link-primary" href="/gallery">
-              Войти в экспозицию
-            </Link>
-            <Link className="hero-link" href="/about">
-              Текст художника
-            </Link>
+    <section className="home-hero">
+      <div className="home-hero-inner">
+        <Link className="home-hero-block" href={`/artworks/${artwork.slug}`}>
+          <div className="home-hero-frame">
+            <Image
+              src={primaryImage.url}
+              alt={primaryArtworkImageAlt(artwork)}
+              fill
+              priority
+              sizes="100vw"
+              className="home-hero-image"
+            />
           </div>
-          <div className="hero-proof">
-            <span>Авторские работы</span>
-            <span>Запросы в студию</span>
-            <span>Каталог по запросу</span>
+          <div className="home-hero-caption">
+            <p className="home-hero-piece-title">{artwork.title}</p>
+            <p className="home-hero-piece-meta">
+              {[artwork.year != null ? String(artwork.year) : null, statusLabel].filter(Boolean).join(" · ")}
+            </p>
           </div>
-        </div>
-        <div className="hero-visual reveal reveal-delay-2" aria-hidden="true">
-          <div className="hero-art-frame hero-art-frame-large">
-            {primaryImage ? (
-              <Image
-                src={primaryImage.url}
-                alt={primaryImage.alt}
-                fill
-                priority
-                sizes="(max-width: 980px) 92vw, 620px"
-                className="hero-art-image"
-              />
-            ) : null}
-          </div>
-          <div className="hero-caption">
-            <span>01</span>
-            <div>
-              <p>{primaryArtwork?.title ?? "Избранная работа"}</p>
-              <span>
-                {[primaryArtwork?.year, primaryArtwork?.medium, statusLabel].filter(Boolean).join(" / ")}
-              </span>
-            </div>
-          </div>
-        </div>
+        </Link>
       </div>
     </section>
   );

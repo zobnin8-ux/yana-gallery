@@ -2,6 +2,7 @@ import { randomUUID } from "node:crypto";
 import { unstable_noStore as noStore } from "next/cache";
 
 import galleryData from "@/data/gallery.json";
+import { slugify } from "@/lib/slugify";
 import { getSupabaseAdminClient, getSupabaseStorageBucket, isSupabaseConfigured } from "@/lib/supabase";
 import type { Artwork, ArtworkCollection, ArtworkCollectionWithArtworks, ArtworkImage } from "@/types/artwork";
 import type { Inquiry } from "@/types/inquiry";
@@ -75,55 +76,6 @@ export type ArtworkPayload = Omit<Artwork, "id" | "images"> & {
 };
 
 const fallbackData = galleryData as GalleryData;
-
-const cyrillicToLatin: Record<string, string> = {
-  а: "a",
-  б: "b",
-  в: "v",
-  г: "g",
-  д: "d",
-  е: "e",
-  ё: "e",
-  ж: "zh",
-  з: "z",
-  и: "i",
-  й: "y",
-  к: "k",
-  л: "l",
-  м: "m",
-  н: "n",
-  о: "o",
-  п: "p",
-  р: "r",
-  с: "s",
-  т: "t",
-  у: "u",
-  ф: "f",
-  х: "h",
-  ц: "ts",
-  ч: "ch",
-  ш: "sh",
-  щ: "sch",
-  ъ: "",
-  ы: "y",
-  ь: "",
-  э: "e",
-  ю: "yu",
-  я: "ya"
-};
-
-export function slugify(value: string) {
-  const slug = value
-    .trim()
-    .toLowerCase()
-    .normalize("NFKD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[а-яё]/g, (char) => cyrillicToLatin[char] ?? "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-
-  return slug || `artwork-${Date.now()}`;
-}
 
 function collectionFromRow(row: CollectionRow): ArtworkCollection {
   return {
@@ -210,7 +162,7 @@ function fallbackCollections(): ArtworkCollectionWithArtworks[] {
         {
           id: "collection-uncategorized",
           slug: "uncategorized",
-          name: "Без коллекции",
+          name: "Отдельные работы",
           description: null,
           coverArtworkId: uncategorized[0]?.id ?? null,
           sortOrder: 10000,
@@ -303,7 +255,13 @@ export const galleryStore = {
   },
 
   async findArtworkBySlug(slug: string) {
-    return (await galleryStore.listArtworks()).find((artwork) => artwork.slug === slug);
+    const list = await this.listArtworks();
+    const direct = list.find((artwork) => artwork.slug === slug);
+    if (direct) {
+      return direct;
+    }
+    const key = slugify(slug);
+    return list.find((artwork) => slugify(artwork.slug) === key);
   },
 
   async listCollections(): Promise<ArtworkCollectionWithArtworks[]> {
@@ -328,7 +286,7 @@ export const galleryStore = {
           {
             id: "collection-uncategorized",
             slug: "uncategorized",
-            name: "Без коллекции",
+            name: "Отдельные работы",
             description: null,
             coverArtworkId: uncategorized[0]?.id ?? null,
             sortOrder: 10000,

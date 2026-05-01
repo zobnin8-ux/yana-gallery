@@ -1,9 +1,17 @@
-﻿import Image from "next/image";
+﻿import type { Metadata } from "next";
+import Image from "next/image";
 
 import { PageContainer } from "@/components/layout/PageContainer";
 import { Section } from "@/components/layout/Section";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
+
+export const metadata: Metadata = {
+  title: "Художник — Яна Зубарева",
+  description: "Практика, материалы и контакты студии.",
+  openGraph: { title: "Художник — Яна Зубарева" },
+  twitter: { card: "summary_large_image", title: "Художник — Яна Зубарева" }
+};
 
 export default function AboutPage() {
   return (

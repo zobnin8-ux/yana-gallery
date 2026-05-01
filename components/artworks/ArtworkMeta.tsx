@@ -7,6 +7,8 @@ type ArtworkMetaProps = {
   collectionGalleryHref?: string;
 };
 
+const TELEGRAM = "https://t.me/yana_art72";
+
 const SPECS_FALLBACK =
   "Технические данные и стоимость — по запросу в студии. Напишите в Telegram, отвечаю в течение 24 часов.";
 
@@ -66,18 +68,23 @@ function buildSpecs(artwork: Artwork): Array<{ term: string; value: string }> {
   return rows;
 }
 
+function telegramStudioHref(artwork: Artwork) {
+  const text = `Здравствуйте, интересует работа «${artwork.title}»`;
+  return `${TELEGRAM}?text=${encodeURIComponent(text)}`;
+}
+
 export function ArtworkMeta({ artwork, collectionGalleryHref }: ArtworkMetaProps) {
   const statusLabel =
     artwork.status === "available" ? "Доступна" : artwork.status === "reserved" ? "В резерве" : "Продана";
   const specs = buildSpecs(artwork);
-  const collectionLabel = artwork.collection ?? "Без коллекции";
+  const showCollection = Boolean(collectionGalleryHref && artwork.collection?.trim());
 
   return (
     <div className="artwork-meta">
       <div className="artwork-meta-heading">
-        {collectionGalleryHref ? (
+        {showCollection ? (
           <p className="artwork-meta-collection">
-            <Link href={collectionGalleryHref}>{collectionLabel}</Link>
+            <Link href={collectionGalleryHref!}>{artwork.collection}</Link>
           </p>
         ) : null}
         <p className={`artwork-status artwork-status-${artwork.status}`}>{statusLabel}</p>
@@ -98,9 +105,14 @@ export function ArtworkMeta({ artwork, collectionGalleryHref }: ArtworkMetaProps
         <p className="artwork-specs-fallback">{SPECS_FALLBACK}</p>
       )}
 
-      <Link className="artwork-request-link" href={`/contact?artwork=${encodeURIComponent(artwork.title)}`}>
-        Запросить информацию
-      </Link>
+      <a
+        className="artwork-request-link"
+        href={telegramStudioHref(artwork)}
+        rel="noreferrer"
+        target="_blank"
+      >
+        Написать в студию
+      </a>
     </div>
   );
 }

@@ -1,56 +1,60 @@
-﻿import { FeaturedArtworks } from "@/components/artworks/FeaturedArtworks";
+﻿import type { Metadata } from "next";
+import Link from "next/link";
+
+import { HomeWorkFeed } from "@/components/home/HomeWorkFeed";
 import { Hero } from "@/components/layout/Hero";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { Section } from "@/components/layout/Section";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { artworksRepository } from "@/lib/repositories/artworks-repository";
-import { worksCountLabel } from "@/lib/ru-plurals";
+
+const HOME_ARTIST_PLACEHOLDER =
+  "Здесь только то, что сейчас хочется показать без шума — откройте работу, если нужны детали.";
+
+export const metadata: Metadata = {
+  title: "Яна Зубарева — частная галерея",
+  description: "Избранные работы и экспозиция.",
+  openGraph: { title: "Яна Зубарева — частная галерея" },
+  twitter: { card: "summary_large_image", title: "Яна Зубарева — частная галерея" }
+};
 
 export default async function HomePage() {
   const featuredArtworks = await artworksRepository.listFeatured();
   const heroArtworks = await artworksRepository.listHero();
-  const collections = (await artworksRepository.listCollections()).filter((collection) => collection.featured);
-  const displayHeroArtworks = heroArtworks.length ? heroArtworks : featuredArtworks.slice(0, 2);
-  const heroArtworkId = displayHeroArtworks[0]?.id;
-  const supportingArtworks = featuredArtworks.filter((artwork) => artwork.id !== heroArtworkId);
+  const heroSource = heroArtworks.length ? heroArtworks : featuredArtworks;
+  const heroArtwork = heroSource[0];
+  const heroId = heroArtwork?.id;
+  const feedArtworks = featuredArtworks.filter((artwork) => artwork.id !== heroId).slice(0, 6);
 
   return (
     <>
       <SiteHeader />
       <main className="home-page">
-        <Hero artworks={displayHeroArtworks} />
+        <Hero artwork={heroArtwork} />
         <PageContainer>
-          {collections.length ? (
-            <Section className="collection-teaser-section">
-              <div className="collection-teaser-heading">
-                <p className="eyebrow">Залы</p>
-                <h2 className="section-heading">Экспозиция собрана как последовательность залов</h2>
-              </div>
-              <div className="collection-teaser-grid">
-                {collections.map((collection) => (
-                  <a className="collection-teaser-card" href={`/gallery#${collection.slug}`} key={collection.id}>
-                    <span>{worksCountLabel(collection.artworks.length)}</span>
-                    <h3>{collection.name}</h3>
-                    {collection.description ? <p>{collection.description}</p> : null}
-                  </a>
-                ))}
-              </div>
-            </Section>
+          {heroArtwork ? (
+            <p className="home-artist-note reveal reveal-delay-1">{HOME_ARTIST_PLACEHOLDER}</p>
           ) : null}
-          {supportingArtworks.length ? (
-            <Section>
-              <FeaturedArtworks artworks={supportingArtworks.slice(0, 6)} />
+          {feedArtworks.length ? (
+            <Section className="home-feed-section">
+              <HomeWorkFeed artworks={feedArtworks} />
+            </Section>
+          ) : heroArtwork ? (
+            <Section className="home-feed-section home-feed-section-sparse">
+              <p className="home-feed-sparse-note">Ещё работы — в полной экспозиции.</p>
             </Section>
           ) : (
             <Section className="home-single-work">
-              <p className="eyebrow">Личный каталог</p>
               <h2 className="section-heading">Экспозиция будет расширяться постепенно.</h2>
-              <p>
-                Пока в открытом просмотре одна работа, главная страница держит паузу вокруг неё и не имитирует полный каталог.
-              </p>
+              <p>Пока в открытом просмотре нет работ — загляните позже или откройте галерею.</p>
             </Section>
           )}
+          <p className="home-view-all reveal">
+            <Link className="hero-link hero-link-primary" href="/gallery">
+              Смотреть все работы →
+            </Link>
+          </p>
         </PageContainer>
       </main>
       <SiteFooter />

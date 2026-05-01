@@ -8,13 +8,9 @@ export function SiteHeader() {
           Яна Зубарева
         </Link>
         <div className="site-nav-links">
-          <Link href="/">Главная</Link>
-          <Link href="/gallery">Галерея</Link>
-          <Link href="/about">Обо мне</Link>
-          <Link href="/contact">Контакты</Link>
-          <Link className="site-nav-admin-link" href="/admin/login">
-            Вход в кабинет
-          </Link>
+          <Link href="/gallery">Работы</Link>
+          <Link href="/about">Художник</Link>
+          <Link href="/contact">Студия</Link>
         </div>
       </nav>
     </header>

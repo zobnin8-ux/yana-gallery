@@ -4,7 +4,8 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 import { adminSessionCookieName, isAdminSession } from "@/lib/admin-auth";
-import { galleryStore, slugify } from "@/lib/gallery-store";
+import { galleryStore } from "@/lib/gallery-store";
+import { slugify } from "@/lib/slugify";
 import type { ArtworkCurrency, ArtworkImage, ArtworkStatus } from "@/types/artwork";
 
 export const runtime = "nodejs";
