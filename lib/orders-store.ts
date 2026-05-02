@@ -39,6 +39,19 @@ function requireSupabase() {
   }
 }
 
+/** PostgREST: relation missing from schema (e.g. `supabase/orders.sql` not applied yet). */
+function isOrdersRelationMissing(error: unknown): boolean {
+  if (!error || typeof error !== "object") {
+    return false;
+  }
+  const code = (error as { code?: string }).code;
+  if (code !== "PGRST205") {
+    return false;
+  }
+  const message = String((error as { message?: string }).message ?? "");
+  return message.includes("orders");
+}
+
 function toRubString(amount: number) {
   return amount.toFixed(2);
 }
@@ -152,6 +165,9 @@ export const ordersStore = {
       .maybeSingle();
 
     if (error) {
+      if (isOrdersRelationMissing(error)) {
+        return null;
+      }
       throw error;
     }
     if (!data) {
@@ -167,6 +183,9 @@ export const ordersStore = {
     const { data, error } = await getSupabaseAdminClient().from("orders").select("*").eq("id", id).maybeSingle();
 
     if (error) {
+      if (isOrdersRelationMissing(error)) {
+        return null;
+      }
       throw error;
     }
     if (!data) {
@@ -185,6 +204,9 @@ export const ordersStore = {
       .order("created_at", { ascending: false });
 
     if (error) {
+      if (isOrdersRelationMissing(error)) {
+        return [];
+      }
       throw error;
     }
     return (data as OrderRecord[]).map(mapRow);
