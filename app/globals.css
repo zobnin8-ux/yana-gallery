@@ -606,6 +606,28 @@
   box-shadow: var(--shadow);
 }
 
+.artwork-checkout-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  margin-top: 20px;
+  margin-right: 16px;
+  padding: 0 22px;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  color: #faf7f0;
+  background: var(--text);
+  border: 1px solid var(--text);
+  box-shadow: var(--shadow);
+}
+
+.artwork-checkout-link:hover {
+  opacity: 0.92;
+  color: #faf7f0;
+}
+
 .artwork-description {
   max-width: 40rem;
   margin-top: 34px;
@@ -3962,4 +3984,285 @@ body {
     justify-self: center;
     text-align: center;
   }
+}
+
+/* Checkout (oplata), public order archive (zakaz), admin orders */
+.oplata-page,
+.zakaz-page {
+  padding: 48px 0 96px;
+}
+
+.oplata-section,
+.zakaz-section {
+  padding-top: 8px;
+}
+
+.oplata-title {
+  margin: 24px 0 8px;
+  font-family: var(--serif);
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+  letter-spacing: 0.02em;
+  font-weight: 400;
+}
+
+.oplata-disabled {
+  margin: 20px 0 0;
+  max-width: 40rem;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.oplata-form {
+  margin-top: 28px;
+  max-width: 28rem;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.oplata-form-work,
+.oplata-form-price {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 1.12rem;
+}
+
+.oplata-form-price {
+  color: var(--muted);
+}
+
+.oplata-form-hint {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.oplata-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+.oplata-field input {
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font: inherit;
+  background: var(--surface-strong);
+}
+
+.oplata-form-status {
+  margin: 0;
+  font-size: 0.92rem;
+  color: var(--muted);
+}
+
+.oplata-submit {
+  margin-top: 8px;
+  align-self: flex-start;
+  min-height: 48px;
+  padding: 0 26px;
+  border-radius: 999px;
+  border: 1px solid var(--text);
+  background: var(--text);
+  color: #faf7f0;
+  font-size: 0.88rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.oplata-submit:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.order-archive {
+  max-width: 40rem;
+}
+
+.order-archive-header {
+  margin-bottom: 24px;
+}
+
+.order-archive-title {
+  margin: 8px 0 0;
+  font-family: var(--serif);
+  font-size: clamp(1.75rem, 3.5vw, 2.35rem);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+.order-archive-meta {
+  margin: 12px 0 0;
+  font-size: 0.92rem;
+  color: var(--muted);
+}
+
+.order-archive-banner {
+  margin: 0 0 24px;
+  padding: 16px 18px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(36, 31, 25, 0.04);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.order-archive-steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.order-archive-step {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: baseline;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.95rem;
+}
+
+.order-archive-step:last-child {
+  border-bottom: none;
+}
+
+.order-archive-step-label {
+  color: var(--muted);
+}
+
+.order-archive-step-done .order-archive-step-label {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.order-archive-step-date {
+  font-size: 0.82rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.order-archive-tracking {
+  margin: 24px 0 0;
+  font-size: 0.92rem;
+  color: var(--muted);
+}
+
+.order-archive-note {
+  margin: 32px 0 0;
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: var(--muted);
+}
+
+.admin-table-wrap {
+  margin-top: 20px;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.admin-orders-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.admin-orders-table th,
+.admin-orders-table td {
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.admin-orders-table th {
+  font-weight: 500;
+  color: var(--muted);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: rgba(36, 31, 25, 0.03);
+}
+
+.admin-orders-table tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-order-meta {
+  margin: 20px 0 28px;
+  padding: 18px 20px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(36, 31, 25, 0.02);
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+
+.admin-order-meta p {
+  margin: 0 0 10px;
+}
+
+.admin-order-meta p:last-child {
+  margin-bottom: 0;
+}
+
+.admin-order-meta span {
+  color: var(--muted);
+  margin-right: 6px;
+}
+
+.admin-order-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  max-width: 32rem;
+}
+
+.admin-order-action-block {
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface-strong);
+}
+
+.admin-order-action-title {
+  margin: 0 0 10px;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.admin-order-action-hint {
+  margin: 0 0 16px;
+  font-size: 0.86rem;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.admin-order-action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.admin-order-pre {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: rgba(36, 31, 25, 0.06);
+  font-size: 0.78rem;
+  overflow-x: auto;
+  word-break: break-all;
 }

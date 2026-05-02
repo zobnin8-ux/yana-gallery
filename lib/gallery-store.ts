@@ -267,6 +267,18 @@ export const galleryStore = {
     return list.find((artwork) => slugify(artwork.slug) === key);
   },
 
+  async updateArtworkStatus(id: string, status: Artwork["status"]) {
+    if (!isSupabaseConfigured()) {
+      throw new Error("Supabase is required to update artwork status.");
+    }
+
+    const { error } = await getSupabaseAdminClient().from("artworks").update({ status }).eq("id", id);
+
+    if (error) {
+      throw error;
+    }
+  },
+
   async listCollections(): Promise<ArtworkCollectionWithArtworks[]> {
     noStore();
 

@@ -1,5 +1,6 @@
 ﻿import Link from "next/link";
 
+import { isCheckoutEnabled } from "@/lib/checkout-config";
 import type { Artwork } from "@/types/artwork";
 
 type ArtworkMetaProps = {
@@ -78,6 +79,13 @@ export function ArtworkMeta({ artwork, collectionGalleryHref }: ArtworkMetaProps
     artwork.status === "available" ? "Доступна" : artwork.status === "reserved" ? "В резерве" : "Продана";
   const specs = buildSpecs(artwork);
   const showCollection = Boolean(collectionGalleryHref && artwork.collection?.trim());
+  const showOnlineCheckout =
+    isCheckoutEnabled() &&
+    artwork.status === "available" &&
+    artwork.showPrice &&
+    typeof artwork.price === "number" &&
+    artwork.price > 0 &&
+    artwork.currency === "RUB";
 
   return (
     <div className="artwork-meta">
@@ -104,6 +112,12 @@ export function ArtworkMeta({ artwork, collectionGalleryHref }: ArtworkMetaProps
       ) : (
         <p className="artwork-specs-fallback">{SPECS_FALLBACK}</p>
       )}
+
+      {showOnlineCheckout ? (
+        <Link className="artwork-checkout-link" href={`/oplata/${artwork.slug}`}>
+          Оплатить резерв онлайн
+        </Link>
+      ) : null}
 
       <a
         className="artwork-request-link"
