@@ -1,5 +1,6 @@
 ﻿import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import { ArtworkDescription } from "@/components/artworks/ArtworkDescription";
 import { ArtworkHero } from "@/components/artworks/ArtworkHero";
@@ -78,6 +79,13 @@ export default async function ArtworkPage({ params }: ArtworkPageProps) {
       <main className="artwork-page">
         <PageContainer>
           <Section className="artwork-section">
+            <nav aria-label="Вы находитесь здесь" className="artwork-breadcrumb">
+              <Link href="/gallery">Экспозиция</Link>
+              <span aria-hidden="true" className="artwork-breadcrumb-sep">
+                /
+              </span>
+              <span className="artwork-breadcrumb-current">{artwork.title}</span>
+            </nav>
             <div className="artwork-layout artwork-layout-spread">
               <div className="artwork-main-column">
                 <ArtworkHero artwork={artwork} />

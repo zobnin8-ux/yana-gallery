@@ -7,10 +7,11 @@ import { PageContainer } from "@/components/layout/PageContainer";
 import { Section } from "@/components/layout/Section";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
+import { homeActualLine } from "@/lib/content/home-actual";
 import { artworksRepository } from "@/lib/repositories/artworks-repository";
 
 const HOME_LEDE =
-  "Тихий просмотр отобранных работ: без ленты соцсетей — только картина, серия и контакт со студией, когда захотите.";
+  "Частная онлайн-экспозиция: без витринного шума — картина, серия и спокойный контакт со студией, когда захотите.";
 
 export const metadata: Metadata = {
   title: "Яна Зубарева — частная галерея",
@@ -33,11 +34,14 @@ export default async function HomePage() {
       <main className="home-page">
         <HomeFrontispiece artwork={heroArtwork} lede={HOME_LEDE} />
         <PageContainer>
+          <aside aria-label="Актуальное" className="home-actual">
+            <p className="home-actual-text">{homeActualLine}</p>
+          </aside>
           {feedArtworks.length ? (
             <Section className="home-featured-section reveal reveal-delay-1">
               <header className="home-featured-header">
                 <h2 className="home-featured-heading">Избранное</h2>
-                <p className="home-featured-sub">Несколько работ рядом с домашней — остальное в экспозиции.</p>
+                <p className="home-featured-sub">Компактный отбор рядом с разворотом — полный каталог в экспозиции.</p>
               </header>
               <HomeWorkFeed artworks={feedArtworks} />
             </Section>

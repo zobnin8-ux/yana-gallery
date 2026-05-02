@@ -3728,3 +3728,238 @@ body {
     width: calc(100% - 32px);
   }
 }
+
+/* —— Концепция «досье»: главная актуальное, художник, хлебные крошки работы, футер —— */
+.home-actual {
+  margin: 0 0 clamp(28px, 5vw, 48px);
+  padding: clamp(16px, 2.5vw, 22px) clamp(18px, 3vw, 26px);
+  border: 1px solid rgba(23, 23, 21, 0.1);
+  background: rgba(255, 252, 247, 0.55);
+}
+
+.home-actual-text {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: clamp(0.95rem, 1.5vw, 1.06rem);
+  line-height: 1.58;
+  color: #47433d;
+}
+
+.artist-dossier .artist-dossier-header {
+  margin-bottom: clamp(28px, 4vw, 40px);
+}
+
+.artist-dossier-name {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: clamp(2.6rem, 6vw, 4.25rem);
+  font-weight: 400;
+  line-height: 0.98;
+  letter-spacing: -0.04em;
+}
+
+.artist-pullquote {
+  margin: 0 0 clamp(40px, 6vw, 56px);
+  padding: 0;
+  border: 0;
+  max-width: 42rem;
+}
+
+.artist-pullquote p {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: clamp(1.35rem, 2.4vw, 1.85rem);
+  font-style: italic;
+  font-weight: 450;
+  line-height: 1.42;
+  color: var(--text);
+}
+
+.artist-pullquote::before {
+  content: "";
+  display: block;
+  width: 48px;
+  height: 1px;
+  margin-bottom: clamp(18px, 3vw, 26px);
+  background: rgba(23, 23, 21, 0.2);
+}
+
+.artist-dossier-layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.42fr) minmax(0, 1fr);
+  gap: clamp(36px, 5vw, 64px);
+  align-items: start;
+  margin-bottom: clamp(48px, 7vw, 72px);
+}
+
+.artist-dossier-frame {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: 0;
+  border: 1px solid rgba(23, 23, 21, 0.1);
+  background:
+    linear-gradient(165deg, rgba(255, 255, 255, 0.12) 0%, transparent 42%),
+    #e6dfd4;
+  box-shadow: 0 26px 56px rgba(18, 17, 15, 0.08);
+}
+
+.artist-dossier-image {
+  object-fit: contain;
+  padding: clamp(14px, 2.5vw, 26px);
+}
+
+.artist-dossier-prose {
+  display: grid;
+  gap: 1.25rem;
+  max-width: 38rem;
+  font-size: 1.02rem;
+  line-height: 1.82;
+  color: #47433d;
+}
+
+.artist-dossier-prose p {
+  margin: 0;
+}
+
+.artist-shows {
+  padding: clamp(36px, 5vw, 48px) 0;
+  border-top: 1px solid rgba(23, 23, 21, 0.12);
+  max-width: 40rem;
+}
+
+.artist-shows-title {
+  margin: 0 0 14px;
+  font-size: 0.76rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.artist-shows-text {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: clamp(1.05rem, 1.8vw, 1.2rem);
+  line-height: 1.6;
+  color: #47433d;
+}
+
+.artist-dossier-cta {
+  margin: clamp(8px, 2vw, 16px) 0 0;
+}
+
+.artwork-breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 10px;
+  margin: 0 0 clamp(24px, 4vw, 36px);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.artwork-breadcrumb a {
+  color: var(--muted);
+  border-bottom: 1px solid rgba(23, 23, 21, 0.22);
+  padding-bottom: 2px;
+}
+
+.artwork-breadcrumb a:hover {
+  color: var(--text);
+  border-bottom-color: rgba(23, 23, 21, 0.45);
+}
+
+.artwork-breadcrumb-sep {
+  opacity: 0.45;
+  user-select: none;
+}
+
+.artwork-breadcrumb-current {
+  color: var(--text);
+  letter-spacing: 0.06em;
+  text-transform: none;
+  font-size: 0.82rem;
+}
+
+.site-footer .site-footer-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: start;
+  gap: 20px 32px;
+  width: 100%;
+}
+
+.site-footer .site-footer-brand {
+  display: block;
+}
+
+.site-footer .site-footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  justify-content: center;
+  justify-self: center;
+}
+
+.site-footer .site-footer-nav a {
+  color: var(--muted);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.site-footer .site-footer-nav a:hover {
+  color: var(--text);
+}
+
+.site-footer .site-footer-contact {
+  display: block;
+  justify-self: end;
+  text-align: right;
+}
+
+.site-footer .site-footer-contact a {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: var(--text);
+}
+
+.site-footer-name {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+  color: var(--text);
+}
+
+.site-footer-tag {
+  margin: 6px 0 0;
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+@media (max-width: 760px) {
+  .artist-dossier-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .site-footer .site-footer-inner {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .site-footer .site-footer-nav {
+    justify-content: center;
+    justify-self: stretch;
+  }
+
+  .site-footer .site-footer-contact {
+    justify-self: center;
+    text-align: center;
+  }
+}
