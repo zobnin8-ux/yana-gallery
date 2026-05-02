@@ -130,7 +130,7 @@ export const ordersStore = {
 
     const confirmationUrl = payment.confirmation?.confirmation_url;
     if (!confirmationUrl) {
-      throw new Error("YooKassa не вернула ссылку на оплату.");
+      throw new Error("Платёжная система не вернула ссылку на оплату.");
     }
 
     const { error: upErr } = await supabase
@@ -344,7 +344,7 @@ export const ordersStore = {
 
     const confirmationUrl = payment.confirmation?.confirmation_url;
     if (!confirmationUrl) {
-      throw new Error("YooKassa не вернула ссылку на оплату доставки.");
+      throw new Error("Платёжная система не вернула ссылку на оплату доставки.");
     }
 
     const { error } = await supabase

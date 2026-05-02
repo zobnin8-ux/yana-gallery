@@ -19,7 +19,9 @@ export default async function AdminOrdersPage() {
   return (
     <section className="admin-section">
       <SectionTitle>Заказы</SectionTitle>
-      <p className="admin-copy">Резервы и оплаты оригиналов (ЮKassa). Подтверждение — в течение одного рабочего дня.</p>
+      <p className="admin-copy">
+        Резервы и оплаты оригиналов. Подтверждение галереей — в течение одного рабочего дня.
+      </p>
       {orders.length === 0 ? (
         <p className="admin-copy">Заказов пока нет. Убедитесь, что в Supabase выполнен скрипт <code>supabase/orders.sql</code>.</p>
       ) : (

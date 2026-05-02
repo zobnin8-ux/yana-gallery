@@ -2,6 +2,10 @@ import { NextResponse } from "next/server";
 
 import { ordersStore } from "@/lib/orders-store";
 
+/**
+ * Webhook route shape matches the placeholder adapter in `lib/yookassa.ts`. Change path and payload handling
+ * when switching payment providers.
+ */
 export const runtime = "nodejs";
 
 type YooNotification = {
@@ -52,7 +56,7 @@ export async function POST(
         await ordersStore.onShippingPaymentSucceeded(orderId, payment.id);
       }
     } catch (error) {
-      console.error("yookassa webhook", error);
+      console.error("payment webhook", error);
       return new NextResponse("Error", { status: 500 });
     }
   }
