@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
+import { fontSans, fontSerif } from "@/app/fonts";
 import "@/app/globals.css";
 
 export const metadata: Metadata = {
@@ -25,7 +26,7 @@ type RootLayoutProps = {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="ru">
+    <html className={`${fontSans.variable} ${fontSerif.variable}`} lang="ru">
       <body>
         <div className="site-shell">{children}</div>
       </body>

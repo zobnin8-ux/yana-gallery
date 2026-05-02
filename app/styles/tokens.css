@@ -1,0 +1,16 @@
+/* Дизайн-токены. Семейства шрифтов задаются next/font на <html> как --font-serif / --font-sans */
+:root {
+  color-scheme: light;
+  --bg: #f5f1e8;
+  --bg-soft: #f9f5ee;
+  --surface: rgba(255, 252, 247, 0.72);
+  --surface-strong: #fbf8f2;
+  --border: rgba(77, 64, 49, 0.12);
+  --text: #241f19;
+  --muted: #6f675f;
+  --accent: #d9cbb6;
+  --shadow: 0 24px 60px rgba(69, 54, 38, 0.08);
+  /* Семейства из next/font (Cormorant Garamond, Inter) + системные запасные варианты */
+  --serif: var(--font-serif), "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --sans: var(--font-sans), "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}

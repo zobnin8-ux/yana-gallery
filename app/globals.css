@@ -1,52 +1,5 @@
-﻿@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Inter:wght@400;500&display=swap");
-
-:root {
-  color-scheme: light;
-  --bg: #f5f1e8;
-  --bg-soft: #f9f5ee;
-  --surface: rgba(255, 252, 247, 0.72);
-  --surface-strong: #fbf8f2;
-  --border: rgba(77, 64, 49, 0.12);
-  --text: #241f19;
-  --muted: #6f675f;
-  --accent: #d9cbb6;
-  --shadow: 0 24px 60px rgba(69, 54, 38, 0.08);
-  --serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
-  --sans: "Avenir Next", "Segoe UI", Helvetica, Arial, sans-serif;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-html,
-body {
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: var(--sans);
-  background:
-    radial-gradient(circle at top left, rgba(255, 250, 242, 0.88), transparent 34%),
-    linear-gradient(180deg, #f6f2e9 0%, #f3eee5 100%);
-  color: var(--text);
-  line-height: 1.5;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-img {
-  display: block;
-  max-width: 100%;
-}
-
-main {
-  display: block;
-}
+﻿@import "./styles/tokens.css";
+@import "./styles/base.css";
 
 .page-container {
   width: min(1240px, calc(100% - 48px));
@@ -2443,6 +2396,28 @@ body {
 
 .artwork-card-home .artwork-card-title {
   font-size: clamp(1.5rem, 2.8vw, 2.35rem);
+}
+
+/* Главная: целиком изображение в рамке, без обрезки (как в сетке экспозиции) */
+.artwork-card-home .artwork-card-image {
+  aspect-ratio: 1 / 1.12;
+}
+
+.artwork-card-home .artwork-card-img {
+  object-fit: contain;
+  padding: clamp(12px, 2vw, 24px);
+}
+
+.artwork-card-home .artwork-card-image-landscape .artwork-card-img {
+  padding: clamp(18px, 2.8vw, 30px) clamp(10px, 1.8vw, 20px);
+}
+
+.artwork-card-home .artwork-card-image-portrait .artwork-card-img {
+  padding: clamp(10px, 1.8vw, 22px) clamp(14px, 2.2vw, 26px);
+}
+
+.artwork-card-home .artwork-card-image-square .artwork-card-img {
+  padding: clamp(14px, 2.2vw, 26px);
 }
 
 .artwork-card-meta {
