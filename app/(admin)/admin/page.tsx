@@ -40,6 +40,9 @@ export default async function AdminPage() {
         <Link className="admin-action-link" href="/admin/collections">
           Смотреть коллекции
         </Link>
+        <Link className="admin-action-link" href="/admin/orders">
+          Заказы
+        </Link>
         <Link className="admin-action-link" href="/admin/inquiries">
           Смотреть заявки
         </Link>
