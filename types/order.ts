@@ -20,6 +20,7 @@ export type OrderRow = {
   buyer_phone: string | null;
   artwork_amount_value: string;
   currency: string;
+  /** External payment IDs from the integrated provider (column names historical). */
   yookassa_artwork_payment_id: string | null;
   yookassa_shipping_payment_id: string | null;
   shipping_amount_value: string | null;

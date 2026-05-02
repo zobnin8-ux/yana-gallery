@@ -70,10 +70,10 @@ export default async function AdminOrderDetailPage({ params }: PageProps) {
           </a>
         </p>
         <p>
-          <span>ЮKassa (картина):</span> {order.yookassa_artwork_payment_id ?? "—"}
+          <span>ID платежа (резерв):</span> {order.yookassa_artwork_payment_id ?? "—"}
         </p>
         <p>
-          <span>ЮKassa (доставка):</span> {order.yookassa_shipping_payment_id ?? "—"}
+          <span>ID платежа (доставка):</span> {order.yookassa_shipping_payment_id ?? "—"}
         </p>
         {order.tracking_number ? (
           <p>

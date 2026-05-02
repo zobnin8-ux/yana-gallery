@@ -1,5 +1,9 @@
 import { isSupabaseConfigured } from "@/lib/supabase";
 
+/**
+ * Online checkout is disabled until payment integration is configured.
+ * Currently gated on optional env vars used by the placeholder payment adapter in `lib/yookassa.ts`.
+ */
 export function isCheckoutEnabled() {
   return (
     isSupabaseConfigured() &&

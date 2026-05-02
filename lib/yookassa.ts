@@ -1,10 +1,14 @@
+/**
+ * Placeholder payment adapter (YooKassa HTTP API). Replace or wrap when the real provider is chosen.
+ * Checkout stays disabled until `isCheckoutEnabled()` passes — see `lib/checkout-config.ts`.
+ */
 const YK_API = "https://api.yookassa.ru/v3";
 
 function basicAuthHeader() {
   const shopId = process.env.YOOKASSA_SHOP_ID?.trim();
   const secret = process.env.YOOKASSA_SECRET_KEY?.trim();
   if (!shopId || !secret) {
-    throw new Error("YOOKASSA_SHOP_ID и YOOKASSA_SECRET_KEY должны быть заданы.");
+    throw new Error("Для оплаты задайте переменные окружения платёжной интеграции (см. lib/yookassa.ts).");
   }
   const token = Buffer.from(`${shopId}:${secret}`, "utf8").toString("base64");
   return `Basic ${token}`;
@@ -35,7 +39,7 @@ export async function yookassaCreatePayment(params: {
 
   if (!response.ok) {
     const text = await response.text();
-    throw new Error(`YooKassa create payment: ${response.status} ${text}`);
+    throw new Error(`Создание платежа: ${response.status} ${text}`);
   }
 
   return response.json() as Promise<{
@@ -65,7 +69,7 @@ export async function yookassaCreateRefund(params: {
 
   if (!response.ok) {
     const text = await response.text();
-    throw new Error(`YooKassa refund: ${response.status} ${text}`);
+    throw new Error(`Возврат платежа: ${response.status} ${text}`);
   }
 
   return response.json() as Promise<{ id: string; status: string }>;
@@ -76,7 +80,7 @@ export async function yookassaGetPayment(paymentId: string) {
     headers: { Authorization: basicAuthHeader() }
   });
   if (!response.ok) {
-    throw new Error(`YooKassa get payment: ${response.status}`);
+    throw new Error(`Получение платежа: ${response.status}`);
   }
   return response.json() as Promise<{
     id: string;

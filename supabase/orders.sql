@@ -1,4 +1,4 @@
--- Заказы на оригиналы (оплата ЮKassa). Выполните в SQL Editor Supabase после бэкапа.
+-- Заказы на оригиналы (оплата — отдельная интеграция). Выполните в SQL Editor Supabase после бэкапа.
 
 create table if not exists orders (
   id uuid primary key default gen_random_uuid(),
