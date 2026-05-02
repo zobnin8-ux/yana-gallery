@@ -14,7 +14,7 @@ Production-oriented Next.js App Router gallery engine for artist Yana Zubareva.
 - `GALLERY_INQUIRY_WEBHOOK_URL` optionally receives saved inquiry payloads as JSON.
 - `GALLERY_ORDER_WEBHOOK_URL` (optional) — JSON POST on important order status changes, if you use the orders feature.
 
-**Orders / online reserve:** the app can store orders in Supabase after you run `supabase/orders.sql`. **Online checkout is off until a payment provider is chosen and wired in** (there is placeholder server code and env names in the repo; you do not need to set them until then).
+**Orders / online reserve:** the app can store orders in Supabase after you run `supabase/orders.sql`. **Online checkout is off until a payment provider is chosen and wired in** (there is placeholder server code and env names in the repo; you do not need to set them until then). Likely options to integrate later include **Robokassa** or **Prodamus** — the current placeholder adapter will be replaced when you pick one.
 
 When Supabase is configured, gallery data is stored in Supabase tables and artwork images are uploaded to
 Supabase Storage. Without Supabase environment variables, the app falls back to `data/gallery.json` for local

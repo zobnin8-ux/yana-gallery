@@ -1,6 +1,6 @@
 /**
- * Placeholder payment adapter (YooKassa HTTP API). Replace or wrap when the real provider is chosen.
- * Checkout stays disabled until `isCheckoutEnabled()` passes — see `lib/checkout-config.ts`.
+ * Placeholder payment adapter (YooKassa HTTP API). Replace with Robokassa, Prodamus, or another provider
+ * when chosen — see `lib/checkout-config.ts` for the checkout gate.
  */
 const YK_API = "https://api.yookassa.ru/v3";
 
