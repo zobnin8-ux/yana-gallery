@@ -28,6 +28,16 @@ img {
   max-width: 100%;
 }
 
-main {
-  display: block;
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+summary:focus-visible {
+  outline: 2px solid rgba(36, 31, 25, 0.42);
+  outline-offset: 3px;
+}
+
+main:focus-visible {
+  outline: none;
 }

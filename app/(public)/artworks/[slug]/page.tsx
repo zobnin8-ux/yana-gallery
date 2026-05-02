@@ -71,7 +71,7 @@ export default async function ArtworkPage({ params }: ArtworkPageProps) {
     ? collections.find((collection) => collection.id === artwork.collectionId)
     : null;
   const collectionGalleryHref = matchedCollection ? `/gallery#${matchedCollection.slug}` : undefined;
-  const { prev, next } = getSeriesPrevNext(artwork, collections);
+  const { prev, next, position } = getSeriesPrevNext(artwork, collections);
 
   return (
     <>
@@ -88,9 +88,10 @@ export default async function ArtworkPage({ params }: ArtworkPageProps) {
             </nav>
             <div className="artwork-layout artwork-layout-spread">
               <div className="artwork-main-column">
+                <p className="artwork-sticky-context">{artwork.title}</p>
                 <ArtworkHero artwork={artwork} />
                 <ArtworkDescription artwork={artwork} />
-                <ArtworkSeriesNav next={next} prev={prev} />
+                <ArtworkSeriesNav next={next} position={position} prev={prev} />
               </div>
               <aside className="artwork-panel">
                 <ArtworkMeta artwork={artwork} collectionGalleryHref={collectionGalleryHref} />
