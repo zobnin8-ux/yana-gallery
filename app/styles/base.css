@@ -1,0 +1,33 @@
+/* Сброс и базовая типографика страницы */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--sans);
+  background:
+    radial-gradient(circle at top left, rgba(255, 250, 242, 0.88), transparent 34%),
+    linear-gradient(180deg, #f6f2e9 0%, #f3eee5 100%);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+main {
+  display: block;
+}
