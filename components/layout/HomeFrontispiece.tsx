@@ -24,6 +24,9 @@ export function HomeFrontispiece({ artwork, lede }: HomeFrontispieceProps) {
               <Link className="hero-link hero-link-primary" href="/gallery">
                 Экспозиция
               </Link>
+              <Link className="hero-link" href="/about">
+                Художник
+              </Link>
               <Link className="hero-link" href="/contact">
                 Студия
               </Link>

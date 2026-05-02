@@ -23,11 +23,11 @@ export default function ContactPage() {
           <Section className="contact-page">
             <div className="contact-layout">
               <div className="contact-copy reveal">
-                <p className="contact-eyebrow">Контакты</p>
-                <h1 className="contact-title">Связаться по поводу работы</h1>
+                <p className="contact-eyebrow">Студия</p>
+                <h1 className="contact-title">Запрос о работе</h1>
                 <p className="contact-intro">
-                  Если тебя заинтересовала картина, можно отправить запрос через форму. Ответное письмо
-                  придёт с деталями о наличии, стоимости и возможной доставке.
+                  Если вас заинтересовала картина в экспозиции, отправьте запрос через форму — ответ придёт с
+                  базовыми сведениями о наличии, стоимости и возможной доставке.
                 </p>
                 <div className="contact-details">
                   <div className="contact-detail">
