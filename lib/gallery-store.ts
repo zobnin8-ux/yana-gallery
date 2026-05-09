@@ -78,7 +78,7 @@ export type ArtworkPayload = Omit<Artwork, "id" | "images"> & {
 
 const fallbackData = galleryData as GalleryData;
 
-function extensionForArtworkUpload(blob: Blob): string {
+export function extensionForArtworkUpload(blob: Blob): string {
   if (typeof File !== "undefined" && blob instanceof File && blob.name.includes(".")) {
     const ext = blob.name.split(".").pop();
     if (ext && /^[a-z0-9]{1,6}$/i.test(ext)) {
@@ -106,6 +106,38 @@ function mimeForArtworkExtension(ext: string): string {
     svg: "image/svg+xml"
   };
   return map[ext.toLowerCase()] ?? "application/octet-stream";
+}
+
+function extensionFromPathOrBlob(path: string, blob: Blob): string {
+  const fromPath = path.includes(".") ? path.split(".").pop() : undefined;
+  if (fromPath && /^[a-z0-9]{1,6}$/i.test(fromPath)) {
+    return fromPath.toLowerCase();
+  }
+  return extensionForArtworkUpload(blob);
+}
+
+/** Uploads a file to the public gallery bucket; returns the public URL. */
+export async function uploadBlobToPublicBucket(path: string, blob: Blob): Promise<string> {
+  if (!isSupabaseConfigured()) {
+    throw new Error("Supabase is required to upload images.");
+  }
+
+  const supabase = getSupabaseAdminClient();
+  const ext = extensionFromPathOrBlob(path, blob);
+  const contentType = blob.type.trim() || mimeForArtworkExtension(ext);
+
+  const { error } = await supabase.storage.from(getSupabaseStorageBucket()).upload(path, blob, {
+    cacheControl: "31536000",
+    upsert: false,
+    contentType
+  });
+
+  if (error) {
+    throw error;
+  }
+
+  const { data } = supabase.storage.from(getSupabaseStorageBucket()).getPublicUrl(path);
+  return data.publicUrl;
 }
 
 function collectionFromRow(row: CollectionRow): ArtworkCollection {
@@ -503,32 +535,15 @@ export const galleryStore = {
   },
 
   async uploadArtworkImage(file: Blob, alt: string, sortOrder: number): Promise<ArtworkImage> {
-    if (!isSupabaseConfigured()) {
-      throw new Error("Supabase is required to upload images.");
-    }
-
     const extension = extensionForArtworkUpload(file);
     const filename = `${Date.now()}-${randomUUID()}.${extension}`;
     const path = `artworks/${filename}`;
-    const supabase = getSupabaseAdminClient();
-    const contentType = file.type.trim() || mimeForArtworkExtension(extension);
-
-    const { error } = await supabase.storage.from(getSupabaseStorageBucket()).upload(path, file, {
-      cacheControl: "31536000",
-      upsert: false,
-      contentType
-    });
-
-    if (error) {
-      throw error;
-    }
-
-    const { data } = supabase.storage.from(getSupabaseStorageBucket()).getPublicUrl(path);
+    const publicUrl = await uploadBlobToPublicBucket(path, file);
 
     return {
       id: randomUUID(),
-      url: data.publicUrl,
-      thumbnailUrl: data.publicUrl,
+      url: publicUrl,
+      thumbnailUrl: publicUrl,
       alt,
       sortOrder,
       isPrimary: sortOrder === 1

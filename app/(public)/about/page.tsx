@@ -7,6 +7,7 @@ import { Section } from "@/components/layout/Section";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { artistBioParagraphs, artistPullquote, artistShowsNote } from "@/lib/content/artist-dossier";
+import { getArtistPortraitUrl } from "@/lib/site-settings-store";
 
 export const metadata: Metadata = {
   title: "Художник — Яна Зубарева",
@@ -16,7 +17,13 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image", title: "Художник — Яна Зубарева" }
 };
 
-export default function AboutPage() {
+const DEFAULT_ABOUT_IMAGE = "/images/artworks/light-composition-1.svg";
+
+export default async function AboutPage() {
+  const portraitUrl = await getArtistPortraitUrl();
+  const heroImageSrc = portraitUrl ?? DEFAULT_ABOUT_IMAGE;
+  const heroImageAlt = portraitUrl ? "Яна Зубарева" : "Фрагмент работы Яны Зубаревой";
+
   return (
     <>
       <SiteHeader />
@@ -36,8 +43,8 @@ export default function AboutPage() {
               <div className="artist-dossier-visual reveal">
                 <div className="artist-dossier-frame">
                   <Image
-                    src="/images/artworks/light-composition-1.svg"
-                    alt="Фрагмент работы Яны Зубаревой"
+                    src={heroImageSrc}
+                    alt={heroImageAlt}
                     fill
                     sizes="(max-width: 900px) 100vw, 40vw"
                     className="artist-dossier-image"
