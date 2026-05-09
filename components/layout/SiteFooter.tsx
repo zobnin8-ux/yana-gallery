@@ -19,7 +19,9 @@ export function SiteFooter() {
           <span className="site-footer-contact-sep" aria-hidden="true">
             ·
           </span>
-          <a href="/admin">Вход</a>
+          <a className="site-footer-admin-link" href="/admin">
+            Вход
+          </a>
         </div>
       </div>
     </footer>
