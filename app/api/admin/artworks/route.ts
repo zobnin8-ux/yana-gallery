@@ -28,10 +28,19 @@ async function requireAdmin() {
   return isAdminSession(session);
 }
 
+function imageBlobsFromFormData(formData: FormData): Blob[] {
+  const blobs: Blob[] = [];
+  for (const value of formData.getAll("artworkImages")) {
+    if (value instanceof Blob && value.size > 0) {
+      blobs.push(value);
+    }
+  }
+  return blobs;
+}
+
 async function saveUploadedImages(formData: FormData, existingImages: ArtworkImage[]) {
-  const files = formData
-    .getAll("artworkImages")
-    .filter((value): value is File => typeof File !== "undefined" && value instanceof File && value.size > 0);
+  /* Node/Next FormData file fields are Blob (often File); instanceof File alone can fail on the server. */
+  const files = imageBlobsFromFormData(formData);
 
   if (!files.length) {
     return existingImages;
@@ -143,13 +152,17 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true, artwork, redirectTo: "/admin/artworks" });
   } catch (error) {
-    return NextResponse.json(
-      {
-        success: false,
-        message: error instanceof Error ? error.message : "Не удалось сохранить работу."
-      },
-      { status: 500 }
-    );
+    const message =
+      error instanceof Error
+        ? error.message
+        : typeof error === "object" &&
+            error !== null &&
+            "message" in error &&
+            typeof (error as { message: unknown }).message === "string"
+          ? (error as { message: string }).message
+          : "Не удалось сохранить работу.";
+    console.error("[api/admin/artworks]", error);
+    return NextResponse.json({ success: false, message }, { status: 500 });
   }
 }
 
