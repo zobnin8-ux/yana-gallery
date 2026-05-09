@@ -2072,6 +2072,11 @@ body {
 .site-nav-admin-link {
   border-color: rgba(23, 23, 21, 0.2);
   color: var(--text);
+  opacity: 0.72;
+}
+
+.site-nav-admin-link:hover {
+  opacity: 0.92;
 }
 
 .hero {
@@ -2474,10 +2479,21 @@ body {
 .artwork-card-status {
   grid-column: 1 / -1;
   justify-self: start;
-  margin-top: 14px;
+  margin-top: 10px;
   padding: 0;
   border: 0;
   letter-spacing: 0.16em;
+}
+
+@media (max-width: 760px) {
+  .artwork-card-body {
+    grid-template-columns: 1fr;
+  }
+
+  .artwork-card-meta {
+    text-align: left;
+    margin-top: 10px;
+  }
 }
 
 .gallery-page {
@@ -3112,11 +3128,17 @@ body {
   line-height: 1.4;
   letter-spacing: 0.06em;
   text-transform: lowercase;
+  padding: 18px 20px;
+  border: 1px solid rgba(23, 23, 21, 0.1);
+  background: rgba(255, 252, 247, 0.48);
+  border-radius: 14px;
 }
 
 .gallery-filters-label {
   color: var(--muted);
   margin-right: 4px;
+  font-size: 0.82em;
+  letter-spacing: 0.08em;
 }
 
 .gallery-filters-sep {
@@ -3126,7 +3148,7 @@ body {
 
 .gallery-filter-anchor {
   margin: 0;
-  padding: 0 0 2px;
+  padding: 0 0 3px;
   border: 0;
   border-bottom: 1px solid transparent;
   border-radius: 0;
@@ -4066,6 +4088,14 @@ body {
 
 .site-footer-contact-sep {
   opacity: 0.55;
+}
+
+.site-footer-admin-link {
+  opacity: 0.7;
+}
+
+.site-footer-admin-link:hover {
+  opacity: 0.9;
 }
 
 .site-footer-name {
