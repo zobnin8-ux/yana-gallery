@@ -238,6 +238,20 @@ async function getSupabaseData() {
   return { collections, artworks };
 }
 
+function errorMessageFromUnknown(error: unknown): string {
+  if (error instanceof Error) {
+    return error.message;
+  }
+  if (error && typeof error === "object" && "message" in error) {
+    return String((error as { message: unknown }).message);
+  }
+  return "";
+}
+
+function isMissingInteriorImageUrlColumnError(error: unknown): boolean {
+  return errorMessageFromUnknown(error).includes("interior_image_url");
+}
+
 function artworkToRow(artwork: ArtworkPayload) {
   return {
     slug: artwork.slug,
@@ -350,7 +364,12 @@ export const galleryStore = {
     const supabase = getSupabaseAdminClient();
     const id = payload.id || randomUUID();
     const artworkRow = { id, ...artworkToRow({ ...payload, slug: payload.slug || slugify(payload.title) }) };
-    const { error } = await supabase.from("artworks").upsert(artworkRow, { onConflict: "id" });
+    let { error } = await supabase.from("artworks").upsert(artworkRow, { onConflict: "id" });
+
+    if (error && isMissingInteriorImageUrlColumnError(error)) {
+      const { interior_image_url: _drop, ...rowWithoutInterior } = artworkRow;
+      ({ error } = await supabase.from("artworks").upsert(rowWithoutInterior, { onConflict: "id" }));
+    }
 
     if (error) {
       throw error;
