@@ -19,3 +19,5 @@ Production-oriented Next.js App Router gallery engine for artist Yana Zubareva.
 When Supabase is configured, gallery data is stored in Supabase tables and artwork images are uploaded to
 Supabase Storage. Without Supabase environment variables, the app falls back to `data/gallery.json` for local
 read-only development.
+
+**Schema drift:** if PostgREST reports a missing column (e.g. `interior_image_url` on `artworks`), run the matching patch in **Supabase → SQL Editor**, such as `supabase/artworks_add_interior_image_url.sql`.
