@@ -78,6 +78,36 @@ export type ArtworkPayload = Omit<Artwork, "id" | "images"> & {
 
 const fallbackData = galleryData as GalleryData;
 
+function extensionForArtworkUpload(blob: Blob): string {
+  if (typeof File !== "undefined" && blob instanceof File && blob.name.includes(".")) {
+    const ext = blob.name.split(".").pop();
+    if (ext && /^[a-z0-9]{1,6}$/i.test(ext)) {
+      return ext.toLowerCase();
+    }
+  }
+  const t = blob.type.toLowerCase();
+  if (t.includes("jpeg") || t === "image/jpg") return "jpg";
+  if (t.includes("png")) return "png";
+  if (t.includes("webp")) return "webp";
+  if (t.includes("gif")) return "gif";
+  if (t.includes("avif")) return "avif";
+  if (t.includes("svg")) return "svg";
+  return "jpg";
+}
+
+function mimeForArtworkExtension(ext: string): string {
+  const map: Record<string, string> = {
+    jpg: "image/jpeg",
+    jpeg: "image/jpeg",
+    png: "image/png",
+    webp: "image/webp",
+    gif: "image/gif",
+    avif: "image/avif",
+    svg: "image/svg+xml"
+  };
+  return map[ext.toLowerCase()] ?? "application/octet-stream";
+}
+
 function collectionFromRow(row: CollectionRow): ArtworkCollection {
   return {
     id: row.id,
@@ -453,18 +483,21 @@ export const galleryStore = {
     return (data as InquiryRow[]).map(inquiryFromRow);
   },
 
-  async uploadArtworkImage(file: File, alt: string, sortOrder: number): Promise<ArtworkImage> {
+  async uploadArtworkImage(file: Blob, alt: string, sortOrder: number): Promise<ArtworkImage> {
     if (!isSupabaseConfigured()) {
       throw new Error("Supabase is required to upload images.");
     }
 
-    const extension = file.name.split(".").pop() || "jpg";
+    const extension = extensionForArtworkUpload(file);
     const filename = `${Date.now()}-${randomUUID()}.${extension}`;
     const path = `artworks/${filename}`;
     const supabase = getSupabaseAdminClient();
+    const contentType = file.type.trim() || mimeForArtworkExtension(extension);
+
     const { error } = await supabase.storage.from(getSupabaseStorageBucket()).upload(path, file, {
       cacheControl: "31536000",
-      upsert: false
+      upsert: false,
+      contentType
     });
 
     if (error) {
