@@ -29,8 +29,8 @@ export default async function GalleryPage() {
                 <h1 className="gallery-title">Экспозиция</h1>
               </div>
               <p className="gallery-intro">
-                Работы сгруппированы по сериям. Выберите фильтры — откройте карточку, чтобы увидеть работу
-                полностью и при необходимости написать в студию.
+                Работы собраны по сериям — можно смотреть всю экспозицию или выбрать одну серию. Если нужна
+                информация о работе, напишите в студию.
               </p>
             </div>
             <GalleryCollectionsView collections={collections} />
