@@ -4,6 +4,16 @@ import Link from "next/link";
 import { primaryArtworkImageAlt } from "@/lib/artwork-image-alt";
 import type { Artwork } from "@/types/artwork";
 
+function formatDimensions(artwork: Artwork): string | null {
+  if (artwork.sizeLabel?.trim()) {
+    return artwork.sizeLabel.trim();
+  }
+  if (typeof artwork.width === "number" && typeof artwork.height === "number") {
+    return `${artwork.width} × ${artwork.height} см`;
+  }
+  return null;
+}
+
 type ArtworkCardProps = {
   artwork: Artwork;
   variant?: "default" | "gallery" | "home" | "feed";
@@ -20,6 +30,7 @@ export function ArtworkCard({ artwork, variant = "default" }: ArtworkCardProps) 
     artwork.status === "available" ? "Доступна" : artwork.status === "reserved" ? "В резерве" : "Продана";
 
   const isSold = artwork.status === "sold";
+  const metaParts = [artwork.year ? String(artwork.year) : null, formatDimensions(artwork)].filter(Boolean);
 
   return (
     <article className={`artwork-card artwork-card-${variant}${isSold ? " artwork-card-is-sold" : ""}`}>
@@ -48,15 +59,9 @@ export function ArtworkCard({ artwork, variant = "default" }: ArtworkCardProps) 
           ) : null}
         </div>
         <div className="artwork-card-body">
-          {artwork.collection ? (
-            <p className="artwork-card-kicker">{artwork.collection}</p>
-          ) : null}
+          {artwork.collection ? <p className="artwork-card-kicker">{artwork.collection}</p> : null}
           <h3 className="artwork-card-title">{artwork.title}</h3>
-          <p className="artwork-card-meta">
-            {[artwork.year, artwork.width && artwork.height ? `${artwork.width} × ${artwork.height} cm` : null]
-              .filter(Boolean)
-              .join(", ")}
-          </p>
+          {metaParts.length ? <p className="artwork-card-meta">{metaParts.join(" · ")}</p> : null}
           <span className={`artwork-card-status artwork-card-status-${artwork.status}`}>{statusLabel}</span>
         </div>
       </Link>

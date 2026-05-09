@@ -16,6 +16,10 @@ export function SiteFooter() {
         </nav>
         <div className="site-footer-contact">
           <a href="mailto:studio@yanazubareva.com">studio@yanazubareva.com</a>
+          <span className="site-footer-contact-sep" aria-hidden="true">
+            ·
+          </span>
+          <a href="/admin">Вход</a>
         </div>
       </div>
     </footer>

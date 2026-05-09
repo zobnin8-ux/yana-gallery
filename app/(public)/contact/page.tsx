@@ -9,7 +9,7 @@ import { SiteHeader } from "@/components/layout/SiteHeader";
 
 export const metadata: Metadata = {
   title: "Студия — связь по работам",
-  description: "Запросить информацию о работе, резерве и доставке.",
+  description: "Запросить информацию о работе: наличие, стоимость и доставка.",
   openGraph: { title: "Студия — связь по работам" },
   twitter: { card: "summary_large_image", title: "Студия — связь по работам" }
 };

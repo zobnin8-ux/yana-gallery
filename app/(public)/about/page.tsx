@@ -11,7 +11,7 @@ import { artistBioParagraphs, artistPullquote, artistShowsNote } from "@/lib/con
 export const metadata: Metadata = {
   title: "Художник — Яна Зубарева",
   description:
-    "Живопись как пространство тишины и света. Практика, серии и контакт со студией для запросов по работам.",
+    "О художнике: практика, серии и заметки о работах. Для стоимости и наличия — запрос в студию.",
   openGraph: { title: "Художник — Яна Зубарева" },
   twitter: { card: "summary_large_image", title: "Художник — Яна Зубарева" }
 };
