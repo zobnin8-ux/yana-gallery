@@ -3107,8 +3107,8 @@ body {
   justify-content: center;
   gap: 10px 14px;
   margin-bottom: clamp(48px, 8vw, 72px);
-  font-size: 0.72rem;
-  letter-spacing: 0.14em;
+  font-size: 0.98rem;
+  letter-spacing: 0.1em;
   text-transform: lowercase;
 }
 
@@ -3810,6 +3810,20 @@ body {
 
 .gallery-collection-salon .gallery-salon-grid {
   margin-top: clamp(8px, 2vw, 16px);
+}
+
+.gallery-empty {
+  margin: 0 auto;
+  max-width: 40rem;
+  text-align: center;
+  padding: clamp(24px, 4vw, 40px) 0;
+}
+
+.gallery-empty-title {
+  margin: 0 0 18px;
+  color: var(--muted);
+  font-size: 1.1rem;
+  line-height: 1.55;
 }
 
 @media (max-width: 860px) {
