@@ -69,20 +69,36 @@ export function GalleryCollectionsView({ collections }: GalleryCollectionsViewPr
       </div>
 
       <div className="gallery-collections gallery-collections-salon">
-        {visibleCollections.map((collection) => (
-          <section className="gallery-collection gallery-collection-salon" id={collection.slug} key={collection.id}>
-            <header className="gallery-series-header">
-              <h2 className="gallery-series-title">{collection.name}</h2>
-              <p className="gallery-series-meta">{worksCountLabel(collection.artworks.length)}</p>
-              {collection.description ? <p className="gallery-series-lede">{collection.description}</p> : null}
-            </header>
-            <div className="artwork-grid artwork-grid-gallery gallery-salon-grid">
-              {collection.artworks.map((artwork) => (
-                <ArtworkCard artwork={artwork} key={artwork.id} variant="gallery" />
-              ))}
-            </div>
-          </section>
-        ))}
+        {visibleCollections.length === 0 ? (
+          <div className="gallery-empty">
+            <p className="gallery-empty-title">Для выбранных фильтров работ нет.</p>
+            <button
+              className="gallery-filter-anchor is-active"
+              onClick={() => {
+                setActiveCollectionId("all");
+                setActiveStatus("all");
+              }}
+              type="button"
+            >
+              Сбросить фильтры
+            </button>
+          </div>
+        ) : (
+          visibleCollections.map((collection) => (
+            <section className="gallery-collection gallery-collection-salon" id={collection.slug} key={collection.id}>
+              <header className="gallery-series-header">
+                <h2 className="gallery-series-title">{collection.name}</h2>
+                <p className="gallery-series-meta">{worksCountLabel(collection.artworks.length)}</p>
+                {collection.description ? <p className="gallery-series-lede">{collection.description}</p> : null}
+              </header>
+              <div className="artwork-grid artwork-grid-gallery gallery-salon-grid">
+                {collection.artworks.map((artwork) => (
+                  <ArtworkCard artwork={artwork} key={artwork.id} variant="gallery" />
+                ))}
+              </div>
+            </section>
+          ))
+        )}
       </div>
     </div>
   );
