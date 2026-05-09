@@ -20,4 +20,4 @@ When Supabase is configured, gallery data is stored in Supabase tables and artwo
 Supabase Storage. Without Supabase environment variables, the app falls back to `data/gallery.json` for local
 read-only development.
 
-**Schema drift:** if PostgREST reports a missing column (e.g. `interior_image_url` on `artworks`), run the matching patch in **Supabase → SQL Editor**, such as `supabase/artworks_add_interior_image_url.sql`.
+**Schema drift:** older `artworks` tables may lack columns the app writes (`size_label`, `price_range`, `shipping_note`, `interior_image_url`). In **the same Supabase project** as `NEXT_PUBLIC_SUPABASE_URL`, run `supabase/artworks_sync_missing_columns.sql` in **SQL Editor** (or `supabase/artworks_add_interior_image_url.sql` if you only need the interior URL). If the API still mentions “schema cache”, run once: `select pg_notify('pgrst', 'reload schema');` or wait and retry.
