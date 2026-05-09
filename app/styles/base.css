@@ -9,6 +9,11 @@ body {
   padding: 0;
 }
 
+/* Slightly larger root type: most UI uses rem; improves readability on desktop */
+html {
+  font-size: 108%;
+}
+
 body {
   font-family: var(--sans);
   background:
