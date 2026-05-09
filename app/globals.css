@@ -2102,8 +2102,8 @@ body {
 .artwork-card-status,
 .artwork-status {
   color: var(--muted);
-  font-size: 0.78rem;
-  letter-spacing: 0.2em;
+  font-size: 0.92rem;
+  letter-spacing: 0.16em;
   line-height: 1.5;
 }
 
@@ -3166,8 +3166,8 @@ body {
 .gallery-series-meta {
   margin: 12px 0 0;
   color: var(--muted);
-  font-size: 0.72rem;
-  letter-spacing: 0.18em;
+  font-size: 0.92rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
