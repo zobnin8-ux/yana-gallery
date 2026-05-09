@@ -21,3 +21,5 @@ Supabase Storage. Without Supabase environment variables, the app falls back to 
 read-only development.
 
 **Schema drift:** older `artworks` tables may lack columns the app writes (`size_label`, `price_range`, `shipping_note`, `interior_image_url`). In **the same Supabase project** as `NEXT_PUBLIC_SUPABASE_URL`, run `supabase/artworks_sync_missing_columns.sql` in **SQL Editor** (or `supabase/artworks_add_interior_image_url.sql` if you only need the interior URL). If the API still mentions “schema cache”, run once: `select pg_notify('pgrst', 'reload schema');` or wait and retry.
+
+**Artist page photo:** run `supabase/site_settings.sql` in SQL Editor so `/admin/about` can store the portrait URL. Without this table, the public `/about` page keeps the default illustration. For local dev without Supabase, you can set `artistPortraitUrl` in `data/site-settings.json` (read-only; uploads require Supabase).
