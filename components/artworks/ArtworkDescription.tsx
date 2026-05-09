@@ -10,9 +10,16 @@ export function ArtworkDescription({ artwork }: ArtworkDescriptionProps) {
     return null;
   }
 
+  const paragraphs = text
+    .split(/\n\s*\n/g)
+    .map((chunk) => chunk.trim())
+    .filter(Boolean);
+
   return (
     <div className="artwork-description artwork-description-prose">
-      <p>{text}</p>
+      {paragraphs.map((paragraph, index) => (
+        <p key={index}>{paragraph}</p>
+      ))}
     </div>
   );
 }

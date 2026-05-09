@@ -9,7 +9,7 @@ import { artworksRepository } from "@/lib/repositories/artworks-repository";
 
 export const metadata: Metadata = {
   title: "Экспозиция — Яна Зубарева",
-  description: "Живопись по сериям: просмотр и запрос сведений о работе в студии.",
+  description: "Работы по сериям: тихий просмотр, статус и запрос подробностей в студии.",
   openGraph: { title: "Экспозиция — Яна Зубарева" },
   twitter: { card: "summary_large_image", title: "Экспозиция — Яна Зубарева" }
 };

@@ -2468,6 +2468,7 @@ body {
   color: var(--muted);
   font-size: 0.94rem;
   text-align: right;
+  letter-spacing: 0.02em;
 }
 
 .artwork-card-status {
@@ -2476,6 +2477,7 @@ body {
   margin-top: 14px;
   padding: 0;
   border: 0;
+  letter-spacing: 0.16em;
 }
 
 .gallery-page {
@@ -4033,7 +4035,9 @@ body {
 }
 
 .site-footer .site-footer-contact {
-  display: block;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
   justify-self: end;
   text-align: right;
 }
@@ -4042,6 +4046,10 @@ body {
   font-size: 0.84rem;
   letter-spacing: 0.08em;
   color: var(--text);
+}
+
+.site-footer-contact-sep {
+  opacity: 0.55;
 }
 
 .site-footer-name {

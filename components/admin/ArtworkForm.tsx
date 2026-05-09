@@ -69,7 +69,7 @@ export function ArtworkForm({ mode, artwork, collections }: ArtworkFormProps) {
             <input
               defaultValue={artwork?.interiorImageUrl ?? undefined}
               name="artworkInteriorImageUrl"
-              placeholder="https://… отдельный кадр для страницы работы"
+              placeholder="https://… отдельный кадр для страницы работы (не загружается сюда)"
               type="url"
             />
           </label>
@@ -155,12 +155,12 @@ export function ArtworkForm({ mode, artwork, collections }: ArtworkFormProps) {
             </label>
 
             <label className="admin-field">
-              <span>Цена</span>
+              <span>Цена (числом)</span>
               <input
                 defaultValue={artwork?.price ?? undefined}
                 inputMode="numeric"
                 name="artworkPrice"
-                placeholder="3200"
+                placeholder="3200 (будет показано только при включённой галочке ниже)"
                 type="text"
               />
             </label>
@@ -232,7 +232,7 @@ export function ArtworkForm({ mode, artwork, collections }: ArtworkFormProps) {
               </label>
               <label>
                 <input defaultChecked={artwork?.showPrice ?? false} name="artworkShowPrice" type="checkbox" />
-                <span>Показывать цену на сайте</span>
+                <span>Показывать числовую цену на сайте</span>
               </label>
             </div>
           </div>

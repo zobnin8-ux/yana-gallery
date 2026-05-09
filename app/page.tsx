@@ -11,11 +11,11 @@ import { homeActualLine } from "@/lib/content/home-actual";
 import { artworksRepository } from "@/lib/repositories/artworks-repository";
 
 const HOME_LEDE =
-  "Частная онлайн-экспозиция: без витринного шума — картина, серия и спокойный контакт со студией, когда захотите.";
+  "Тихий онлайн‑зал: выбранные работы, серии и подробности по запросу в студии.";
 
 export const metadata: Metadata = {
   title: "Яна Зубарева — частная галерея",
-  description: "Избранные работы и экспозиция.",
+  description: "Тихая онлайн‑экспозиция работ: серии, статус и контакт со студией.",
   openGraph: { title: "Яна Зубарева — частная галерея" },
   twitter: { card: "summary_large_image", title: "Яна Зубарева — частная галерея" }
 };
@@ -41,7 +41,7 @@ export default async function HomePage() {
             <Section className="home-featured-section reveal reveal-delay-1">
               <header className="home-featured-header">
                 <h2 className="home-featured-heading">Избранное</h2>
-                <p className="home-featured-sub">Компактный отбор рядом с разворотом — полный каталог в экспозиции.</p>
+                <p className="home-featured-sub">Небольшая выборка из текущей экспозиции. Полный каталог — в разделе «Экспозиция».</p>
               </header>
               <HomeWorkFeed artworks={feedArtworks} />
             </Section>
