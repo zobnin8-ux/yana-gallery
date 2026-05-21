@@ -39,6 +39,14 @@ function requireSupabase() {
   }
 }
 
+function errorText(error: unknown): string {
+  if (!error || typeof error !== "object") {
+    return String(error ?? "");
+  }
+  const record = error as { message?: string; details?: string };
+  return `${record.message ?? ""} ${record.details ?? ""}`;
+}
+
 /** PostgREST: relation missing from schema (e.g. `supabase/orders.sql` not applied yet). */
 function isOrdersRelationMissing(error: unknown): boolean {
   if (!error || typeof error !== "object") {
@@ -50,6 +58,24 @@ function isOrdersRelationMissing(error: unknown): boolean {
   }
   const message = String((error as { message?: string }).message ?? "");
   return message.includes("orders");
+}
+
+/** Wrong URL, DNS, or network during read — do not fail production build. */
+function isOrdersReadFailure(error: unknown): boolean {
+  const text = errorText(error);
+  return (
+    text.includes("fetch failed") ||
+    text.includes("ENOTFOUND") ||
+    text.includes("ECONNREFUSED") ||
+    text.includes("ETIMEDOUT")
+  );
+}
+
+function handleOrdersReadError(error: unknown): null | [] {
+  if (isOrdersRelationMissing(error) || isOrdersReadFailure(error)) {
+    return null;
+  }
+  throw error;
 }
 
 function toRubString(amount: number) {
@@ -165,10 +191,9 @@ export const ordersStore = {
       .maybeSingle();
 
     if (error) {
-      if (isOrdersRelationMissing(error)) {
+      if (handleOrdersReadError(error) === null) {
         return null;
       }
-      throw error;
     }
     if (!data) {
       return null;
@@ -183,10 +208,9 @@ export const ordersStore = {
     const { data, error } = await getSupabaseAdminClient().from("orders").select("*").eq("id", id).maybeSingle();
 
     if (error) {
-      if (isOrdersRelationMissing(error)) {
+      if (handleOrdersReadError(error) === null) {
         return null;
       }
-      throw error;
     }
     if (!data) {
       return null;
@@ -204,10 +228,10 @@ export const ordersStore = {
       .order("created_at", { ascending: false });
 
     if (error) {
-      if (isOrdersRelationMissing(error)) {
+      const handled = handleOrdersReadError(error);
+      if (handled === null || Array.isArray(handled)) {
         return [];
       }
-      throw error;
     }
     return (data as OrderRecord[]).map(mapRow);
   },
