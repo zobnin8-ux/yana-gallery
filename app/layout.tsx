@@ -3,11 +3,12 @@ import type { ReactNode } from "react";
 
 import { fontSans, fontSerif } from "@/app/fonts";
 import "@/app/globals.css";
+import { getSiteUrlOrigin } from "@/lib/site-url";
 
 export const metadata: Metadata = {
   title: "Галерея Яны Зубаревой",
   description: "Тихая онлайн-галерея работ художницы Яны Зубаревой.",
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://yanazubareva.com"),
+  metadataBase: getSiteUrlOrigin(),
   openGraph: {
     title: "Галерея Яны Зубаревой",
     description: "Частный просмотр отобранных работ художницы Яны Зубаревой.",
