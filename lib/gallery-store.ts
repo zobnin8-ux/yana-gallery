@@ -270,6 +270,15 @@ async function getSupabaseData() {
   return { collections, artworks };
 }
 
+/** When Supabase URL/key are wrong or host is unreachable, public pages must not crash. */
+async function tryGetSupabaseData() {
+  try {
+    return await getSupabaseData();
+  } catch {
+    return null;
+  }
+}
+
 function errorMessageFromUnknown(error: unknown): string {
   if (error instanceof Error) {
     return error.message;
@@ -318,7 +327,12 @@ export const galleryStore = {
       return [...fallbackData.artworks].sort((left, right) => left.sortOrder - right.sortOrder);
     }
 
-    return (await getSupabaseData()).artworks;
+    const remote = await tryGetSupabaseData();
+    if (!remote) {
+      return [...fallbackData.artworks].sort((left, right) => left.sortOrder - right.sortOrder);
+    }
+
+    return remote.artworks;
   },
 
   async listFeaturedArtworks() {
@@ -362,7 +376,12 @@ export const galleryStore = {
       return fallbackCollections();
     }
 
-    const { collections, artworks } = await getSupabaseData();
+    const remote = await tryGetSupabaseData();
+    if (!remote) {
+      return fallbackCollections();
+    }
+
+    const { collections, artworks } = remote;
     const assignedArtworkIds = new Set<string>();
     const withArtworks = collections.map((collection) => {
       const collectionArtworks = artworks.filter((artwork) => artwork.collectionId === collection.id);
@@ -528,7 +547,7 @@ export const galleryStore = {
       .order("created_at", { ascending: false });
 
     if (error) {
-      throw error;
+      return [];
     }
 
     return (data as InquiryRow[]).map(inquiryFromRow);

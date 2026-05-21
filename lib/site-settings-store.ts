@@ -27,6 +27,16 @@ function isSiteSettingsRelationMissing(error: unknown): boolean {
   return message.includes("PGRST205") && message.includes("site_settings");
 }
 
+function isSiteSettingsReadFailure(error: unknown): boolean {
+  const message = errorMessageFromUnknown(error);
+  return (
+    message.includes("fetch failed") ||
+    message.includes("ENOTFOUND") ||
+    message.includes("ECONNREFUSED") ||
+    message.includes("ETIMEDOUT")
+  );
+}
+
 export async function getArtistPortraitUrl(): Promise<string | null> {
   noStore();
 
@@ -43,7 +53,7 @@ export async function getArtistPortraitUrl(): Promise<string | null> {
     .maybeSingle();
 
   if (error) {
-    if (isSiteSettingsRelationMissing(error)) {
+    if (isSiteSettingsRelationMissing(error) || isSiteSettingsReadFailure(error)) {
       return null;
     }
     throw error;
