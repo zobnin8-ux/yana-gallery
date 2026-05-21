@@ -1,8 +1,9 @@
 import type { MetadataRoute } from "next";
 
 import { artworksRepository } from "@/lib/repositories/artworks-repository";
+import { getSiteUrl } from "@/lib/site-url";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://yanazubareva.com";
+const siteUrl = getSiteUrl();
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes = ["", "/gallery", "/about", "/contact"].map((route) => ({
