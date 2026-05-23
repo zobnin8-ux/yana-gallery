@@ -58,15 +58,25 @@ export async function uploadBlobToR2(blob: Blob, folder = "artworks"): Promise<{
   const contentType = blob.type.trim() || mimeForExtension(normalizedExt);
   const body = Buffer.from(await blob.arrayBuffer());
 
-  await getR2Client().send(
-    new PutObjectCommand({
-      Bucket: getR2BucketName(),
-      Key: key,
-      Body: body,
-      ContentType: contentType,
-      CacheControl: "public, max-age=31536000, immutable"
-    })
-  );
+  try {
+    await getR2Client().send(
+      new PutObjectCommand({
+        Bucket: getR2BucketName(),
+        Key: key,
+        Body: body,
+        ContentType: contentType,
+        CacheControl: "public, max-age=31536000, immutable"
+      })
+    );
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    if (message.includes("EPROTO") || message.includes("handshake failure") || message.includes("SSL alert number 40")) {
+      throw new Error(
+        "Не удалось подключиться к Cloudflare R2 (ошибка SSL). Проверьте R2_ACCOUNT_ID в Vercel и что endpoint открывается: https://<account-id>.r2.cloudflarestorage.com — у новых R2-аккаунтов TLS иногда поднимается через несколько часов."
+      );
+    }
+    throw error;
+  }
 
   const baseUrl = getR2PublicBaseUrl();
   return { key, url: `${baseUrl}/${key}` };

@@ -22,13 +22,23 @@ let cachedClient: S3Client | null = null;
 
 export function getR2Client(): S3Client {
   if (!cachedClient) {
+    const accountId = requiredEnv("R2_ACCOUNT_ID");
+    if (!/^[a-f0-9]{32}$/i.test(accountId)) {
+      throw new Error(
+        "R2_ACCOUNT_ID должен быть 32-символьным Account ID из Cloudflare (без https:// и без пробелов)."
+      );
+    }
+
     cachedClient = new S3Client({
       region: "auto",
-      endpoint: `https://${requiredEnv("R2_ACCOUNT_ID")}.r2.cloudflarestorage.com`,
+      endpoint: `https://${accountId}.r2.cloudflarestorage.com`,
       credentials: {
         accessKeyId: requiredEnv("R2_ACCESS_KEY_ID"),
         secretAccessKey: requiredEnv("R2_SECRET_ACCESS_KEY")
-      }
+      },
+      // AWS SDK 3.729+ default checksums break R2 PutObject without this.
+      requestChecksumCalculation: "WHEN_REQUIRED",
+      responseChecksumValidation: "WHEN_REQUIRED"
     });
   }
   return cachedClient;
