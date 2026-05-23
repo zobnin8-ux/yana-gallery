@@ -1,9 +1,7 @@
-import { randomUUID } from "node:crypto";
-
 import { unstable_noStore as noStore } from "next/cache";
 
 import siteSettingsFallback from "@/data/site-settings.json";
-import { extensionForArtworkUpload, uploadBlobToPublicBucket } from "@/lib/gallery-store";
+import { uploadBlobToR2 } from "@/lib/storage";
 import { getSupabaseAdminClient, isSupabaseConfigured } from "@/lib/supabase";
 
 const ARTIST_PORTRAIT_KEY = "artist_portrait_url";
@@ -97,7 +95,6 @@ export async function setArtistPortraitUrl(url: string | null) {
 }
 
 export async function uploadArtistPortraitImage(blob: Blob): Promise<string> {
-  const ext = extensionForArtworkUpload(blob);
-  const path = `site/artist-portrait-${Date.now()}-${randomUUID()}.${ext}`;
-  return uploadBlobToPublicBucket(path, blob);
+  const { url } = await uploadBlobToR2(blob, "site");
+  return url;
 }

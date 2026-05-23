@@ -31,7 +31,8 @@ This document is the **single operational source of truth** for the current bran
 |--------|--------|
 | Framework | Next.js **15.2**, App Router, React **19** |
 | Language | TypeScript |
-| Database & storage (production) | **Supabase** (Postgres + Storage) |
+| Database (production) | **Supabase Postgres** |
+| Image storage (production) | **Cloudflare R2** → `https://images.yanazubareva.com` |
 | Auth (admin) | Cookie session; password from env (see [Admin](#admin)) |
 | Images | `next/image` with **`unoptimized: true`** (see `next.config.ts`) |
 
@@ -44,7 +45,7 @@ Typical workflow from a clean machine:
 ```bash
 git clone https://github.com/zobnin8-ux/yana-gallery.git
 cd yana-gallery
-git checkout cursor/gallery-engine-remake   # or your working branch
+git checkout main
 npm install
 cp .env.local.example .env.local            # if you add an example file; otherwise create .env.local manually
 # edit .env.local — see Environment variables
@@ -57,13 +58,13 @@ npm run dev
 git status
 git add <files>
 git commit -m "Your message"
-git push origin cursor/gallery-engine-remake
+git push origin main
 ```
 
 If the remote branch does not exist yet:
 
 ```bash
-git push -u origin cursor/gallery-engine-remake
+git push -u origin main
 ```
 
 **Open a pull request** against `main` on GitHub when the branch is ready.
@@ -111,6 +112,13 @@ NEXT_PUBLIC_SUPABASE_URL=https://xxxx.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 SUPABASE_STORAGE_BUCKET=artworks
 
+# Cloudflare R2 (new image uploads)
+R2_ACCOUNT_ID=
+R2_ACCESS_KEY_ID=
+R2_SECRET_ACCESS_KEY=
+R2_BUCKET_NAME=yana-gallery
+R2_PUBLIC_BASE_URL=https://images.yanazubareva.com
+
 # Admin
 GALLERY_ADMIN_PASSWORD=your-strong-password
 GALLERY_ADMIN_SESSION_TOKEN=your-long-random-session-secret
@@ -133,13 +141,17 @@ GALLERY_ADMIN_SESSION_TOKEN=your-long-random-session-secret
 | `SUPABASE_SERVICE_ROLE_KEY` | Server-only key for admin API routes, uploads, and server reads |
 | `GALLERY_ADMIN_PASSWORD` | Password for `/admin` login |
 | `NEXT_PUBLIC_SITE_URL` | Canonical base URL (no trailing slash), sitemap, metadata, order links |
+| `R2_ACCOUNT_ID` | Cloudflare account ID for R2 |
+| `R2_ACCESS_KEY_ID` | R2 API token access key |
+| `R2_SECRET_ACCESS_KEY` | R2 API token secret |
+| `R2_BUCKET_NAME` | R2 bucket name (e.g. `yana-gallery`) |
+| `R2_PUBLIC_BASE_URL` | Public CDN origin (e.g. `https://images.yanazubareva.com`) |
 
 ### Strongly recommended
 
 | Variable | Purpose |
 |----------|---------|
 | `GALLERY_ADMIN_SESSION_TOKEN` | Fixed secret string stored in the admin cookie. **Set a long random value in production** so the session value is not derived from the password. |
-| `SUPABASE_STORAGE_BUCKET` | Storage bucket name for artwork and site images. Default: **`artworks`**. |
 
 ### Optional
 
@@ -193,14 +205,15 @@ Without this table, the app still builds; server code treats a missing `orders` 
 
 Without it, `/admin/about` cannot persist a portrait to the database; the public `/about` page falls back to the default illustration.
 
-### Storage bucket
+### Cloudflare R2 (image uploads)
 
-- Create a **public** bucket (default name **`artworks`** or match `SUPABASE_STORAGE_BUCKET`).
-- Uploaded paths include:
-  - `artworks/…` — artwork images
-  - `site/…` — artist portrait from admin
+New uploads go to **Cloudflare R2**, not Supabase Storage. Configure env vars (see above) and a public custom domain (e.g. `https://images.yanazubareva.com`).
 
-`next.config.ts` includes `images.remotePatterns` for `*.supabase.co` public object URLs.
+- Upload paths: `artworks/…`, `site/…`
+- Server upload: `POST /api/admin/upload` (admin only) or via artwork save flow
+- **Legacy:** existing Supabase Storage URLs in the database still display; do not delete the old bucket yet
+
+`next.config.ts` includes `images.remotePatterns` for `images.yanazubareva.com` and legacy `*.supabase.co` URLs.
 
 ---
 
@@ -210,7 +223,7 @@ If **`NEXT_PUBLIC_SUPABASE_URL`** and **`SUPABASE_SERVICE_ROLE_KEY`** are **not*
 
 - Public gallery reads from **`data/gallery.json`** (read-only seed).
 - Admin **mutations** (save artwork, upload, inquiries to DB, orders) require Supabase — they will error or no-op as designed.
-- Artist portrait fallback: **`data/site-settings.json`** (`artistPortraitUrl`) is read for `/about` when Supabase is off; **upload from admin requires Supabase**.
+- Artist portrait fallback: **`data/site-settings.json`** (`artistPortraitUrl`) is read for `/about` when Supabase is off; **upload requires R2 + Supabase** for DB save.
 
 ---
 
@@ -222,7 +235,9 @@ If **`NEXT_PUBLIC_SUPABASE_URL`** and **`SUPABASE_SERVICE_ROLE_KEY`** are **not*
 | `app/(admin)/admin/` | Admin UI (protected by `middleware.ts`) |
 | `app/api/` | Route handlers: admin CRUD, inquiries, orders, payment webhook placeholder |
 | `components/` | UI components (layout, gallery, artworks, admin, checkout, order) |
-| `lib/gallery-store.ts` | Artworks, collections, inquiries, image upload to Storage |
+| `lib/gallery-store.ts` | Artworks, collections, inquiries (DB via Supabase) |
+| `lib/storage.ts` | Upload/delete images in Cloudflare R2 |
+| `lib/r2.ts` | R2 S3 client configuration |
 | `lib/orders-store.ts` | Orders CRUD and status transitions |
 | `lib/site-settings-store.ts` | Site key/value (artist portrait URL) |
 | `lib/supabase.ts` | Supabase admin client and bucket name |

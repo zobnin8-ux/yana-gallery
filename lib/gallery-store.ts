@@ -3,7 +3,8 @@ import { unstable_noStore as noStore } from "next/cache";
 
 import galleryData from "@/data/gallery.json";
 import { slugify } from "@/lib/slugify";
-import { getSupabaseAdminClient, getSupabaseStorageBucket, isSupabaseConfigured } from "@/lib/supabase";
+import { uploadBlobToR2 } from "@/lib/storage";
+import { getSupabaseAdminClient, isSupabaseConfigured } from "@/lib/supabase";
 import type { Artwork, ArtworkCollection, ArtworkCollectionWithArtworks, ArtworkImage } from "@/types/artwork";
 import type { Inquiry } from "@/types/inquiry";
 
@@ -78,67 +79,7 @@ export type ArtworkPayload = Omit<Artwork, "id" | "images"> & {
 
 const fallbackData = galleryData as GalleryData;
 
-export function extensionForArtworkUpload(blob: Blob): string {
-  if (typeof File !== "undefined" && blob instanceof File && blob.name.includes(".")) {
-    const ext = blob.name.split(".").pop();
-    if (ext && /^[a-z0-9]{1,6}$/i.test(ext)) {
-      return ext.toLowerCase();
-    }
-  }
-  const t = blob.type.toLowerCase();
-  if (t.includes("jpeg") || t === "image/jpg") return "jpg";
-  if (t.includes("png")) return "png";
-  if (t.includes("webp")) return "webp";
-  if (t.includes("gif")) return "gif";
-  if (t.includes("avif")) return "avif";
-  if (t.includes("svg")) return "svg";
-  return "jpg";
-}
-
-function mimeForArtworkExtension(ext: string): string {
-  const map: Record<string, string> = {
-    jpg: "image/jpeg",
-    jpeg: "image/jpeg",
-    png: "image/png",
-    webp: "image/webp",
-    gif: "image/gif",
-    avif: "image/avif",
-    svg: "image/svg+xml"
-  };
-  return map[ext.toLowerCase()] ?? "application/octet-stream";
-}
-
-function extensionFromPathOrBlob(path: string, blob: Blob): string {
-  const fromPath = path.includes(".") ? path.split(".").pop() : undefined;
-  if (fromPath && /^[a-z0-9]{1,6}$/i.test(fromPath)) {
-    return fromPath.toLowerCase();
-  }
-  return extensionForArtworkUpload(blob);
-}
-
-/** Uploads a file to the public gallery bucket; returns the public URL. */
-export async function uploadBlobToPublicBucket(path: string, blob: Blob): Promise<string> {
-  if (!isSupabaseConfigured()) {
-    throw new Error("Supabase is required to upload images.");
-  }
-
-  const supabase = getSupabaseAdminClient();
-  const ext = extensionFromPathOrBlob(path, blob);
-  const contentType = blob.type.trim() || mimeForArtworkExtension(ext);
-
-  const { error } = await supabase.storage.from(getSupabaseStorageBucket()).upload(path, blob, {
-    cacheControl: "31536000",
-    upsert: false,
-    contentType
-  });
-
-  if (error) {
-    throw error;
-  }
-
-  const { data } = supabase.storage.from(getSupabaseStorageBucket()).getPublicUrl(path);
-  return data.publicUrl;
-}
+export { extensionForArtworkUpload } from "@/lib/image-upload";
 
 function collectionFromRow(row: CollectionRow): ArtworkCollection {
   return {
@@ -554,15 +495,12 @@ export const galleryStore = {
   },
 
   async uploadArtworkImage(file: Blob, alt: string, sortOrder: number): Promise<ArtworkImage> {
-    const extension = extensionForArtworkUpload(file);
-    const filename = `${Date.now()}-${randomUUID()}.${extension}`;
-    const path = `artworks/${filename}`;
-    const publicUrl = await uploadBlobToPublicBucket(path, file);
+    const { url } = await uploadBlobToR2(file, "artworks");
 
     return {
       id: randomUUID(),
-      url: publicUrl,
-      thumbnailUrl: publicUrl,
+      url,
+      thumbnailUrl: url,
       alt,
       sortOrder,
       isPrimary: sortOrder === 1

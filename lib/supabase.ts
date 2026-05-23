@@ -28,6 +28,7 @@ export function getSupabaseAdminClient() {
   });
 }
 
+/** @deprecated Supabase Storage is no longer used for new uploads. Kept for legacy references only. */
 export function getSupabaseStorageBucket() {
   return process.env.SUPABASE_STORAGE_BUCKET?.trim() || "artworks";
 }
