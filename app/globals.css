@@ -26,9 +26,10 @@
 }
 
 .site-brand {
+  --site-brand-mark-size: calc(1.22rem * 1.2 + 0.68rem * 1.2 + 16px);
   display: inline-flex;
   flex-direction: row;
-  align-items: stretch;
+  align-items: center;
   gap: 5mm;
   line-height: 1.2;
   color: inherit;
@@ -42,16 +43,13 @@
 }
 
 .site-brand-mark {
-  display: flex;
+  position: relative;
   flex-shrink: 0;
-  align-items: center;
-  aspect-ratio: 1;
-  align-self: stretch;
+  width: var(--site-brand-mark-size);
+  height: var(--site-brand-mark-size);
 }
 
 .site-brand-mark-image {
-  height: 100%;
-  width: auto;
   object-fit: contain;
 }
 

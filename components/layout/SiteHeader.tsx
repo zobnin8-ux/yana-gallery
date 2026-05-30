@@ -15,9 +15,9 @@ export function SiteHeader() {
             <Image
               alt=""
               className="site-brand-mark-image"
-              height={180}
-              src="/images/branding/favicon-180.png"
-              width={180}
+              fill
+              sizes="48px"
+              src="/images/branding/yana-monogram-full.png"
             />
           </span>
         </Link>
