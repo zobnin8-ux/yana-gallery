@@ -25,7 +25,16 @@ export default async function AboutPage() {
   const heroImageAlt = portraitUrl ? "Яна Зубарева" : "Фрагмент работы Яны Зубаревой";
 
   return (
-    <>
+    <div className="artist-dossier-page">
+      <div aria-hidden="true" className="artist-dossier-watermark">
+        <Image
+          alt=""
+          className="artist-dossier-watermark-image"
+          fill
+          sizes="100vw"
+          src="/images/branding/yana-monogram-full.png"
+        />
+      </div>
       <SiteHeader />
       <main>
         <PageContainer>
@@ -48,15 +57,6 @@ export default async function AboutPage() {
                     fill
                     sizes="(max-width: 900px) 100vw, 40vw"
                     className="artist-dossier-image"
-                  />
-                </div>
-                <div aria-hidden="true" className="artist-dossier-mark">
-                  <Image
-                    alt=""
-                    className="artist-dossier-mark-image"
-                    height={512}
-                    src="/images/branding/yana-monogram-full.png"
-                    width={512}
                   />
                 </div>
               </div>
@@ -83,6 +83,6 @@ export default async function AboutPage() {
         </PageContainer>
       </main>
       <SiteFooter />
-    </>
+    </div>
   );
 }
