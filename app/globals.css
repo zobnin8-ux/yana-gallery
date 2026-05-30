@@ -3937,6 +3937,34 @@ body {
   color: #47433d;
 }
 
+.artist-dossier-page {
+  position: relative;
+  isolation: isolate;
+}
+
+.artist-dossier-page .site-header,
+.artist-dossier-page main,
+.artist-dossier-page .site-footer {
+  position: relative;
+  z-index: 1;
+}
+
+.artist-dossier-watermark {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.artist-dossier-watermark-image {
+  object-fit: contain;
+  object-position: center;
+  opacity: 0.47;
+  filter: contrast(1.02);
+  transform: scale(1.08);
+}
+
 .artist-dossier .artist-dossier-header {
   margin-bottom: clamp(28px, 4vw, 40px);
 }
