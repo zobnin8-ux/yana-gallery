@@ -5,7 +5,7 @@ export function SiteHeader() {
     <header className="site-header">
       <nav className="site-nav" aria-label="Основная навигация">
         <Link className="site-brand" href="/">
-          <span className="site-brand-name">Яна Зubareva</span>
+          <span className="site-brand-name">Яна Зубарева</span>
           <span className="site-brand-line" aria-hidden="true" />
           <span className="site-brand-tag">частная галерея</span>
         </Link>
