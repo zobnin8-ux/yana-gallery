@@ -3960,7 +3960,7 @@ body {
 .artist-dossier-watermark-image {
   object-fit: contain;
   object-position: center;
-  opacity: 0.4;
+  opacity: 0.47;
   filter: contrast(1.02);
   transform: scale(1.08);
 }
