@@ -1,9 +1,14 @@
 import { ImageResponse } from "next/og";
 
+import { loadMonogramDataUrl, monogramFaviconCropStyle } from "@/lib/branding/monogram-icon";
+
 export const size = { width: 180, height: 180 };
 export const contentType = "image/png";
 
-export default function AppleIcon() {
+export default async function AppleIcon() {
+  const src = await loadMonogramDataUrl();
+  const crop = monogramFaviconCropStyle(180);
+
   return new ImageResponse(
     (
       <div
@@ -13,26 +18,12 @@ export default function AppleIcon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          overflow: "hidden",
           background: "#f0ebe3"
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: 120,
-            height: 140,
-            background: "#faf7f1",
-            border: "4px solid #241f19",
-            fontSize: 88,
-            fontFamily: "Georgia, serif",
-            color: "#241f19",
-            fontWeight: 500
-          }}
-        >
-          {"\u042F"}
-        </div>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img alt="" src={src} width={crop.width} height={crop.height} style={crop} />
       </div>
     ),
     { ...size }

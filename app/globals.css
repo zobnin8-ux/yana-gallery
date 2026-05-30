@@ -4001,6 +4001,20 @@ body {
   padding: clamp(14px, 2.5vw, 26px);
 }
 
+.artist-dossier-mark {
+  display: flex;
+  justify-content: center;
+  margin-top: clamp(22px, 3.5vw, 32px);
+  padding: 0 clamp(8px, 2vw, 16px);
+}
+
+.artist-dossier-mark-image {
+  width: min(168px, 42vw);
+  height: auto;
+  opacity: 0.9;
+  filter: grayscale(0.08) contrast(0.98);
+}
+
 .artist-dossier-prose {
   display: grid;
   gap: 1.25rem;

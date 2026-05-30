@@ -50,6 +50,15 @@ export default async function AboutPage() {
                     className="artist-dossier-image"
                   />
                 </div>
+                <div aria-hidden="true" className="artist-dossier-mark">
+                  <Image
+                    alt=""
+                    className="artist-dossier-mark-image"
+                    height={512}
+                    src="/images/branding/yana-monogram-full.png"
+                    width={512}
+                  />
+                </div>
               </div>
               <div className="artist-dossier-prose reveal reveal-delay-1">
                 {artistBioParagraphs.map((paragraph, index) => (

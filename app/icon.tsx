@@ -1,9 +1,14 @@
 import { ImageResponse } from "next/og";
 
+import { loadMonogramDataUrl, monogramFaviconCropStyle } from "@/lib/branding/monogram-icon";
+
 export const size = { width: 32, height: 32 };
 export const contentType = "image/png";
 
-export default function Icon() {
+export default async function Icon() {
+  const src = await loadMonogramDataUrl();
+  const crop = monogramFaviconCropStyle(32);
+
   return new ImageResponse(
     (
       <div
@@ -13,26 +18,12 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          overflow: "hidden",
           background: "#f0ebe3"
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: 22,
-            height: 26,
-            background: "#faf7f1",
-            border: "1.5px solid #241f19",
-            fontSize: 17,
-            fontFamily: "Georgia, serif",
-            color: "#241f19",
-            fontWeight: 500
-          }}
-        >
-          {"\u042F"}
-        </div>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img alt="" src={src} width={crop.width} height={crop.height} style={crop} />
       </div>
     ),
     { ...size }
