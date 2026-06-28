@@ -260,6 +260,29 @@ function artworkToRow(artwork: ArtworkPayload) {
   };
 }
 
+function uniqueArtworkSlug(baseSlug: string, artworkId: string, artworks: Pick<Artwork, "id" | "slug">[]): string {
+  const slug = slugify(baseSlug);
+  const taken = new Set(artworks.filter((artwork) => artwork.id !== artworkId).map((artwork) => artwork.slug));
+
+  if (!taken.has(slug)) {
+    return slug;
+  }
+
+  for (let index = 2; index < 1000; index += 1) {
+    const candidate = `${slug}-${index}`;
+    if (!taken.has(candidate)) {
+      return candidate;
+    }
+  }
+
+  return `${slug}-${randomUUID().slice(0, 8)}`;
+}
+
+function isDuplicateSlugError(error: unknown): boolean {
+  const message = errorMessageFromUnknown(error).toLowerCase();
+  return message.includes("duplicate key") && message.includes("slug");
+}
+
 export const galleryStore = {
   async listArtworks() {
     noStore();
@@ -355,7 +378,9 @@ export const galleryStore = {
 
     const supabase = getSupabaseAdminClient();
     const id = payload.id || randomUUID();
-    const artworkRow = { id, ...artworkToRow({ ...payload, slug: payload.slug || slugify(payload.title) }) };
+    const artworks = await galleryStore.listArtworks();
+    const slug = uniqueArtworkSlug(payload.slug || payload.title, id, artworks);
+    const artworkRow = { id, ...artworkToRow({ ...payload, slug }) };
     let { error } = await supabase.from("artworks").upsert(artworkRow, { onConflict: "id" });
 
     if (error && isMissingInteriorImageUrlColumnError(error)) {
@@ -364,6 +389,9 @@ export const galleryStore = {
     }
 
     if (error) {
+      if (isDuplicateSlugError(error)) {
+        throw new Error("Не удалось сохранить работу: URL (slug) уже занят. Укажите slug вручную в форме.");
+      }
       throw error;
     }
 
