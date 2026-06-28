@@ -1,14 +1,26 @@
 ﻿"use client";
 
+import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-import type { ArtworkCollectionWithArtworks } from "@/types/artwork";
 import { worksCountLabel } from "@/lib/ru-plurals";
+import type { Artwork, ArtworkCollectionWithArtworks } from "@/types/artwork";
 
 type AdminCollectionsManagerProps = {
   collections: ArtworkCollectionWithArtworks[];
 };
+
+function artworkStatusLabel(status: Artwork["status"]) {
+  if (status === "available") {
+    return "в продаже";
+  }
+  if (status === "sold") {
+    return "продана";
+  }
+  return "в резерве";
+}
 
 export function AdminCollectionsManager({ collections }: AdminCollectionsManagerProps) {
   const router = useRouter();
@@ -140,6 +152,47 @@ export function AdminCollectionsManager({ collections }: AdminCollectionsManager
                 <input defaultChecked={collection.featured} name="featured" type="checkbox" />
                 <span>Показывать как избранную коллекцию</span>
               </label>
+            </div>
+
+            <div className="admin-collection-artworks">
+              <span className="admin-collection-panel-label">Работы в коллекции</span>
+              {collection.artworks.length ? (
+                collection.artworks.map((artwork) => {
+                  const primaryImage = artwork.images[0];
+                  const meta = [artwork.year != null ? String(artwork.year) : null, artworkStatusLabel(artwork.status)]
+                    .filter(Boolean)
+                    .join(" · ");
+
+                  return (
+                    <div className="admin-collection-artwork-row" key={artwork.id}>
+                      <div className="admin-collection-artwork-thumb">
+                        {primaryImage ? (
+                          <Image
+                            alt={primaryImage.alt}
+                            className="admin-collection-artwork-thumb-img"
+                            fill
+                            sizes="56px"
+                            src={primaryImage.thumbnailUrl ?? primaryImage.url}
+                          />
+                        ) : (
+                          <span className="admin-collection-artwork-thumb-empty">—</span>
+                        )}
+                      </div>
+                      <div className="admin-collection-artwork-copy">
+                        <strong>{artwork.title}</strong>
+                        {meta ? <span>{meta}</span> : null}
+                      </div>
+                      <div className="admin-collection-artwork-move">
+                        <Link className="admin-table-link" href={`/admin/artworks/${artwork.id}/edit`}>
+                          Редактировать
+                        </Link>
+                      </div>
+                    </div>
+                  );
+                })
+              ) : (
+                <p className="admin-collection-panel-meta">В этой коллекции пока нет работ.</p>
+              )}
             </div>
           </form>
         ))}
