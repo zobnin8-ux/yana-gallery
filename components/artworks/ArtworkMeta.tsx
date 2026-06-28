@@ -8,10 +8,8 @@ type ArtworkMetaProps = {
   collectionGalleryHref?: string;
 };
 
-const TELEGRAM = "https://t.me/yana_art72";
-
 const SPECS_FALLBACK =
-  "Технические данные и стоимость — по запросу в студии. Напишите в Telegram, отвечаю в течение 24 часов.";
+  "Технические данные и стоимость — по запросу в студии. Напишите через форму на странице «Студия» или на почту.";
 
 function formatDimensionsFromNumbers(artwork: Artwork) {
   const parts = [artwork.width, artwork.height].filter((value): value is number => typeof value === "number");
@@ -69,9 +67,13 @@ function buildSpecs(artwork: Artwork): Array<{ term: string; value: string }> {
   return rows;
 }
 
-function telegramStudioHref(artwork: Artwork) {
-  const text = `Здравствуйте, интересует работа «${artwork.title}»`;
-  return `${TELEGRAM}?text=${encodeURIComponent(text)}`;
+function contactHref(artwork: Artwork) {
+  const params = new URLSearchParams({
+    artwork: artwork.slug,
+    title: artwork.title,
+    id: artwork.id
+  });
+  return `/contact?${params.toString()}`;
 }
 
 export function ArtworkMeta({ artwork, collectionGalleryHref }: ArtworkMetaProps) {
@@ -119,14 +121,9 @@ export function ArtworkMeta({ artwork, collectionGalleryHref }: ArtworkMetaProps
         </Link>
       ) : null}
 
-      <a
-        className="artwork-request-link"
-        href={telegramStudioHref(artwork)}
-        rel="noreferrer"
-        target="_blank"
-      >
+      <Link className="artwork-request-link" href={contactHref(artwork)}>
         Написать в студию
-      </a>
+      </Link>
     </div>
   );
 }

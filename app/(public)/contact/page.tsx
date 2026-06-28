@@ -27,8 +27,8 @@ export default function ContactPage() {
                 <p className="contact-eyebrow">Студия</p>
                 <h1 className="contact-title">Запрос о работе</h1>
                 <p className="contact-intro">
-                  Если вас заинтересовала картина в экспозиции, отправьте запрос через форму — ответ придёт с
-                  базовыми сведениями о наличии, стоимости и возможной доставке.
+                  Если вас заинтересовала картина в экспозиции, отправьте запрос через форму — заявка сохранится в
+                  студии, и мы свяжемся с вами в ближайшее время.
                 </p>
                 <div className="contact-details">
                   <div className="contact-detail">

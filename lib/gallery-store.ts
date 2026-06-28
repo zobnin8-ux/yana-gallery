@@ -503,6 +503,25 @@ export const galleryStore = {
     return inquiryFromRow(data as InquiryRow);
   },
 
+  async updateInquiryStatus(id: string, status: Inquiry["status"]) {
+    if (!isSupabaseConfigured()) {
+      throw new Error("Supabase is required to update inquiry status.");
+    }
+
+    const { data, error } = await getSupabaseAdminClient()
+      .from("inquiries")
+      .update({ status })
+      .eq("id", id)
+      .select("*")
+      .single();
+
+    if (error) {
+      throw error;
+    }
+
+    return inquiryFromRow(data as InquiryRow);
+  },
+
   async listInquiries() {
     noStore();
 

@@ -1856,6 +1856,51 @@
   font-size: 0.9rem;
 }
 
+.admin-inquiry-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.admin-inquiry-status {
+  flex-shrink: 0;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.admin-inquiry-status-new {
+  background: rgba(138, 94, 82, 0.12);
+  color: #8a5e52;
+}
+
+.admin-inquiry-status-read {
+  background: rgba(90, 106, 90, 0.12);
+  color: #5a6a5a;
+}
+
+.admin-inquiry-status-archived {
+  background: rgba(120, 120, 120, 0.12);
+  color: var(--muted);
+}
+
+.admin-inquiry-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.inquiry-artwork-context {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
 .admin-form-status,
 .inquiry-status {
   grid-column: 1 / -1;

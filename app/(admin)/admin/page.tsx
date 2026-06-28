@@ -1,12 +1,17 @@
 ﻿import Link from "next/link";
 
 import { SectionTitle } from "@/components/layout/SectionTitle";
+import { galleryStore } from "@/lib/gallery-store";
 import { artworksRepository } from "@/lib/repositories/artworks-repository";
-import { collectionsCountLabel, worksCountLabel } from "@/lib/ru-plurals";
+import { collectionsCountLabel, inquiriesCountLabel, worksCountLabel } from "@/lib/ru-plurals";
 
 export default async function AdminPage() {
-  const collections = await artworksRepository.listCollections();
-  const artworks = await artworksRepository.list();
+  const [collections, artworks, inquiries] = await Promise.all([
+    artworksRepository.listCollections(),
+    artworksRepository.list(),
+    galleryStore.listInquiries()
+  ]);
+  const newInquiries = inquiries.filter((inquiry) => inquiry.status === "new").length;
 
   return (
     <section className="admin-section">
@@ -23,7 +28,10 @@ export default async function AdminPage() {
         </div>
         <div className="admin-overview-card">
           <span>Заявки</span>
-          <strong>Сохраняются в галерее</strong>
+          <strong>
+            {inquiries.length ? inquiriesCountLabel(inquiries.length) : "Пока нет"}
+            {newInquiries ? ` · ${newInquiries} новых` : ""}
+          </strong>
         </div>
         <div className="admin-overview-card">
           <span>Статусы</span>

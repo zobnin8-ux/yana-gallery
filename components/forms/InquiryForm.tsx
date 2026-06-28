@@ -1,12 +1,15 @@
 ﻿"use client";
 
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import type { FormEvent } from "react";
 import { useState } from "react";
 
 export function InquiryForm() {
   const searchParams = useSearchParams();
-  const selectedArtwork = searchParams.get("artwork") ?? "";
+  const artworkSlug = searchParams.get("artwork") ?? "";
+  const artworkId = searchParams.get("id") ?? "";
+  const artworkTitle = searchParams.get("title") ?? "";
   const [statusMessage, setStatusMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -23,7 +26,7 @@ export function InquiryForm() {
     const result = (await response.json()) as { success: boolean; message?: string };
 
     setIsSubmitting(false);
-    setStatusMessage(result.message ?? (result.success ? "Запрос отправлен." : "Не удалось отправить запрос."));
+    setStatusMessage(result.message ?? (result.success ? "Заявка принята." : "Не удалось отправить запрос."));
 
     if (result.success) {
       event.currentTarget.reset();
@@ -32,21 +35,36 @@ export function InquiryForm() {
 
   return (
     <form className="inquiry-form" onSubmit={handleSubmit}>
-      <input name="artworkTitle" type="hidden" value={selectedArtwork} />
+      <input name="artworkSlug" type="hidden" value={artworkSlug} />
+      <input name="artworkId" type="hidden" value={artworkId} />
+      <input name="artworkTitle" type="hidden" value={artworkTitle} />
+
+      {artworkTitle ? (
+        <p className="inquiry-artwork-context">
+          Запрос о работе:{" "}
+          {artworkSlug ? (
+            <Link href={`/artworks/${artworkSlug}`}>«{artworkTitle}»</Link>
+          ) : (
+            <>«{artworkTitle}»</>
+          )}
+        </p>
+      ) : null}
+
       <label className="inquiry-field">
         <span>Имя</span>
-        <input name="name" placeholder="Ваше имя" required type="text" />
+        <input autoComplete="name" name="name" placeholder="Ваше имя" required type="text" />
       </label>
 
       <label className="inquiry-field">
         <span>Почта</span>
-        <input name="email" placeholder="name@email.com" required type="email" />
+        <input autoComplete="email" name="email" placeholder="name@email.com" required type="email" />
       </label>
 
       <label className="inquiry-field inquiry-field-full">
         <span>Запрос</span>
         <textarea
-          defaultValue={selectedArtwork ? `Меня заинтересовала работа «${selectedArtwork}». ` : undefined}
+          defaultValue={artworkTitle ? `Меня заинтересовала работа «${artworkTitle}». ` : undefined}
+          minLength={10}
           name="message"
           placeholder="Напишите, какая работа вас заинтересовала."
           required
@@ -54,7 +72,11 @@ export function InquiryForm() {
         />
       </label>
 
-      {statusMessage ? <p className="inquiry-status">{statusMessage}</p> : null}
+      {statusMessage ? (
+        <p aria-live="polite" className="inquiry-status" role="status">
+          {statusMessage}
+        </p>
+      ) : null}
 
       <button className="inquiry-submit" disabled={isSubmitting} type="submit">
         {isSubmitting ? "Отправляем..." : "Отправить запрос"}
