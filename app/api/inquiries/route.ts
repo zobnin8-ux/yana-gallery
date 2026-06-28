@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 
 import { galleryStore } from "@/lib/gallery-store";
+import { enforceRateLimit } from "@/lib/rate-limit";
+import { isTurnstileRequired, verifyTurnstileToken } from "@/lib/turnstile";
 
 function isValidEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
@@ -11,13 +13,26 @@ function isUuid(value: string) {
 }
 
 export async function POST(request: Request) {
+  const rateLimit = await enforceRateLimit("inquiry", request);
+  if (!rateLimit.allowed) {
+    return NextResponse.json({ success: false, message: rateLimit.message }, { status: 429 });
+  }
+
   const formData = await request.formData();
   const name = String(formData.get("name") ?? "").trim();
   const email = String(formData.get("email") ?? "").trim();
   const message = String(formData.get("message") ?? "").trim();
   const artworkSlug = String(formData.get("artworkSlug") ?? "").trim() || null;
   const artworkIdInput = String(formData.get("artworkId") ?? "").trim() || null;
+  const turnstileToken = String(formData.get("turnstileToken") ?? "");
   let artworkTitle = String(formData.get("artworkTitle") ?? "").trim() || null;
+
+  if (isTurnstileRequired()) {
+    const captchaOk = await verifyTurnstileToken(turnstileToken, request);
+    if (!captchaOk) {
+      return NextResponse.json({ success: false, message: "Подтвердите, что вы не робот." }, { status: 422 });
+    }
+  }
 
   if (!name || !isValidEmail(email) || message.length < 10) {
     return NextResponse.json(

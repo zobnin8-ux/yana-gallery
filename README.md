@@ -123,6 +123,10 @@ R2_PUBLIC_BASE_URL=https://images.yanazubareva.com
 GALLERY_ADMIN_PASSWORD=your-strong-password
 GALLERY_ADMIN_SESSION_TOKEN=your-long-random-session-secret
 
+# Cloudflare Turnstile (captcha) — required in production
+NEXT_PUBLIC_TURNSTILE_SITE_KEY=
+TURNSTILE_SECRET_KEY=
+
 # Optional webhooks
 # GALLERY_INQUIRY_WEBHOOK_URL=
 # GALLERY_ORDER_WEBHOOK_URL=
@@ -140,6 +144,9 @@ GALLERY_ADMIN_SESSION_TOKEN=your-long-random-session-secret
 | `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL |
 | `SUPABASE_SERVICE_ROLE_KEY` | Server-only key for admin API routes, uploads, and server reads |
 | `GALLERY_ADMIN_PASSWORD` | Password for `/admin` login |
+| `GALLERY_ADMIN_SESSION_TOKEN` | **Required in production.** Long random secret stored in the admin cookie. Must differ from the password. |
+| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Cloudflare Turnstile site key (public). Required in production for contact form and admin login. |
+| `TURNSTILE_SECRET_KEY` | Cloudflare Turnstile secret key (server-only). |
 | `NEXT_PUBLIC_SITE_URL` | Canonical base URL (no trailing slash), sitemap, metadata, order links |
 | `R2_ACCOUNT_ID` | Cloudflare account ID for R2 |
 | `R2_ACCESS_KEY_ID` | R2 API token access key |
@@ -151,7 +158,13 @@ GALLERY_ADMIN_SESSION_TOKEN=your-long-random-session-secret
 
 | Variable | Purpose |
 |----------|---------|
-| `GALLERY_ADMIN_SESSION_TOKEN` | Fixed secret string stored in the admin cookie. **Set a long random value in production** so the session value is not derived from the password. |
+| *(none — session token and Turnstile are listed above as production requirements)* |
+
+### Security (production)
+
+- **`GALLERY_ADMIN_SESSION_TOKEN`** — generate a long random string (32+ chars), different from the password. Without it, admin pages will not work in production.
+- **Turnstile** — create a widget at [Cloudflare Turnstile](https://dash.cloudflare.com/?to=/:account/turnstile) for your domain. Add both keys to Vercel.
+- **Rate limiting** — run `supabase/api_rate_limits.sql` in Supabase SQL Editor. Limits contact form and admin login to **5 attempts per hour per IP**.
 
 ### Optional
 

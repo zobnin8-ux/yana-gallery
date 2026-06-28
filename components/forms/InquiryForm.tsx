@@ -5,6 +5,8 @@ import { useSearchParams } from "next/navigation";
 import type { FormEvent } from "react";
 import { useState } from "react";
 
+import { isTurnstileEnabledInBrowser, TurnstileField } from "@/components/security/TurnstileField";
+
 export function InquiryForm() {
   const searchParams = useSearchParams();
   const artworkSlug = searchParams.get("artwork") ?? "";
@@ -12,13 +14,23 @@ export function InquiryForm() {
   const artworkTitle = searchParams.get("title") ?? "";
   const [statusMessage, setStatusMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const turnstileRequired = isTurnstileEnabledInBrowser();
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    if (turnstileRequired && !turnstileToken) {
+      setStatusMessage("Подтвердите, что вы не робот.");
+      return;
+    }
+
     setIsSubmitting(true);
     setStatusMessage("");
 
     const formData = new FormData(event.currentTarget);
+    formData.set("turnstileToken", turnstileToken);
+
     const response = await fetch("/api/inquiries", {
       method: "POST",
       body: formData
@@ -30,6 +42,7 @@ export function InquiryForm() {
 
     if (result.success) {
       event.currentTarget.reset();
+      setTurnstileToken("");
     }
   }
 
@@ -71,6 +84,8 @@ export function InquiryForm() {
           rows={7}
         />
       </label>
+
+      <TurnstileField onTokenChange={setTurnstileToken} />
 
       {statusMessage ? (
         <p aria-live="polite" className="inquiry-status" role="status">

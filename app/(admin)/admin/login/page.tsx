@@ -13,8 +13,7 @@ export default function AdminLoginPage() {
     <section className="admin-section admin-login-section">
       <SectionTitle>Вход в админку</SectionTitle>
       <p className="admin-copy">
-        Введите пароль, заданный в переменной окружения <code>GALLERY_ADMIN_PASSWORD</code>. Для локального
-        запуска временный пароль: <code>change-me</code>.
+        Введите пароль администратора. Доступ защищён лимитом попыток и проверкой на роботов.
       </p>
       <Suspense fallback={<p className="admin-copy">Загружаем форму входа...</p>}>
         <AdminLoginForm />
