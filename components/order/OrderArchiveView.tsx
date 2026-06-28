@@ -1,3 +1,4 @@
+import { STUDIO_EMAIL } from "@/lib/site-contact";
 import type { OrderPublicView } from "@/types/order";
 
 function formatDate(iso: string | null) {
@@ -52,7 +53,7 @@ export function OrderArchiveView({ view }: OrderArchiveViewProps) {
       <p className="order-archive-note">
         Страница открывается по ссылке из письма и остаётся доступной как архив заказа. При вопросах
         напишите на{" "}
-        <a href="mailto:studio@yanazubareva.com">studio@yanazubareva.com</a>.
+        <a href={`mailto:${STUDIO_EMAIL}`}>{STUDIO_EMAIL}</a>.
       </p>
     </div>
   );

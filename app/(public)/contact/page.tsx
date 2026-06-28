@@ -6,6 +6,7 @@ import { PageContainer } from "@/components/layout/PageContainer";
 import { Section } from "@/components/layout/Section";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
+import { STUDIO_EMAIL } from "@/lib/site-contact";
 
 export const metadata: Metadata = {
   title: "Студия — связь по работам",
@@ -32,7 +33,7 @@ export default function ContactPage() {
                 <div className="contact-details">
                   <div className="contact-detail">
                     <span>Почта</span>
-                    <a href="mailto:studio@yanazubareva.com">studio@yanazubareva.com</a>
+                    <a href={`mailto:${STUDIO_EMAIL}`}>{STUDIO_EMAIL}</a>
                   </div>
                   <div className="contact-detail">
                     <span>Запросы</span>

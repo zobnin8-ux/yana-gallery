@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { STUDIO_EMAIL } from "@/lib/site-contact";
+
 export function SiteFooter() {
   return (
     <footer className="site-footer">
@@ -15,7 +17,7 @@ export function SiteFooter() {
           <Link href="/contact">Студия</Link>
         </nav>
         <div className="site-footer-contact">
-          <a href="mailto:studio@yanazubareva.com">studio@yanazubareva.com</a>
+          <a href={`mailto:${STUDIO_EMAIL}`}>{STUDIO_EMAIL}</a>
           <span className="site-footer-contact-sep" aria-hidden="true">
             ·
           </span>
