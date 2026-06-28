@@ -3229,14 +3229,11 @@ body {
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: center;
-  gap: 12px 18px;
-  margin-bottom: clamp(48px, 8vw, 72px);
-  /* Big, readable filter row (requested ~2x) */
-  font-size: 1.45rem;
-  line-height: 1.4;
-  letter-spacing: 0.06em;
-  text-transform: lowercase;
-  padding: 18px 20px;
+  gap: 10px 16px;
+  margin-bottom: clamp(40px, 6vw, 64px);
+  font-size: 0.98rem;
+  line-height: 1.55;
+  padding: 16px 18px;
   border: 1px solid rgba(23, 23, 21, 0.1);
   background: rgba(255, 252, 247, 0.48);
   border-radius: 14px;
@@ -3244,14 +3241,15 @@ body {
 
 .gallery-filters-label {
   color: var(--muted);
-  margin-right: 4px;
-  font-size: 0.82em;
-  letter-spacing: 0.08em;
+  margin-right: 2px;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
 }
 
 .gallery-filters-sep {
   color: rgba(23, 23, 21, 0.35);
-  margin: 0 4px;
+  margin: 0 2px;
 }
 
 .gallery-filter-anchor {
@@ -3262,10 +3260,19 @@ body {
   border-radius: 0;
   background: none;
   color: inherit;
-  font: inherit;
-  letter-spacing: inherit;
-  text-transform: inherit;
   cursor: pointer;
+}
+
+.gallery-filter-anchor-series {
+  font-family: var(--serif);
+  font-size: clamp(1.02rem, 1.5vw, 1.22rem);
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.gallery-filter-anchor-status {
+  font-size: 0.92rem;
+  letter-spacing: 0.02em;
 }
 
 .gallery-filter-anchor:hover {
@@ -3274,6 +3281,7 @@ body {
 
 .gallery-filter-anchor.is-active {
   border-bottom-color: currentColor;
+  color: var(--foreground);
 }
 
 .gallery-collections-feed {
@@ -3927,6 +3935,20 @@ body {
 .gallery-heading-salon {
   align-items: flex-start;
   margin-bottom: clamp(36px, 5vw, 52px);
+}
+
+.gallery-heading-salon .gallery-title {
+  font-size: clamp(2.4rem, 5vw, 4.4rem);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+}
+
+.gallery-heading-salon .gallery-intro {
+  color: var(--muted);
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.8;
+  max-width: 36rem;
 }
 
 .gallery-collections-salon {

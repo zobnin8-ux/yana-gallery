@@ -11,10 +11,10 @@ type GalleryCollectionsViewProps = {
 };
 
 const statusLabels: Record<ArtworkStatus | "all", string> = {
-  all: "все",
-  available: "доступные",
-  reserved: "в резерве",
-  sold: "проданные"
+  all: "Все",
+  available: "Доступные",
+  reserved: "В резерве",
+  sold: "Проданные"
 };
 
 export function GalleryCollectionsView({ collections }: GalleryCollectionsViewProps) {
@@ -36,15 +36,17 @@ export function GalleryCollectionsView({ collections }: GalleryCollectionsViewPr
       <div className="gallery-filters-line" role="navigation" aria-label="Фильтры галереи">
         <span className="gallery-filters-label">Серия:</span>
         <button
-          className={`gallery-filter-anchor${activeCollectionId === "all" ? " is-active" : ""}`}
+          aria-pressed={activeCollectionId === "all"}
+          className={`gallery-filter-anchor gallery-filter-anchor-series${activeCollectionId === "all" ? " is-active" : ""}`}
           onClick={() => setActiveCollectionId("all")}
           type="button"
         >
-          все
+          Все серии
         </button>
         {collections.map((collection) => (
           <button
-            className={`gallery-filter-anchor${activeCollectionId === collection.id ? " is-active" : ""}`}
+            aria-pressed={activeCollectionId === collection.id}
+            className={`gallery-filter-anchor gallery-filter-anchor-series${activeCollectionId === collection.id ? " is-active" : ""}`}
             key={collection.id}
             onClick={() => setActiveCollectionId(collection.id)}
             type="button"
@@ -58,7 +60,8 @@ export function GalleryCollectionsView({ collections }: GalleryCollectionsViewPr
         <span className="gallery-filters-label">Статус:</span>
         {(Object.keys(statusLabels) as Array<ArtworkStatus | "all">).map((status) => (
           <button
-            className={`gallery-filter-anchor${activeStatus === status ? " is-active" : ""}`}
+            aria-pressed={activeStatus === status}
+            className={`gallery-filter-anchor gallery-filter-anchor-status${activeStatus === status ? " is-active" : ""}`}
             key={status}
             onClick={() => setActiveStatus(status)}
             type="button"
